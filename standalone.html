@@ -1,0 +1,860 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>随机餐厅打卡</title>
+    <style>
+      :root {
+        color: #1f2933;
+        background: #f5f7f2;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-width: 320px;
+      }
+
+      button,
+      input,
+      textarea {
+        font: inherit;
+      }
+
+      button {
+        border: 0;
+        cursor: pointer;
+      }
+
+      button:disabled {
+        cursor: not-allowed;
+        opacity: 0.55;
+      }
+
+      .app-shell {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 28px 0 48px;
+      }
+
+      .topbar,
+      .panel {
+        border: 1px solid #d9e0d1;
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 14px 38px rgba(67, 88, 61, 0.07);
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 24px;
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 0;
+        letter-spacing: 0;
+      }
+
+      h1 {
+        margin-top: 4px;
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        line-height: 1.05;
+      }
+
+      .eyebrow {
+        margin: 0;
+        color: #687568;
+        font-size: 0.78rem;
+        font-weight: 700;
+      }
+
+      .topbar-stats {
+        display: grid;
+        min-width: 112px;
+        place-items: center;
+        padding: 16px;
+        border-radius: 8px;
+        background: #f0f5e9;
+        color: #31533b;
+      }
+
+      .topbar-stats strong {
+        font-size: 2rem;
+        line-height: 1;
+      }
+
+      .content-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+        gap: 18px;
+        margin-top: 18px;
+        align-items: start;
+      }
+
+      .panel {
+        padding: 20px;
+      }
+
+      .hero-panel {
+        position: sticky;
+        top: 18px;
+      }
+
+      .section-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+      }
+
+      .counter {
+        flex: 0 0 auto;
+        padding: 8px 10px;
+        border-radius: 999px;
+        background: #eaf0e2;
+        color: #31533b;
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
+
+      .primary-action,
+      .success-action,
+      .secondary-action,
+      .ghost-action,
+      .danger-action {
+        min-height: 42px;
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-weight: 700;
+      }
+
+      .primary-action {
+        width: 100%;
+        min-height: 58px;
+        background: #245b47;
+        color: #fff;
+        font-size: 1.08rem;
+      }
+
+      .success-action {
+        width: 100%;
+        margin-top: 18px;
+        background: #d95f35;
+        color: #fff;
+      }
+
+      .secondary-action {
+        background: #245b47;
+        color: #fff;
+      }
+
+      .ghost-action {
+        border: 1px solid #c7d0c2;
+        background: #fff;
+        color: #2d4c3a;
+      }
+
+      .danger-action {
+        border: 1px solid #efc4ba;
+        background: #fff5f2;
+        color: #9b341c;
+      }
+
+      .selected-card,
+      .empty-state {
+        margin-top: 18px;
+        padding: 18px;
+        border-radius: 8px;
+      }
+
+      .selected-card {
+        background: #f8fbf4;
+        border: 1px solid #d8e4ce;
+      }
+
+      .selected-card h3 {
+        margin-top: 4px;
+        font-size: 1.8rem;
+      }
+
+      .selected-card dl {
+        display: grid;
+        gap: 12px;
+        margin: 16px 0 0;
+      }
+
+      .selected-card dt {
+        color: #687568;
+        font-size: 0.85rem;
+        font-weight: 700;
+      }
+
+      .selected-card dd {
+        margin: 4px 0 0;
+        line-height: 1.6;
+      }
+
+      .restaurant-form {
+        display: grid;
+        gap: 14px;
+        padding-bottom: 18px;
+        border-bottom: 1px solid #e4e8df;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      label {
+        display: grid;
+        gap: 7px;
+        color: #39493f;
+        font-weight: 700;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        border: 1px solid #cbd5c4;
+        border-radius: 8px;
+        padding: 11px 12px;
+        background: #fff;
+        color: #1f2933;
+        outline: none;
+      }
+
+      textarea {
+        resize: vertical;
+      }
+
+      .form-actions,
+      .row-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .restaurant-list,
+      .history-list {
+        display: grid;
+        gap: 10px;
+        margin-top: 18px;
+        max-height: 560px;
+        overflow: auto;
+        padding-right: 4px;
+      }
+
+      .list-card {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 14px;
+        align-items: center;
+        padding: 14px;
+        border: 1px solid #e0e6dc;
+        border-radius: 8px;
+        background: #fff;
+      }
+
+      .list-card.is-editing {
+        border-color: #d95f35;
+        background: #fff8f2;
+      }
+
+      .list-card h3 {
+        margin-bottom: 5px;
+        font-size: 1.02rem;
+      }
+
+      .list-card p,
+      .list-card time {
+        display: block;
+        margin: 0;
+        color: #53655a;
+        line-height: 1.55;
+      }
+
+      .muted {
+        color: #7d887d !important;
+      }
+
+      .empty-state {
+        border: 1px dashed #bdc9b7;
+        background: #fbfcf8;
+        color: #5d6e61;
+        line-height: 1.6;
+        text-align: center;
+      }
+
+      .toast {
+        position: fixed;
+        z-index: 20;
+        left: 50%;
+        bottom: 22px;
+        transform: translateX(-50%);
+        max-width: min(520px, calc(100% - 28px));
+        padding: 12px 16px;
+        border-radius: 8px;
+        background: #1f2933;
+        color: #fff;
+      }
+
+      @media (max-width: 860px) {
+        .app-shell {
+          width: min(100% - 22px, 720px);
+          padding-top: 14px;
+        }
+
+        .topbar,
+        .content-grid,
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .topbar {
+          display: grid;
+          padding: 18px;
+        }
+
+        .content-grid {
+          display: grid;
+        }
+
+        .hero-panel {
+          position: static;
+        }
+
+        .list-card {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 520px) {
+        .panel,
+        .topbar {
+          padding: 16px;
+        }
+
+        .section-heading {
+          display: grid;
+        }
+
+        .form-actions,
+        .row-actions {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">LocalStorage 单页应用</p>
+          <h1>随机餐厅打卡</h1>
+        </div>
+        <div class="topbar-stats">
+          <strong id="restaurant-count-top">0</strong>
+          <span>待打卡餐厅</span>
+        </div>
+      </header>
+
+      <div class="content-grid">
+        <section class="panel hero-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">今日目的地</p>
+              <h2>随机抽取区</h2>
+            </div>
+            <span class="counter" id="restaurant-count">0 家待打卡</span>
+          </div>
+          <button class="primary-action" id="pick-button" type="button">随机抽一家餐厅</button>
+          <div id="selected-area" class="empty-state">还没有抽取餐厅，点一下按钮看看今天吃什么。</div>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">餐厅库</p>
+              <h2>餐厅管理</h2>
+            </div>
+          </div>
+          <form class="restaurant-form" id="restaurant-form">
+            <div class="form-grid">
+              <label>
+                <span>餐厅名称 *</span>
+                <input id="name-input" placeholder="例如：餐厅 100" required />
+              </label>
+              <label>
+                <span>地址</span>
+                <input id="address-input" placeholder="可选" />
+              </label>
+            </div>
+            <label>
+              <span>备注</span>
+              <textarea id="note-input" placeholder="口味、排队情况、推荐菜等" rows="3"></textarea>
+            </label>
+            <div class="form-actions">
+              <button class="secondary-action" id="submit-button" type="submit">添加餐厅</button>
+              <button class="ghost-action" id="cancel-edit-button" type="button" hidden>取消编辑</button>
+            </div>
+          </form>
+          <div class="restaurant-list" id="restaurant-list"></div>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">足迹</p>
+              <h2>打卡历史</h2>
+            </div>
+            <button class="danger-action" id="clear-history-button" type="button">清空全部记录</button>
+          </div>
+          <div class="history-list" id="history-list"></div>
+        </section>
+      </div>
+    </main>
+    <div class="toast" id="toast" hidden></div>
+
+    <script>
+      const RESTAURANTS_KEY = "random-restaurant-checkin:restaurants";
+      const CHECK_INS_KEY = "random-restaurant-checkin:check-ins";
+      const restaurantRows = [
+        ["肯德基", "", "连锁"],
+        ["麦当劳", "", "连锁"],
+        ["必胜客", "", "连锁"],
+        ["汉堡王", "", "连锁"],
+        ["六盘水黄牛馆", "生牛肉、胸口油、牛骨髓", "奥莱金街"],
+        ["辣尔家", "油泼鸡、小炒鸡杂、雪菜芋艿", "象山国际"],
+        ["小辣椒", "小炒肉、生炒鸡、香辣甲鱼", "象山国际"],
+        ["吴家露", "铁板五花肉、部队火锅、火辣鸡爪", "首尔印象"],
+        ["本分冒菜", "牛肉、毛肚、脑花、鸭肠、黄喉", "金街美地"],
+        ["睿雪面馆", "猪肝拌川、酸辣面、腰花拌川", "象山路西街"],
+        ["来翠面馆", "虾腰拌川、双腰拌川、猪肝面", "集贸路"],
+        ["彩虹大排档", "椒盐皮皮虾、醋爪、小龙虾", "袁浦路"],
+        ["老桐庐1977", "生炒鸡、鱼头煲、卤鸭", "金街美地"],
+        ["那拉提新疆菜", "大盘鸡、烤羊腿、羊肉串", "星光荟"],
+        ["贵州地摊大排档", "酸虾牛肉、酸汤牛肉、炒魔芋", "首尔印象"],
+        ["波哥私厨", "香辣蟹、水煮吊龙、小龙虾", "之江商务中心"],
+        ["停车场新疆烧烤", "羊肉串、秋刀鱼、羊骨汤", "南街停车场"],
+        ["重庆鸡公煲", "重庆鸡公煲", "金街美地"],
+        ["大老表江西小炒", "小炒肉、黄牛肉、黄豆鸡脚", "金街美地"],
+        ["瑶姐干蒸菜", "吊龙牛肉、容边排骨", "象山国际"],
+        ["墨绿", "泉水鱼、石锅牛蛙、铁锅鸡", "星光荟"],
+        ["印象坊", "扁扁鸡、酸菜黑鱼", "金街美地"],
+        ["金华砂锅", "筒骨砂锅", "金街美地"],
+        ["大峰饭店", "鱼籽鱼泡、杂鱼锅仔", "象山站 D 口"],
+        ["味世芳烧饼", "干菜饼、牛肉烧饼", "星光荟"],
+        ["衢小膳", "泡椒牛蛙、杂鱼锅、小炒黄牛肉", "象山国际"],
+        ["大叔与萝莉", "汉堡、牛肉蛋包饭、沙拉", "象山国际"],
+        ["玖十八烤鱼", "海鲈鱼烤鱼、锡纸日本豆腐", "奥莱金街"],
+        ["张大厨柠檬酸菜鱼", "老坛酸菜鱼、干烧肥肠", "龙坞"],
+        ["山胡椒", "带汤牛肉、茄子、擂辣椒皮蛋", "BAC 艺术社区"],
+        ["觅窄巷子", "鸭血、猪脑、毛肚、冰粉", "金街美地"],
+        ["杨国福麻辣烫", "所有素菜", "金街美地"],
+        ["四季大树底", "山泉水螺蛳、杂鱼锅、炒肚尖", "金华南路"],
+        ["蜀风旋转小火锅", "所有素菜", "大关大润发"],
+        ["台州海鲜面", "海鲜粉丝、黄鱼面、带鱼面", "野风现代之窗"],
+        ["凯哥一头牛", "新鲜吊龙、鲜切牛肉", "拱墅万达金街"],
+        ["快点小龙虾大闸蟹", "小龙虾、椒盐皮皮虾、螺蛳", "信义坊"],
+        ["欢喜串串老火锅", "鸭血、猪脑、鸭肠", "景芳"],
+        ["一席地本地鸡窝", "本地鸡窝、乌鸡鸡窝", "连锁"],
+        ["传统韩家（已关）", "金枪鱼辣白菜汤、海带牛肉汤", "原工大垃圾街"],
+        ["沐茗小镇", "干焖鸡、五味虾、铁板日本豆腐", "铂悦城"],
+        ["再回首老北京火锅", "肥牛卷、鲜切羊肉、酸菜", "屏峰"],
+        ["妈妈私房菜", "尖椒小鱼干、腊味小排", "石马"],
+        ["重庆正宗万州烤鱼", "烤鱼、魔芋、螺蛳", "萧山"],
+        ["虾王夜宴", "小龙虾、锡纸娃娃菜、鸭舌", "九堡"],
+        ["战友龙虾", "小龙虾、螺蛳", "三墩"],
+        ["老翰湖州菜", "虾粥、空心菜、鹅肝、血蛤", "香积寺路"],
+        ["慧心小吃", "笋尖烧卖、鲜肉小馄饨", "大关"],
+        ["阿英川菜馆", "辣子鸡、水煮鱼、毛血旺、冰粉", "上塘路"],
+        ["谢大牛馆", "牛杂煲、飞机骨、牛鞭汤", "上塘路"],
+        ["新凯旋烧烤", "羊肉串、烤鱼、小龙虾", "上塘路"],
+        ["彩娥饭店", "白切门腔、葱油花蛤、雪菜蘑菇", "屏峰"],
+        ["小四川", "铁板豆腐、石锅虾、手撕包菜", "东和"],
+        ["渝八两鸡公煲", "鸡公煲、锅巴土豆", "连锁"],
+        ["飞爷牛腩面", "老酸菜牛腩面、特色炸酱面", "UN 公社"],
+        ["琳理小馆", "冬阴功火锅、眼肉牛排、肉酱意面", "UN 公社"],
+        ["贵州烙锅", "牛肉、五花肉、虾", "铂悦城"],
+        ["阿杰家下饭菜", "小炒鸡、土豆牛腩、尖椒豆腐", "铂悦城"],
+        ["金梓面馆", "雪菜肉丝面、青椒肉丝面", "小和山新苑"],
+        ["海来一号", "海鲜杂鱼、溪沟杂鱼、铁板鳝丝", "良渚"],
+        ["飘香川菜馆", "毛血旺、水煮肉片、酸菜鱼", "良渚"],
+        ["岳阳烧烤", "螺蛳、烤牛肋条、小龙虾", "良渚"],
+        ["胖子面馆", "三鲜面、肉丝面、豆腐面", "良渚"],
+        ["九米羊肉炉", "羊肉炉、烤鸡皮、小黄鱼", "七贤山居"],
+        ["一朝鲜面馆", "三线面蛋、肉丝拌川、肉圆面", "七贤山居"],
+        ["老陶面馆", "猪肝面、爆鳝面、酥鱼", "七贤山居"],
+        ["梁大妈妈菜", "小龙虾、酸菜鱼、老姜炒鸡", "三墩新天地"],
+        ["永旺夜市", "超多摊位，任君挑选", "永旺梦乐城"],
+        ["朱富贵", "皮皮虾、九节虾、黑虎虾、螺", "中大银泰"],
+        ["绝美嘉馄饨", "野菜鲜肉小馄饨、馄饨砂锅", "大关"],
+        ["流芳面馆", "猪肝拌川、仔排面、尖椒笋干肉丝面", "海外海"],
+        ["复兴面王", "茄汁水猪肝拌川、爆鳝拌川", "河东路"],
+        ["芳达烧烤", "锅包肉、烤冷面、雪绵豆沙", "康康谷"],
+        ["红盔甲", "小龙虾、椒盐皮皮虾、烤牛蛙", "新塘路"],
+        ["罩罩记粉馆", "螺蛳粉、猪蹄、木薯羹、鸭脚", "高教园"],
+        ["光头麻辣烫", "木耳、蕨菜、海蜇和各种素菜", "西联广场"],
+        ["郭淑芬自助老火锅", "毛肚、黄喉、鸭肠、牛蛙", "西文街"],
+        ["乔街深夜食堂", "高压锅牛蛙、胡椒猪肚鸡", "新天地"],
+        ["老李蚝宅", "高压锅生蚝、鸡爪、酥辣小黄鱼", "海创园"],
+        ["留下来", "筒骨砂锅", "乐堤港"],
+        ["衢州农家菜", "铁板鲫鱼、生炒鸡、螺蛳", "西和"],
+        ["先启半步颠", "火爆双脆、麻辣牛骨髓、鲜椒兔", "永旺梦乐城"],
+        ["荆几令爆炒桥头三嫩", "几秒腰花、雪花吊龙、冰渣豆花", "新天地"],
+        ["313 羊庄", "羊腿肉、羊蝎子、羊排", "西子丁兰"],
+        ["夏星酒馆", "芝士排骨、麻辣锅包肉", "剑桥公社"],
+        ["川与麻老火锅", "鸭血、吊龙、嫩牛肉", "剑桥公社"],
+        ["药膳鸡煲", "药膳鸡、鲜切猪肚", "剑桥公社"],
+        ["新疆炒米粉", "鸡肉炒米粉、鱼排双拼", "剑桥公社"],
+        ["牛大倌黄牛肉火锅", "生牛肉、牛杂拌", "香积寺路"],
+        ["老秦凉都黄牛肉馆", "生牛肉、牛百叶、空心菜", "萧山"],
+        ["鹊拾湘", "砂锅扁豆丝、现炒黄牛肉", "新天地"],
+        ["晓锅鸡", "小公鸡、贴饼", "善贤人家"],
+        ["光头龙虾", "鱼籽鱼泡、小龙虾", "信义坊"],
+        ["木屋烧烤", "烤生蚝、羊肉串、烤白菜", "胜利河美食街"],
+        ["老头儿油爆虾", "油爆虾、干炸带鱼、炒腰花", "胜利河美食街"],
+        ["涮味浓老北京火锅", "羊蝎子、脆毛肚、嫩牛肉", "胜利河美食街"],
+        ["小厨师沈家门", "梭子蟹、鲳鱼", "胜利河美食街"],
+        ["吃饭皇帝大", "猫儿山的小黄牛、稻草鱼", "西溪印象城"],
+        ["很久以前羊肉串", "羊肉串、去壳虾、烤酸菜", "西溪印象城"],
+      ];
+
+      const initialRestaurants = restaurantRows.map(([name, note, address], index) => {
+        const number = String(index + 1).padStart(3, "0");
+        return {
+          id: `initial-restaurant-${number}`,
+          name,
+          address,
+          note: note || undefined,
+          createdAt: new Date("2026-01-01T00:00:00.000Z").toISOString(),
+        };
+      });
+
+      let restaurants = readRestaurants();
+      let checkIns = readJson(CHECK_INS_KEY, []);
+      let selectedRestaurant = null;
+      let editingRestaurantId = null;
+      let toastTimer = 0;
+
+      const elements = {
+        topCount: document.querySelector("#restaurant-count-top"),
+        count: document.querySelector("#restaurant-count"),
+        selectedArea: document.querySelector("#selected-area"),
+        pickButton: document.querySelector("#pick-button"),
+        form: document.querySelector("#restaurant-form"),
+        nameInput: document.querySelector("#name-input"),
+        addressInput: document.querySelector("#address-input"),
+        noteInput: document.querySelector("#note-input"),
+        submitButton: document.querySelector("#submit-button"),
+        cancelEditButton: document.querySelector("#cancel-edit-button"),
+        restaurantList: document.querySelector("#restaurant-list"),
+        historyList: document.querySelector("#history-list"),
+        clearHistoryButton: document.querySelector("#clear-history-button"),
+        toast: document.querySelector("#toast"),
+      };
+
+      function readJson(key, fallback) {
+        try {
+          const raw = localStorage.getItem(key);
+          return raw ? JSON.parse(raw) : fallback;
+        } catch {
+          return fallback;
+        }
+      }
+
+      function readRestaurants() {
+        const storedRestaurants = readJson(RESTAURANTS_KEY, initialRestaurants);
+        if (isPlaceholderRestaurantList(storedRestaurants)) {
+          return initialRestaurants;
+        }
+        return storedRestaurants;
+      }
+
+      function isPlaceholderRestaurantList(items) {
+        return (
+          items.length === 99 &&
+          items.every((restaurant, index) => {
+            const number = String(index + 1).padStart(3, "0");
+            return restaurant.name === `餐厅 ${number}`;
+          })
+        );
+      }
+
+      function writeJson(key, value) {
+        localStorage.setItem(key, JSON.stringify(value));
+      }
+
+      function createId(prefix) {
+        return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+      }
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function showMessage(message) {
+        window.clearTimeout(toastTimer);
+        elements.toast.textContent = message;
+        elements.toast.hidden = false;
+        toastTimer = window.setTimeout(() => {
+          elements.toast.hidden = true;
+        }, 2600);
+      }
+
+      function saveAll() {
+        writeJson(RESTAURANTS_KEY, restaurants);
+        writeJson(CHECK_INS_KEY, checkIns);
+      }
+
+      function render() {
+        if (
+          selectedRestaurant &&
+          !restaurants.some((restaurant) => restaurant.id === selectedRestaurant.id)
+        ) {
+          selectedRestaurant = null;
+        }
+
+        elements.topCount.textContent = restaurants.length;
+        elements.count.textContent = `${restaurants.length} 家待打卡`;
+        elements.clearHistoryButton.disabled = checkIns.length === 0;
+
+        renderSelected();
+        renderRestaurantForm();
+        renderRestaurants();
+        renderHistory();
+        saveAll();
+      }
+
+      function renderSelected() {
+        if (!selectedRestaurant) {
+          elements.selectedArea.className = "empty-state";
+          elements.selectedArea.innerHTML = "还没有抽取餐厅，点一下按钮看看今天吃什么。";
+          return;
+        }
+
+        elements.selectedArea.className = "selected-card";
+        elements.selectedArea.innerHTML = `
+          <p class="eyebrow">本次抽中</p>
+          <h3>${escapeHtml(selectedRestaurant.name)}</h3>
+          <dl>
+            <div><dt>地址</dt><dd>${escapeHtml(selectedRestaurant.address || "暂无地址")}</dd></div>
+            <div><dt>备注</dt><dd>${escapeHtml(selectedRestaurant.note || "暂无备注")}</dd></div>
+          </dl>
+          <button class="success-action" id="complete-button" type="button">完成打卡</button>
+        `;
+        document.querySelector("#complete-button").addEventListener("click", completeCheckIn);
+      }
+
+      function renderRestaurantForm() {
+        const editingRestaurant = restaurants.find((restaurant) => restaurant.id === editingRestaurantId);
+        elements.submitButton.textContent = editingRestaurant ? "保存修改" : "添加餐厅";
+        elements.cancelEditButton.hidden = !editingRestaurant;
+      }
+
+      function renderRestaurants() {
+        if (restaurants.length === 0) {
+          elements.restaurantList.innerHTML = '<div class="empty-state">当前没有可抽取的餐厅，请先添加餐厅。</div>';
+          return;
+        }
+
+        elements.restaurantList.innerHTML = restaurants
+          .map((restaurant) => `
+            <article class="list-card ${editingRestaurantId === restaurant.id ? "is-editing" : ""}">
+              <div>
+                <h3>${escapeHtml(restaurant.name)}</h3>
+                <p>${escapeHtml(restaurant.address || "暂无地址")}</p>
+                ${restaurant.note ? `<p class="muted">${escapeHtml(restaurant.note)}</p>` : ""}
+              </div>
+              <div class="row-actions">
+                <button class="ghost-action" data-action="edit" data-id="${restaurant.id}" type="button">编辑</button>
+                <button class="danger-action" data-action="delete" data-id="${restaurant.id}" type="button">删除</button>
+              </div>
+            </article>
+          `)
+          .join("");
+      }
+
+      function renderHistory() {
+        if (checkIns.length === 0) {
+          elements.historyList.innerHTML = '<div class="empty-state">还没有打卡记录。</div>';
+          return;
+        }
+
+        elements.historyList.innerHTML = checkIns
+          .map((record) => `
+            <article class="list-card">
+              <div>
+                <h3>${escapeHtml(record.restaurantName)}</h3>
+                <p>${escapeHtml(record.address || "暂无地址")}</p>
+                ${record.note ? `<p class="muted">${escapeHtml(record.note)}</p>` : ""}
+                <time>${new Intl.DateTimeFormat("zh-CN", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                }).format(new Date(record.checkedInAt))}</time>
+              </div>
+              <button class="danger-action" data-action="delete-history" data-id="${record.id}" type="button">删除</button>
+            </article>
+          `)
+          .join("");
+      }
+
+      function pickRestaurant() {
+        if (restaurants.length === 0) {
+          alert("当前没有可抽取的餐厅，请先添加餐厅");
+          return;
+        }
+
+        selectedRestaurant = restaurants[Math.floor(Math.random() * restaurants.length)];
+        showMessage("已经为你抽好本次目的地。");
+        render();
+      }
+
+      function completeCheckIn() {
+        if (!selectedRestaurant) return;
+        const shouldRemove = confirm("打卡完成！是否将该餐厅从待打卡库中移除？");
+        checkIns = [
+          {
+            id: createId("check-in"),
+            restaurantId: selectedRestaurant.id,
+            restaurantName: selectedRestaurant.name,
+            address: selectedRestaurant.address,
+            note: selectedRestaurant.note,
+            checkedInAt: new Date().toISOString(),
+          },
+          ...checkIns,
+        ];
+
+        if (shouldRemove) {
+          restaurants = restaurants.filter((restaurant) => restaurant.id !== selectedRestaurant.id);
+        }
+
+        selectedRestaurant = null;
+        showMessage(shouldRemove ? "打卡成功，餐厅已从待打卡库移除。" : "打卡成功，餐厅已保留。");
+        render();
+      }
+
+      function resetForm() {
+        editingRestaurantId = null;
+        elements.nameInput.value = "";
+        elements.addressInput.value = "";
+        elements.noteInput.value = "";
+      }
+
+      elements.pickButton.addEventListener("click", pickRestaurant);
+
+      elements.form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const input = {
+          name: elements.nameInput.value.trim(),
+          address: elements.addressInput.value.trim(),
+          note: elements.noteInput.value.trim(),
+        };
+
+        if (!input.name) {
+          alert("餐厅名称不能为空");
+          return;
+        }
+
+        if (editingRestaurantId) {
+          restaurants = restaurants.map((restaurant) =>
+            restaurant.id === editingRestaurantId
+              ? { ...restaurant, name: input.name, address: input.address, note: input.note }
+              : restaurant,
+          );
+          if (selectedRestaurant?.id === editingRestaurantId) {
+            selectedRestaurant = { ...selectedRestaurant, ...input };
+          }
+          resetForm();
+          showMessage("餐厅信息已更新。");
+        } else {
+          restaurants = [
+            {
+              id: createId("restaurant"),
+              name: input.name,
+              address: input.address,
+              note: input.note,
+              createdAt: new Date().toISOString(),
+            },
+            ...restaurants,
+          ];
+          resetForm();
+          showMessage("新餐厅已添加。");
+        }
+
+        render();
+      });
+
+      elements.cancelEditButton.addEventListener("click", () => {
+        resetForm();
+        render();
+      });
+
+      elements.restaurantList.addEventListener("click", (event) => {
+        const button = event.target.closest("button");
+        if (!button) return;
+        const id = button.dataset.id;
+        const restaurant = restaurants.find((item) => item.id === id);
+        if (!restaurant) return;
+
+        if (button.dataset.action === "edit") {
+          editingRestaurantId = restaurant.id;
+          elements.nameInput.value = restaurant.name;
+          elements.addressInput.value = restaurant.address || "";
+          elements.noteInput.value = restaurant.note || "";
+          elements.nameInput.focus();
+          render();
+        }
+
+        if (button.dataset.action === "delete") {
+          if (!confirm(`确定删除「${restaurant.name}」吗？`)) return;
+          restaurants = restaurants.filter((item) => item.id !== restaurant.id);
+          if (editingRestaurantId === restaurant.id) resetForm();
+          if (selectedRestaurant?.id === restaurant.id) selectedRestaurant = null;
+          showMessage("餐厅已删除。");
+          render();
+        }
+      });
+
+      elements.historyList.addEventListener("click", (event) => {
+        const button = event.target.closest("button");
+        if (!button || button.dataset.action !== "delete-history") return;
+        checkIns = checkIns.filter((record) => record.id !== button.dataset.id);
+        showMessage("打卡记录已删除。");
+        render();
+      });
+
+      elements.clearHistoryButton.addEventListener("click", () => {
+        if (checkIns.length === 0) return;
+        if (!confirm("确定清空全部打卡记录吗？此操作不可撤销。")) return;
+        checkIns = [];
+        showMessage("打卡历史已清空。");
+        render();
+      });
+
+      render();
+    </script>
+  </body>
+</html>

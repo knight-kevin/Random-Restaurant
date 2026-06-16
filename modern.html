@@ -1,0 +1,758 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="人间寻味记" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="theme-color" content="#fff7e8" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/icon.svg" />
+    <title>人间寻味记</title>
+    <style>
+      :root {
+        color: #1e2329;
+        background:
+          radial-gradient(circle at 12% 8%, rgba(255, 213, 128, 0.35), transparent 32rem),
+          linear-gradient(135deg, #fff7e8 0%, #f4f7f1 46%, #eaf3f6 100%);
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+      }
+
+      * { box-sizing: border-box; }
+      body { margin: 0; min-width: 320px; min-height: 100vh; }
+      button, input, textarea { font: inherit; }
+      button { border: 0; cursor: pointer; }
+      button:disabled { cursor: not-allowed; opacity: 0.7; }
+
+      .app-shell { width: min(1160px, calc(100% - 32px)); margin: 0 auto; padding: 22px 0 48px; }
+      .topbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 18px 20px; }
+      h1, h2, h3 { margin: 0; letter-spacing: 0; }
+      h1 { margin-top: 4px; font-size: clamp(2rem, 4.8vw, 4rem); line-height: 1.02; }
+      .eyebrow { margin: 0; color: #7d5544; font-size: 0.78rem; font-weight: 800; letter-spacing: 0; }
+      .top-actions { display: flex; gap: 8px; padding: 6px; border: 1px solid rgba(36, 91, 71, 0.16); border-radius: 999px; background: rgba(255,255,255,.72); box-shadow: 0 18px 42px rgba(45,54,60,.08); }
+      .nav-action { min-height: 42px; border-radius: 999px; padding: 0 16px; background: transparent; color: #33423a; font-weight: 800; }
+      .nav-action.is-active { background: #1f5d4a; color: #fff; }
+
+      .home-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(320px, .65fr); gap: 18px; align-items: start; }
+      .panel, .hero-stage { border: 1px solid rgba(44,71,60,.14); border-radius: 8px; background: rgba(255,255,255,.82); box-shadow: 0 24px 60px rgba(45,54,60,.1); backdrop-filter: blur(14px); }
+      .hero-stage { overflow: hidden; padding: clamp(20px, 3vw, 32px); }
+      .hero-copy { display: grid; gap: 10px; max-width: 720px; }
+      .hero-copy h2 { font-size: clamp(2.1rem, 6vw, 5.4rem); line-height: .98; }
+      .hero-copy p:last-child { max-width: 560px; margin: 0; color: #5d6870; font-size: 1.02rem; line-height: 1.7; }
+      .filter-panel { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)) auto; gap: 12px; align-items: end; margin-top: 20px; padding: 14px; border: 1px solid rgba(31,93,74,.14); border-radius: 8px; background: rgba(255,255,255,.74); }
+      .filter-panel label { display: grid; gap: 7px; color: #39493f; font-weight: 800; }
+      .filter-panel span { font-size: .82rem; color: #7d5544; }
+      .filter-panel select { min-height: 42px; border: 1px solid #cbd5c4; border-radius: 8px; padding: 0 12px; background: #fff; color: #1f2933; outline: none; font-weight: 700; }
+      .filter-summary { margin: 0; color: #53655a; font-size: .9rem; font-weight: 800; white-space: nowrap; }
+
+      .reel-shell { position: relative; margin-top: 24px; padding: 18px; border-radius: 8px; background: radial-gradient(circle at 50% 45%, rgba(255,211,108,.2), transparent 34%), linear-gradient(160deg, #24343d, #12191f); box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+      .reel-window { position: relative; height: 430px; overflow: hidden; border-radius: 8px; perspective: 1200px; }
+      .reel-window::before { position: absolute; z-index: 0; inset: 42px 10%; content: ""; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.11), rgba(255,211,108,.08) 42%, transparent 68%); box-shadow: inset 0 0 50px rgba(255,255,255,.1), 0 0 60px rgba(255,211,108,.14); }
+      .reel-marker { position: absolute; z-index: 4; top: 50%; left: 50%; width: 10px; height: 10px; border-radius: 50%; transform: translate(-50%, -50%); background: #ffd36c; box-shadow: 0 0 0 8px rgba(255,211,108,.16), 0 0 30px rgba(255,211,108,.55); }
+      .reel-track { position: absolute; z-index: 2; inset: 0; transform-style: preserve-3d; transform: rotateX(0deg) rotateY(0deg); will-change: transform; }
+      .reel-track.is-idle { animation: sphereIdle 18s linear infinite; }
+      .reel-track.is-rolling { animation: sphereSpin 3s cubic-bezier(.2,.72,.18,1) forwards; }
+      .reel-track.is-revealed .reel-card.is-final { animation: finalReveal .62s cubic-bezier(.16,1,.3,1) both; }
+      .reel-card { position: absolute; top: 50%; left: 50%; width: 128px; height: 154px; overflow: hidden; border-radius: 44% / 18%; clip-path: ellipse(61% 51% at 50% 50%); background: #fffaf2; box-shadow: 0 18px 36px rgba(0,0,0,.24); transform: translate(-50%, -50%) rotateY(var(--theta)) rotateX(var(--phi)) translateZ(var(--radius)) scale(var(--card-scale)); transform-style: preserve-3d; opacity: var(--depth-opacity); filter: saturate(var(--depth-saturation)); backface-visibility: visible; }
+      .reel-card::before { position: absolute; z-index: 3; inset: -2px; content: ""; border-radius: inherit; background: radial-gradient(circle at 50% 42%, transparent 0 46%, rgba(10,25,36,.24) 72%, rgba(10,25,36,.42) 100%); pointer-events: none; mix-blend-mode: multiply; }
+      .reel-card::after { position: absolute; z-index: 4; inset: 0; content: ""; border-radius: inherit; background: linear-gradient(100deg, rgba(255,255,255,.38), transparent 34%, rgba(0,0,0,.28)); pointer-events: none; }
+      .reel-card.is-final { z-index: 8; width: 210px; height: 242px; border-radius: 32% / 14%; clip-path: ellipse(59% 52% at 50% 50%); box-shadow: 0 34px 70px rgba(0,0,0,.4), 0 0 0 4px rgba(255,211,108,.78), 0 0 44px rgba(255,211,108,.34); }
+      .food-photo { display: grid; height: 94px; place-items: center; background-color: #cf4f35; background-image: radial-gradient(circle at 50% 48%, rgba(255,255,255,.18), rgba(255,255,255,0) 38%), linear-gradient(135deg, rgba(243,180,92,.65), rgba(207,79,53,.24)), var(--food-image); background-size: cover; background-position: center; }
+      .food-photo span { display: grid; width: 58px; height: 58px; place-items: center; border-radius: 50%; background: rgba(255,255,255,.88); color: #a33824; font-size: 1.25rem; font-weight: 900; box-shadow: 0 16px 28px rgba(30,35,41,.18); }
+      .reel-card h3 { padding: 10px 10px 0; font-size: .86rem; }
+      .reel-card p { margin: 4px 0 0; padding: 0 10px; color: #687274; font-size: .76rem; }
+      .reel-card.is-final .food-photo { height: 146px; }
+      .reel-card.is-final h3 { font-size: 1.05rem; }
+      .reel-card.is-final p { font-size: .86rem; }
+      .reel-placeholder { display: grid; position: relative; z-index: 2; height: 100%; place-items: center; color: rgba(255,255,255,.72); text-align: center; }
+      @keyframes sphereIdle { from { transform: rotateX(10deg) rotateY(0deg) rotateZ(0deg); } to { transform: rotateX(10deg) rotateY(-360deg) rotateZ(0deg); } }
+      @keyframes sphereSpin { 0% { transform: rotateX(18deg) rotateY(-24deg) rotateZ(-2deg); } 35% { transform: rotateX(-14deg) rotateY(-560deg) rotateZ(2deg); } 70% { transform: rotateX(10deg) rotateY(-1030deg) rotateZ(-1deg); } 100% { transform: rotateX(0deg) rotateY(-1440deg) rotateZ(0deg); } }
+      @keyframes finalReveal { 0% { transform: translate(-50%, -50%) rotateY(var(--theta)) rotateX(var(--phi)) translateZ(150px) scale(.62); opacity: 0; } 100% { transform: translate(-50%, -50%) rotateY(var(--theta)) rotateX(var(--phi)) translateZ(var(--radius)) scale(var(--card-scale)); opacity: 1; } }
+
+      .random-controls { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; margin-top: 22px; }
+      .count-pill { display: grid; min-width: 98px; min-height: 98px; place-items: center; padding: 12px; border-radius: 50%; background: #fff4d4; color: #8a421f; box-shadow: inset 0 0 0 1px rgba(138,66,31,.1); }
+      .count-pill strong { font-size: 2rem; line-height: 1; }
+      .count-pill span { font-size: .82rem; font-weight: 800; }
+      .random-button { min-height: clamp(108px, 15vw, 160px); border-radius: 999px; background: radial-gradient(circle at 34% 18%, rgba(255,255,255,.32), transparent 30%), linear-gradient(135deg, #e55438, #bb3428 48%, #7e231f); color: #fff; font-size: clamp(1.45rem, 4vw, 2.65rem); font-weight: 900; box-shadow: 0 22px 40px rgba(179,52,40,.28), inset 0 -10px 24px rgba(70,18,14,.22); transition: transform .18s ease, filter .18s ease; }
+      .random-button:hover { transform: translateY(-2px) scale(1.01); }
+      .random-button:active { transform: translateY(1px) scale(.99); }
+
+      .result-card { display: grid; gap: 16px; margin-top: 22px; padding: 20px; border: 1px solid rgba(255,211,108,.48); border-radius: 8px; background: linear-gradient(135deg, #fffdf7, #fff1da); }
+      .result-card h3 { margin-top: 4px; font-size: clamp(1.8rem, 5vw, 3.2rem); }
+      .result-card dl { display: grid; gap: 12px; margin: 0; }
+      .result-card dt { color: #7d5544; font-size: .85rem; font-weight: 900; }
+      .result-card dd { margin: 4px 0 0; line-height: 1.6; }
+      .quiet-hint { margin-top: 18px; color: #687274; text-align: center; }
+
+      .panel { padding: 20px; }
+      .manage-panel { max-width: 980px; margin: 18px auto 0; }
+      .section-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+      .section-heading h2 { margin-top: 3px; font-size: 1.45rem; }
+      .success-action, .secondary-action, .ghost-action, .danger-action, .map-action { min-height: 42px; border-radius: 8px; padding: 10px 14px; font-weight: 800; }
+      .success-action, .secondary-action { background: #1f5d4a; color: #fff; }
+      .ghost-action { border: 1px solid #c7d0c2; background: #fff; color: #2d4c3a; }
+      .danger-action { border: 1px solid #efc4ba; background: #fff5f2; color: #9b341c; }
+      .map-action { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; background: #fff4d4; color: #8a421f; border: 1px solid rgba(138,66,31,.16); }
+      .result-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+      .restaurant-form { display: grid; gap: 14px; padding-bottom: 18px; border-bottom: 1px solid #e4e8df; }
+      .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+      label { display: grid; gap: 7px; color: #39493f; font-weight: 800; }
+      label span { font-size: .9rem; }
+      input, textarea, select { width: 100%; border: 1px solid #cbd5c4; border-radius: 8px; padding: 11px 12px; background: #fff; color: #1f2933; outline: none; }
+      textarea { resize: vertical; }
+      input:focus, textarea:focus { border-color: #1f5d4a; box-shadow: 0 0 0 3px rgba(31,93,74,.12); }
+      .form-actions, .row-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+      .restaurant-list, .history-list { display: grid; gap: 10px; margin-top: 18px; max-height: 640px; overflow: auto; padding-right: 4px; }
+      .list-card { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 14px; border: 1px solid #e0e6dc; border-radius: 8px; background: #fff; }
+      .list-card.is-editing { border-color: #d95f35; background: #fff8f2; }
+      .list-card h3 { margin-bottom: 5px; font-size: 1.02rem; }
+      .list-card p, .list-card time { display: block; margin: 0; color: #53655a; line-height: 1.55; }
+      .muted { color: #7d887d !important; }
+      .tag-line { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+      .mini-tag { width: fit-content; padding: 3px 8px; border-radius: 999px; background: #fff4d4; color: #8a421f; font-size: .76rem; font-weight: 800; }
+      .thought-text { margin-top: 8px !important; padding: 10px; border-radius: 8px; background: #f8fbf4; color: #39493f !important; }
+      .empty-state { margin-top: 14px; padding: 18px; border: 1px dashed #bdc9b7; border-radius: 8px; background: #fbfcf8; color: #5d6e61; line-height: 1.6; text-align: center; }
+      .toast { position: fixed; z-index: 20; left: 50%; bottom: 22px; transform: translateX(-50%); max-width: min(520px, calc(100% - 28px)); padding: 12px 16px; border-radius: 8px; background: #1f2933; color: #fff; box-shadow: 0 16px 40px rgba(31,41,51,.22); }
+      [hidden] { display: none !important; }
+
+      @media (max-width: 900px) {
+        .app-shell { width: min(100% - 22px, 720px); padding-top: 12px; }
+        .topbar, .home-grid, .form-grid { grid-template-columns: 1fr; }
+        .filter-panel { grid-template-columns: 1fr; }
+        .filter-summary { white-space: normal; }
+        .topbar { display: grid; padding-inline: 0; }
+        .top-actions { width: 100%; }
+        .nav-action { flex: 1; }
+        .home-grid { display: grid; }
+        .reel-window { height: 390px; }
+        .reel-card { width: 112px; height: 140px; }
+        .reel-card.is-final { width: 172px; height: 206px; }
+        .food-photo { height: 86px; }
+        .reel-card.is-final .food-photo { height: 122px; }
+      }
+
+      @media (max-width: 560px) {
+        .hero-stage, .panel { padding: 16px; }
+        .section-heading { display: grid; }
+        .random-controls { grid-template-columns: 1fr; }
+        .count-pill { width: 92px; height: 92px; justify-self: center; }
+        .random-button { min-height: 128px; }
+        .list-card { grid-template-columns: 1fr; }
+        .form-actions, .row-actions { display: grid; grid-template-columns: 1fr 1fr; }
+        .form-actions .secondary-action { grid-column: 1 / -1; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Random Restaurant</p>
+          <h1>人间寻味记</h1>
+        </div>
+        <nav class="top-actions" aria-label="页面导航">
+          <button class="nav-action is-active" id="home-tab" type="button">抽餐厅</button>
+          <button class="nav-action" id="manage-tab" type="button">管理餐厅</button>
+        </nav>
+      </header>
+
+      <div class="home-grid" id="home-view">
+        <section class="hero-stage">
+          <div class="hero-copy">
+            <p class="eyebrow">今天吃哪家</p>
+            <h2>让命运先替你排个号</h2>
+          </div>
+          <div class="filter-panel" aria-label="筛选餐厅">
+            <label>
+              <span>餐厅种类</span>
+              <select id="category-filter"></select>
+            </label>
+            <label>
+              <span>杭州区域</span>
+              <select id="location-filter"></select>
+            </label>
+            <p class="filter-summary" id="filter-summary">全部餐厅</p>
+          </div>
+          <div class="reel-shell">
+            <div class="reel-window">
+              <div class="reel-marker"></div>
+              <div id="reel-area" class="reel-track"></div>
+            </div>
+          </div>
+          <div class="random-controls">
+            <div class="count-pill"><strong id="restaurant-count">0</strong><span>家待打卡</span></div>
+            <button class="random-button" id="pick-button" type="button">随机抽一家餐厅</button>
+          </div>
+          <div id="result-area" class="quiet-hint">还没有抽取餐厅。</div>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">足迹</p>
+              <h2>打卡历史</h2>
+            </div>
+            <button class="danger-action" id="clear-history-button" type="button">清空全部记录</button>
+          </div>
+          <div class="history-list" id="history-list"></div>
+        </section>
+      </div>
+
+      <section class="panel manage-panel" id="manage-view" hidden>
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow" id="manage-count">0 家待打卡</p>
+            <h2>餐厅管理</h2>
+          </div>
+          <button class="ghost-action" id="back-home-button" type="button">返回抽取</button>
+        </div>
+        <form class="restaurant-form" id="restaurant-form">
+          <div class="form-grid">
+            <label><span>餐厅名称 *</span><input id="name-input" placeholder="例如：餐厅 100" required /></label>
+            <label><span>地址</span><input id="address-input" placeholder="可选" /></label>
+          </div>
+          <label><span>餐厅分类</span><select id="restaurant-category-input"></select></label>
+          <label><span>推荐菜 / 备注</span><textarea id="note-input" placeholder="口味、排队情况、推荐菜等" rows="3"></textarea></label>
+          <div class="form-actions">
+            <button class="secondary-action" id="submit-button" type="submit">添加餐厅</button>
+            <button class="ghost-action" id="cancel-edit-button" type="button" hidden>取消编辑</button>
+          </div>
+        </form>
+        <div class="restaurant-list" id="restaurant-list"></div>
+      </section>
+    </main>
+    <div class="toast" id="toast" hidden></div>
+
+    <script>
+      const RESTAURANTS_KEY = "random-restaurant-checkin:restaurants";
+      const CHECK_INS_KEY = "random-restaurant-checkin:check-ins";
+      const ROLL_DURATION_MS = 3000;
+      const REEL_LENGTH = 32;
+      const CATEGORY_OPTIONS = [
+        { value: "all", label: "全部种类", keywords: [] },
+        { value: "bbq", label: "烧烤", keywords: ["烧烤", "烤", "串", "生蚝"] },
+        { value: "hotpot", label: "火锅", keywords: ["火锅", "涮", "羊蝎子", "锅"] },
+        { value: "stir", label: "炒菜", keywords: ["小炒", "炒", "菜馆", "饭店", "私房菜", "下饭菜"] },
+        { value: "noodle", label: "面 / 粉", keywords: ["面", "粉", "拌川", "麻辣烫"] },
+        { value: "seafood", label: "海鲜 / 小龙虾", keywords: ["海鲜", "小龙虾", "龙虾", "虾", "蟹", "鱼"] },
+        { value: "beef", label: "牛羊肉", keywords: ["牛", "羊"] },
+        { value: "fast", label: "快餐 / 西式", keywords: ["肯德基", "麦当劳", "必胜客", "汉堡王", "汉堡", "披萨"] },
+      ];
+      const DISTRICT_RULES = [
+        { district: "西湖区", keywords: ["象山", "小和山", "屏峰", "转塘", "龙坞", "袁浦", "之江", "小和山新苑", "西溪", "留下", "石马", "西联", "西文", "高教园", "首尔印象", "星光荟", "奥莱金街", "象山国际", "象山站", "七贤山居"] },
+        { district: "拱墅区", keywords: ["大关", "上塘", "香积寺", "胜利河", "河东路", "新天地", "海外海", "乐堤港", "中大银泰", "大关大润发", "上塘路", "香积寺路"] },
+        { district: "萧山区", keywords: ["萧山", "西子丁兰"] },
+        { district: "余杭区", keywords: ["良渚", "海创园", "永旺", "永旺梦乐城", "西溪印象城"] },
+        { district: "钱塘区", keywords: ["下沙", "高教园", "金沙湖", "文海南路", "下沙江滨"] },
+        { district: "上城区", keywords: ["景芳", "新塘路", "九堡", "信义坊", "丁兰", "西子丁兰"] },
+        { district: "滨江区", keywords: ["滨江", "西兴", "长河", "浦沿"] },
+        { district: "临平区", keywords: ["临平", "乔司"] },
+        { district: "富阳区", keywords: ["富阳"] },
+      ];
+
+      let initialRestaurants = [];
+      let restaurants = [];
+      let checkIns = readJson(CHECK_INS_KEY, []);
+      let selectedRestaurant = null;
+      let pendingRestaurant = null;
+      let editingRestaurantId = null;
+      let selectedCategory = "all";
+      let selectedLocation = "all";
+      let isRolling = false;
+      let toastTimer = 0;
+
+      const elements = {
+        homeTab: document.querySelector("#home-tab"),
+        manageTab: document.querySelector("#manage-tab"),
+        homeView: document.querySelector("#home-view"),
+        manageView: document.querySelector("#manage-view"),
+        backHomeButton: document.querySelector("#back-home-button"),
+        count: document.querySelector("#restaurant-count"),
+        manageCount: document.querySelector("#manage-count"),
+        categoryFilter: document.querySelector("#category-filter"),
+        locationFilter: document.querySelector("#location-filter"),
+        filterSummary: document.querySelector("#filter-summary"),
+        pickButton: document.querySelector("#pick-button"),
+        reelArea: document.querySelector("#reel-area"),
+        resultArea: document.querySelector("#result-area"),
+        clearHistoryButton: document.querySelector("#clear-history-button"),
+        historyList: document.querySelector("#history-list"),
+        form: document.querySelector("#restaurant-form"),
+        nameInput: document.querySelector("#name-input"),
+        addressInput: document.querySelector("#address-input"),
+        restaurantCategoryInput: document.querySelector("#restaurant-category-input"),
+        noteInput: document.querySelector("#note-input"),
+        submitButton: document.querySelector("#submit-button"),
+        cancelEditButton: document.querySelector("#cancel-edit-button"),
+        restaurantList: document.querySelector("#restaurant-list"),
+        toast: document.querySelector("#toast"),
+      };
+
+      bootstrap();
+
+      async function bootstrap() {
+        initialRestaurants = await fetch("restaurants.json").then((response) => response.json());
+        restaurants = readRestaurants();
+        bindEvents();
+        render();
+        renderReel(buildRollingReel(), false);
+      }
+
+      function bindEvents() {
+        elements.homeTab.addEventListener("click", () => switchView("home"));
+        elements.manageTab.addEventListener("click", () => switchView("manage"));
+        elements.backHomeButton.addEventListener("click", () => switchView("home"));
+        elements.categoryFilter.addEventListener("change", () => {
+          selectedCategory = elements.categoryFilter.value;
+          selectedRestaurant = null;
+          pendingRestaurant = null;
+          render();
+          renderReel(buildRollingReel(), false);
+        });
+        elements.locationFilter.addEventListener("change", () => {
+          selectedLocation = elements.locationFilter.value;
+          selectedRestaurant = null;
+          pendingRestaurant = null;
+          render();
+          renderReel(buildRollingReel(), false);
+        });
+        elements.pickButton.addEventListener("click", pickRestaurant);
+        elements.clearHistoryButton.addEventListener("click", clearHistory);
+        elements.cancelEditButton.addEventListener("click", () => { resetForm(); render(); });
+        elements.form.addEventListener("submit", submitRestaurant);
+        elements.restaurantList.addEventListener("click", handleRestaurantListClick);
+        elements.historyList.addEventListener("click", handleHistoryClick);
+      }
+
+      function readJson(key, fallback) {
+        try {
+          const raw = localStorage.getItem(key);
+          return raw ? JSON.parse(raw) : fallback;
+        } catch {
+          return fallback;
+        }
+      }
+
+      function readRestaurants() {
+        const stored = readJson(RESTAURANTS_KEY, initialRestaurants);
+        return isPlaceholderRestaurantList(stored) ? initialRestaurants : stored;
+      }
+
+      function isPlaceholderRestaurantList(items) {
+        return items.length === 99 && items.every((restaurant, index) => restaurant.name === `餐厅 ${String(index + 1).padStart(3, "0")}`);
+      }
+
+      function saveAll() {
+        localStorage.setItem(RESTAURANTS_KEY, JSON.stringify(restaurants));
+        localStorage.setItem(CHECK_INS_KEY, JSON.stringify(checkIns));
+      }
+
+      function getRestaurantText(restaurant) {
+        return `${restaurant.name || ""} ${restaurant.note || ""} ${restaurant.address || ""}`;
+      }
+
+      function matchesCategory(restaurant, categoryValue) {
+        if (categoryValue === "all") return true;
+        const category = CATEGORY_OPTIONS.find((item) => item.value === categoryValue);
+        if (!category) return true;
+        if ((restaurant.category || inferCategory(restaurant)) === categoryValue) return true;
+        const text = getRestaurantText(restaurant);
+        return category.keywords.some((keyword) => text.includes(keyword));
+      }
+
+      function inferCategory(restaurant) {
+        const text = getRestaurantText(restaurant);
+        const matched = CATEGORY_OPTIONS.find((category) =>
+          category.value !== "all" && category.keywords.some((keyword) => text.includes(keyword)),
+        );
+        return matched ? matched.value : "stir";
+      }
+
+      function getCategoryLabel(value) {
+        return CATEGORY_OPTIONS.find((category) => category.value === value)?.label || "炒菜";
+      }
+
+      function getDistrict(address = "") {
+        const matched = DISTRICT_RULES.find((rule) =>
+          rule.keywords.some((keyword) => address.includes(keyword)),
+        );
+        return matched ? matched.district : "其他区域";
+      }
+
+      function getLocations() {
+        return [...new Set(restaurants.map((restaurant) => getDistrict(restaurant.address)))].sort((a, b) => a.localeCompare(b, "zh-CN"));
+      }
+
+      function getFilteredRestaurants() {
+        return restaurants.filter((restaurant) => {
+          const categoryMatched = matchesCategory(restaurant, selectedCategory);
+          const locationMatched = selectedLocation === "all" || getDistrict(restaurant.address) === selectedLocation;
+          return categoryMatched && locationMatched;
+        });
+      }
+
+      function formatLocation(address) {
+        return address ? `杭州市 · ${getDistrict(address)} · ${address}` : "杭州市 · 位置待补充";
+      }
+
+      function getMapUrl(restaurant) {
+        const query = `杭州 ${restaurant.address || ""} ${restaurant.name}`.trim();
+        return `https://uri.amap.com/search?keyword=${encodeURIComponent(query)}&src=renjianxunweiji&callnative=1`;
+      }
+
+      function renderFilters(filteredRestaurants) {
+        const currentCategory = selectedCategory;
+        const currentLocation = selectedLocation;
+        elements.categoryFilter.innerHTML = CATEGORY_OPTIONS.map((category) =>
+          `<option value="${category.value}">${category.label}</option>`
+        ).join("");
+        elements.locationFilter.innerHTML = [
+          '<option value="all">全部区域</option>',
+          ...getLocations().map((location) => `<option value="${escapeHtml(location)}">${escapeHtml(location)}</option>`),
+        ].join("");
+        elements.categoryFilter.value = currentCategory;
+        elements.locationFilter.value = getLocations().includes(currentLocation) ? currentLocation : "all";
+        selectedLocation = elements.locationFilter.value;
+        elements.filterSummary.textContent = `当前可抽 ${filteredRestaurants.length} / ${restaurants.length} 家`;
+      }
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function createId(prefix) {
+        return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+      }
+
+      function showMessage(message) {
+        window.clearTimeout(toastTimer);
+        elements.toast.textContent = message;
+        elements.toast.hidden = false;
+        toastTimer = window.setTimeout(() => { elements.toast.hidden = true; }, 2600);
+      }
+
+      function switchView(view) {
+        elements.homeView.hidden = view !== "home";
+        elements.manageView.hidden = view !== "manage";
+        elements.homeTab.classList.toggle("is-active", view === "home");
+        elements.manageTab.classList.toggle("is-active", view === "manage");
+        if (view === "home" && !isRolling && !selectedRestaurant) {
+          renderReel(buildRollingReel(), false);
+        }
+      }
+
+      function render() {
+        if (selectedRestaurant && !restaurants.some((restaurant) => restaurant.id === selectedRestaurant.id)) {
+          selectedRestaurant = null;
+        }
+        const filteredRestaurants = getFilteredRestaurants();
+        renderFilters(filteredRestaurants);
+        elements.count.textContent = filteredRestaurants.length;
+        elements.manageCount.textContent = `${restaurants.length} 家待打卡`;
+        elements.pickButton.disabled = isRolling;
+        elements.pickButton.textContent = isRolling ? "正在抽取..." : "随机抽一家餐厅";
+        elements.clearHistoryButton.disabled = checkIns.length === 0;
+        renderResult();
+        renderHistory();
+        renderRestaurantForm();
+        renderRestaurants();
+        saveAll();
+      }
+
+      function renderReel(sequence, rolling, revealed = false) {
+        if (!sequence.length) {
+          elements.reelArea.className = "reel-track";
+          elements.reelArea.innerHTML = "";
+          return;
+        }
+        elements.reelArea.className = `reel-track ${revealed ? "is-revealed" : ""} ${!rolling && !revealed ? "is-idle" : ""}`;
+        elements.reelArea.innerHTML = sequence.map((restaurant, index) => `
+          <article class="reel-card ${revealed && index === 0 ? "is-final" : ""}" style="${getSphereStyle(index, sequence.length, revealed)}" key="${restaurant.id}-${index}">
+            <div class="food-photo" style="--food-image: url('${getRestaurantImage(restaurant)}')"><span>${escapeHtml(restaurant.name.slice(0, 2))}</span></div>
+            <h3>${escapeHtml(restaurant.name)}</h3>
+            <p>${escapeHtml(formatLocation(restaurant.address))}</p>
+            <div class="tag-line"><span class="mini-tag">${escapeHtml(getCategoryLabel(restaurant.category || inferCategory(restaurant)))}</span></div>
+          </article>
+        `).join("");
+        requestAnimationFrame(() => {
+          if (rolling) elements.reelArea.classList.add("is-rolling");
+        });
+      }
+
+      function shuffleRestaurants(items) {
+        return [...items].sort(() => Math.random() - 0.5);
+      }
+
+      function buildRollingReel() {
+        const pool = getFilteredRestaurants();
+        return shuffleRestaurants(pool).slice(0, Math.min(REEL_LENGTH, pool.length));
+      }
+
+      function buildFinalReel(finalRestaurant) {
+        const pool = getFilteredRestaurants();
+        return [finalRestaurant].concat(
+          shuffleRestaurants(pool.filter((restaurant) => restaurant.id !== finalRestaurant.id))
+            .slice(0, Math.min(REEL_LENGTH - 1, Math.max(pool.length - 1, 0))),
+        );
+      }
+
+      function renderResult() {
+        if (selectedRestaurant) {
+          elements.resultArea.className = "result-card";
+          elements.resultArea.innerHTML = `
+            <div><p class="eyebrow">锁定目的地</p><h3>${escapeHtml(selectedRestaurant.name)}</h3></div>
+            <dl>
+              <div><dt>位置</dt><dd>${escapeHtml(formatLocation(selectedRestaurant.address))}</dd></div>
+              <div><dt>推荐菜</dt><dd>${escapeHtml(selectedRestaurant.note || "暂无推荐菜")}</dd></div>
+            </dl>
+            <div class="result-actions">
+              <a class="map-action" href="${getMapUrl(selectedRestaurant)}" target="_blank" rel="noreferrer">打开地图</a>
+              <button class="success-action" id="complete-button" type="button">完成打卡</button>
+            </div>
+          `;
+          document.querySelector("#complete-button").addEventListener("click", completeCheckIn);
+          return;
+        }
+        elements.resultArea.className = "quiet-hint";
+        elements.resultArea.textContent = isRolling ? "餐厅正在飞速路过，马上揭晓。" : "还没有抽取餐厅。";
+      }
+
+      function pickRestaurant() {
+        if (isRolling) return;
+        if (restaurants.length === 0) {
+          alert("当前没有可抽取的餐厅，请先添加餐厅");
+          return;
+        }
+        const pool = getFilteredRestaurants();
+        if (pool.length === 0) {
+          alert("当前筛选条件下没有可抽取的餐厅，请调整筛选条件");
+          return;
+        }
+        const finalRestaurant = pool[Math.floor(Math.random() * pool.length)];
+        const sequence = buildRollingReel();
+        selectedRestaurant = null;
+        pendingRestaurant = finalRestaurant;
+        isRolling = true;
+        render();
+        renderReel(sequence, true);
+        window.setTimeout(() => {
+          selectedRestaurant = pendingRestaurant;
+          pendingRestaurant = null;
+          isRolling = false;
+          showMessage("已锁定本次打卡餐厅。");
+          render();
+          renderReel(buildFinalReel(selectedRestaurant), false, true);
+        }, ROLL_DURATION_MS);
+      }
+
+      function getSphereStyle(index, total, revealed = false) {
+        if (revealed && index === 0) {
+          return "--theta: 0deg; --phi: 0deg; --radius: 232px; --depth-opacity: 1; --depth-saturation: 1.12; --card-scale: 1;";
+        }
+
+        const adjustedIndex = revealed ? index - 1 : index;
+        const adjustedTotal = Math.max(revealed ? total - 1 : total, 1);
+        const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+        const y = 1 - (adjustedIndex / Math.max(adjustedTotal - 1, 1)) * 2;
+        const horizontalRadius = Math.sqrt(Math.max(0, 1 - y * y));
+        const theta = goldenAngle * adjustedIndex;
+        const x = Math.cos(theta) * horizontalRadius;
+        const z = Math.sin(theta) * horizontalRadius;
+        const cardTheta = Math.atan2(x, z) * 180 / Math.PI;
+        const cardPhi = Math.asin(y) * 180 / Math.PI;
+        const depthOpacity = Math.max(0.24, 0.56 + z * 0.38).toFixed(2);
+        const depthSaturation = Math.max(0.58, 0.82 + z * 0.24).toFixed(2);
+        const cardScale = Math.max(0.62, 0.8 + z * 0.18).toFixed(2);
+        return `--theta: ${cardTheta.toFixed(2)}deg; --phi: ${cardPhi.toFixed(2)}deg; --radius: 214px; --depth-opacity: ${depthOpacity}; --depth-saturation: ${depthSaturation}; --card-scale: ${cardScale};`;
+      }
+
+      function getRestaurantImage(restaurant) {
+        const text = `${restaurant.name || ""} ${restaurant.note || ""} ${restaurant.address || ""}`;
+        const imageMap = [
+          [["火锅", "涮", "羊蝎子"], "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=520&q=80"],
+          [["烧烤", "烤", "串", "生蚝"], "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=520&q=80"],
+          [["面", "拌川", "粉", "麻辣烫"], "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=520&q=80"],
+          [["小龙虾", "龙虾", "虾"], "https://images.unsplash.com/photo-1559737558-2f5a35f4523b?auto=format&fit=crop&w=520&q=80"],
+          [["牛", "牛肉", "牛蛙"], "https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=520&q=80"],
+          [["鸡", "鸡公煲", "鸭", "鹅"], "https://images.unsplash.com/photo-1562967916-eb82221dfb36?auto=format&fit=crop&w=520&q=80"],
+          [["鱼", "海鲜", "蟹", "鲳"], "https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=520&q=80"],
+          [["汉堡", "肯德基", "麦当劳", "必胜客", "汉堡王"], "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=520&q=80"],
+          [["砂锅", "煲", "菜馆", "小炒"], "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=520&q=80"],
+        ];
+        const matched = imageMap.find(([keywords]) => keywords.some((keyword) => text.includes(keyword)));
+        return matched ? matched[1] : "https://images.unsplash.com/photo-1543353071-873f17a7a088?auto=format&fit=crop&w=520&q=80";
+      }
+
+      function completeCheckIn() {
+        if (!selectedRestaurant) return;
+        const shouldRemove = confirm("打卡完成！是否将该餐厅从待打卡库中移除？");
+        checkIns = [{
+          id: createId("check-in"),
+          restaurantId: selectedRestaurant.id,
+          restaurantName: selectedRestaurant.name,
+          address: selectedRestaurant.address,
+          category: selectedRestaurant.category || inferCategory(selectedRestaurant),
+          note: selectedRestaurant.note,
+          checkedInAt: new Date().toISOString(),
+        }, ...checkIns];
+        if (shouldRemove) restaurants = restaurants.filter((restaurant) => restaurant.id !== selectedRestaurant.id);
+        selectedRestaurant = null;
+        showMessage(shouldRemove ? "打卡成功，餐厅已从待打卡库移除。" : "打卡成功，餐厅已保留。");
+        render();
+        renderReel(buildRollingReel(), false);
+      }
+
+      function renderHistory() {
+        if (checkIns.length === 0) {
+          elements.historyList.innerHTML = '<div class="empty-state">还没有打卡记录。</div>';
+          return;
+        }
+        elements.historyList.innerHTML = checkIns.map((record) => `
+          <article class="list-card">
+            <div>
+              <h3>${escapeHtml(record.restaurantName)}</h3>
+              <p>${escapeHtml(formatLocation(record.address))}</p>
+              <div class="tag-line"><span class="mini-tag">${escapeHtml(getCategoryLabel(record.category || inferCategory({ name: record.restaurantName, note: record.note, address: record.address })))}</span></div>
+              ${record.note ? `<p class="muted">${escapeHtml(record.note)}</p>` : ""}
+              ${record.thought ? `<p class="thought-text">${escapeHtml(record.thought)}</p>` : ""}
+              <time>${new Intl.DateTimeFormat("zh-CN", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }).format(new Date(record.checkedInAt))}</time>
+            </div>
+            <div class="row-actions">
+              <button class="ghost-action" data-action="edit-thought" data-id="${record.id}" type="button">${record.thought ? "修改心得" : "记录心得"}</button>
+            <button class="danger-action" data-action="delete-history" data-id="${record.id}" type="button">删除</button>
+            </div>
+          </article>
+        `).join("");
+      }
+
+      function renderRestaurantForm() {
+        const editingRestaurant = restaurants.find((restaurant) => restaurant.id === editingRestaurantId);
+        elements.restaurantCategoryInput.innerHTML = CATEGORY_OPTIONS
+          .filter((category) => category.value !== "all")
+          .map((category) => `<option value="${category.value}">${category.label}</option>`)
+          .join("");
+        elements.restaurantCategoryInput.value = editingRestaurant
+          ? (editingRestaurant.category || inferCategory(editingRestaurant))
+          : "stir";
+        elements.submitButton.textContent = editingRestaurant ? "保存修改" : "添加餐厅";
+        elements.cancelEditButton.hidden = !editingRestaurant;
+      }
+
+      function renderRestaurants() {
+        if (restaurants.length === 0) {
+          elements.restaurantList.innerHTML = '<div class="empty-state">当前没有可抽取的餐厅，请先添加餐厅。</div>';
+          return;
+        }
+        elements.restaurantList.innerHTML = restaurants.map((restaurant) => `
+          <article class="list-card ${editingRestaurantId === restaurant.id ? "is-editing" : ""}">
+            <div>
+              <h3>${escapeHtml(restaurant.name)}</h3>
+              <p>${escapeHtml(formatLocation(restaurant.address))}</p>
+              <div class="tag-line"><span class="mini-tag">${escapeHtml(getCategoryLabel(restaurant.category || inferCategory(restaurant)))}</span></div>
+              ${restaurant.note ? `<p class="muted">${escapeHtml(restaurant.note)}</p>` : ""}
+            </div>
+            <div class="row-actions">
+              <a class="map-action" href="${getMapUrl(restaurant)}" target="_blank" rel="noreferrer">地图</a>
+              <button class="ghost-action" data-action="edit" data-id="${restaurant.id}" type="button">编辑</button>
+              <button class="danger-action" data-action="delete" data-id="${restaurant.id}" type="button">删除</button>
+            </div>
+          </article>
+        `).join("");
+      }
+
+      function submitRestaurant(event) {
+        event.preventDefault();
+        const input = {
+          name: elements.nameInput.value.trim(),
+          address: elements.addressInput.value.trim(),
+          category: elements.restaurantCategoryInput.value,
+          note: elements.noteInput.value.trim(),
+        };
+        if (!input.name) {
+          alert("餐厅名称不能为空");
+          return;
+        }
+        if (editingRestaurantId) {
+          restaurants = restaurants.map((restaurant) => restaurant.id === editingRestaurantId ? { ...restaurant, ...input } : restaurant);
+          if (selectedRestaurant?.id === editingRestaurantId) selectedRestaurant = { ...selectedRestaurant, ...input };
+          resetForm();
+          showMessage("餐厅信息已更新。");
+        } else {
+          restaurants = [{ id: createId("restaurant"), ...input, createdAt: new Date().toISOString() }, ...restaurants];
+          resetForm();
+          showMessage("新餐厅已添加。");
+        }
+        render();
+      }
+
+      function resetForm() {
+        editingRestaurantId = null;
+        elements.nameInput.value = "";
+        elements.addressInput.value = "";
+        elements.restaurantCategoryInput.value = "stir";
+        elements.noteInput.value = "";
+      }
+
+      function handleRestaurantListClick(event) {
+        const button = event.target.closest("button");
+        if (!button) return;
+        const restaurant = restaurants.find((item) => item.id === button.dataset.id);
+        if (!restaurant) return;
+        if (button.dataset.action === "edit") {
+          editingRestaurantId = restaurant.id;
+          elements.nameInput.value = restaurant.name;
+          elements.addressInput.value = restaurant.address || "";
+          elements.restaurantCategoryInput.value = restaurant.category || inferCategory(restaurant);
+          elements.noteInput.value = restaurant.note || "";
+          elements.nameInput.focus();
+          render();
+        }
+        if (button.dataset.action === "delete") {
+          if (!confirm(`确定删除「${restaurant.name}」吗？`)) return;
+          restaurants = restaurants.filter((item) => item.id !== restaurant.id);
+          if (editingRestaurantId === restaurant.id) resetForm();
+          if (selectedRestaurant?.id === restaurant.id) selectedRestaurant = null;
+          showMessage("餐厅已删除。");
+          render();
+        }
+      }
+
+      function handleHistoryClick(event) {
+        const button = event.target.closest("button");
+        if (!button) return;
+        if (button.dataset.action === "edit-thought") {
+          const record = checkIns.find((item) => item.id === button.dataset.id);
+          if (!record) return;
+          const nextThought = prompt(`记录「${record.restaurantName}」的打卡心得`, record.thought || "");
+          if (nextThought === null) return;
+          checkIns = checkIns.map((item) =>
+            item.id === record.id ? { ...item, thought: nextThought.trim() } : item,
+          );
+          showMessage(nextThought.trim() ? "心得已保存。" : "心得已清空。");
+          render();
+          return;
+        }
+        if (button.dataset.action === "delete-history") {
+          checkIns = checkIns.filter((record) => record.id !== button.dataset.id);
+          showMessage("打卡记录已删除。");
+          render();
+        }
+      }
+
+      function clearHistory() {
+        if (checkIns.length === 0) return;
+        if (!confirm("确定清空全部打卡记录吗？此操作不可撤销。")) return;
+        checkIns = [];
+        showMessage("打卡历史已清空。");
+        render();
+      }
+    </script>
+  </body>
+</html>
