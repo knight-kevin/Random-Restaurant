@@ -1,0 +1,14 @@
+[
+  {
+    "id": "gaode-xihu-001",
+    "name": "餐厅名称",
+    "address": "尽量完整的高德地址",
+    "note": "推荐菜、榜单摘要或人均信息",
+    "category": "hotpot",
+    "district": "西湖区",
+    "businessArea": "商圈名称",
+    "source": "高德扫街榜",
+    "rank": 1,
+    "createdAt": "2026-06-17T00:00:00.000Z"
+  }
+]

@@ -2,13 +2,14 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="人间寻味记" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="format-detection" content="telephone=no" />
     <meta name="theme-color" content="#fff7e8" />
     <link rel="manifest" href="manifest.webmanifest" />
-    <link rel="apple-touch-icon" href="icon.svg" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
     <title>人间寻味记</title>
     <style>
       :root {
@@ -19,9 +20,10 @@
         font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
       }
 
-      * { box-sizing: border-box; }
-      body { margin: 0; min-width: 320px; min-height: 100vh; }
+      * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+      body { margin: 0; min-width: 320px; min-height: 100vh; min-height: 100dvh; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); overscroll-behavior-y: contain; }
       button, input, textarea { font: inherit; }
+      button, a { touch-action: manipulation; }
       button { border: 0; cursor: pointer; }
       button:disabled { cursor: not-allowed; opacity: 0.7; }
 
@@ -53,11 +55,12 @@
       .reel-track { position: absolute; z-index: 2; inset: 0; transform-style: preserve-3d; transform: rotateX(0deg) rotateY(0deg); will-change: transform; }
       .reel-track.is-idle { animation: sphereIdle 18s linear infinite; }
       .reel-track.is-rolling { animation: sphereSpin 3s cubic-bezier(.2,.72,.18,1) forwards; }
-      .reel-track.is-revealed .reel-card.is-final { animation: finalReveal .62s cubic-bezier(.16,1,.3,1) both; }
-      .reel-card { position: absolute; top: 50%; left: 50%; width: 128px; height: 154px; overflow: hidden; border-radius: 44% / 18%; clip-path: ellipse(61% 51% at 50% 50%); background: #fffaf2; box-shadow: 0 18px 36px rgba(0,0,0,.24); transform: translate(-50%, -50%) rotateY(var(--theta)) rotateX(var(--phi)) translateZ(var(--radius)) scale(var(--card-scale)); transform-style: preserve-3d; opacity: var(--depth-opacity); filter: saturate(var(--depth-saturation)); backface-visibility: visible; }
+      .reel-track.is-revealed .reel-card:not(.is-final) { opacity: 0; filter: blur(10px) saturate(.45); pointer-events: none; transition: opacity .38s ease, filter .38s ease; }
+      .reel-track.is-revealed .reel-card.is-final { animation: finalReveal 1.05s cubic-bezier(.16,1,.3,1) both; }
+      .reel-card { position: absolute; top: 50%; left: 50%; width: 128px; height: 154px; overflow: hidden; border-radius: 44% / 18%; clip-path: ellipse(61% 51% at 50% 50%); background: #fffaf2; box-shadow: 0 18px 36px rgba(0,0,0,.24); transform: translate(-50%, -50%) rotateY(var(--theta)) rotateX(var(--phi)) rotateZ(var(--twist)) translateZ(var(--radius)) scaleX(var(--curve-scale)) scale(var(--card-scale)); transform-style: preserve-3d; opacity: var(--depth-opacity); filter: saturate(var(--depth-saturation)) brightness(var(--depth-light)); backface-visibility: visible; transition: opacity .24s ease, filter .24s ease; }
       .reel-card::before { position: absolute; z-index: 3; inset: -2px; content: ""; border-radius: inherit; background: radial-gradient(circle at 50% 42%, transparent 0 46%, rgba(10,25,36,.24) 72%, rgba(10,25,36,.42) 100%); pointer-events: none; mix-blend-mode: multiply; }
       .reel-card::after { position: absolute; z-index: 4; inset: 0; content: ""; border-radius: inherit; background: linear-gradient(100deg, rgba(255,255,255,.38), transparent 34%, rgba(0,0,0,.28)); pointer-events: none; }
-      .reel-card.is-final { z-index: 8; width: 210px; height: 242px; border-radius: 32% / 14%; clip-path: ellipse(59% 52% at 50% 50%); box-shadow: 0 34px 70px rgba(0,0,0,.4), 0 0 0 4px rgba(255,211,108,.78), 0 0 44px rgba(255,211,108,.34); }
+      .reel-card.is-final { z-index: 8; width: 230px; height: 266px; border-radius: 28px; clip-path: inset(0 round 28px); box-shadow: 0 34px 70px rgba(0,0,0,.4), 0 0 0 4px rgba(255,211,108,.78), 0 0 44px rgba(255,211,108,.34); }
       .food-photo { display: grid; height: 94px; place-items: center; background-color: #cf4f35; background-image: radial-gradient(circle at 50% 48%, rgba(255,255,255,.18), rgba(255,255,255,0) 38%), linear-gradient(135deg, rgba(243,180,92,.65), rgba(207,79,53,.24)), var(--food-image); background-size: cover; background-position: center; }
       .food-photo span { display: grid; width: 58px; height: 58px; place-items: center; border-radius: 50%; background: rgba(255,255,255,.88); color: #a33824; font-size: 1.25rem; font-weight: 900; box-shadow: 0 16px 28px rgba(30,35,41,.18); }
       .reel-card h3 { padding: 10px 10px 0; font-size: .86rem; }
@@ -68,7 +71,7 @@
       .reel-placeholder { display: grid; position: relative; z-index: 2; height: 100%; place-items: center; color: rgba(255,255,255,.72); text-align: center; }
       @keyframes sphereIdle { from { transform: rotateX(10deg) rotateY(0deg) rotateZ(0deg); } to { transform: rotateX(10deg) rotateY(-360deg) rotateZ(0deg); } }
       @keyframes sphereSpin { 0% { transform: rotateX(18deg) rotateY(-24deg) rotateZ(-2deg); } 35% { transform: rotateX(-14deg) rotateY(-560deg) rotateZ(2deg); } 70% { transform: rotateX(10deg) rotateY(-1030deg) rotateZ(-1deg); } 100% { transform: rotateX(0deg) rotateY(-1440deg) rotateZ(0deg); } }
-      @keyframes finalReveal { 0% { transform: translate(-50%, -50%) rotateY(var(--theta)) rotateX(var(--phi)) translateZ(150px) scale(.62); opacity: 0; } 100% { transform: translate(-50%, -50%) rotateY(var(--theta)) rotateX(var(--phi)) translateZ(var(--radius)) scale(var(--card-scale)); opacity: 1; } }
+      @keyframes finalReveal { 0% { transform: translate(-50%, -50%) rotateY(-34deg) rotateX(12deg) translateZ(120px) scale(.56); opacity: 0; filter: blur(8px) saturate(.8); } 55% { opacity: 1; filter: blur(0) saturate(1.05); } 100% { transform: translate(-50%, -50%) rotateY(var(--theta)) rotateX(var(--phi)) rotateZ(0deg) translateZ(var(--radius)) scaleX(1) scale(var(--card-scale)); opacity: 1; filter: blur(0) saturate(1.12); } }
 
       .random-controls { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; margin-top: 22px; }
       .count-pill { display: grid; min-width: 98px; min-height: 98px; place-items: center; padding: 12px; border-radius: 50%; background: #fff4d4; color: #8a421f; box-shadow: inset 0 0 0 1px rgba(138,66,31,.1); }
@@ -113,6 +116,13 @@
       .tag-line { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
       .mini-tag { width: fit-content; padding: 3px 8px; border-radius: 999px; background: #fff4d4; color: #8a421f; font-size: .76rem; font-weight: 800; }
       .thought-text { margin-top: 8px !important; padding: 10px; border-radius: 8px; background: #f8fbf4; color: #39493f !important; }
+      .rating-summary { display: grid; gap: 7px; margin-top: 10px; padding: 12px; border-radius: 8px; background: #fffaf0; border: 1px solid rgba(138,66,31,.12); }
+      .rating-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+      .rating-chip { display: grid; gap: 3px; padding: 8px; border-radius: 8px; background: rgba(255,255,255,.78); color: #8a421f; font-weight: 900; text-align: center; }
+      .rating-chip span { color: #687274; font-size: .72rem; font-weight: 800; }
+      .review-form { display: grid; gap: 12px; margin-top: 12px; padding: 12px; border: 1px solid #dfe7d9; border-radius: 8px; background: #fbfcf8; }
+      .review-score-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+      .review-form select { min-height: 40px; }
       .empty-state { margin-top: 14px; padding: 18px; border: 1px dashed #bdc9b7; border-radius: 8px; background: #fbfcf8; color: #5d6e61; line-height: 1.6; text-align: center; }
       .toast { position: fixed; z-index: 20; left: 50%; bottom: 22px; transform: translateX(-50%); max-width: min(520px, calc(100% - 28px)); padding: 12px 16px; border-radius: 8px; background: #1f2933; color: #fff; box-shadow: 0 16px 40px rgba(31,41,51,.22); }
       [hidden] { display: none !important; }
@@ -140,6 +150,7 @@
         .count-pill { width: 92px; height: 92px; justify-self: center; }
         .random-button { min-height: 128px; }
         .list-card { grid-template-columns: 1fr; }
+        .rating-grid, .review-score-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .form-actions, .row-actions { display: grid; grid-template-columns: 1fr 1fr; }
         .form-actions .secondary-action { grid-column: 1 / -1; }
       }
@@ -258,10 +269,12 @@
       let selectedRestaurant = null;
       let pendingRestaurant = null;
       let editingRestaurantId = null;
+      let editingReviewId = null;
       let selectedCategory = "all";
       let selectedLocation = "all";
       let isRolling = false;
       let toastTimer = 0;
+      let audioContext = null;
 
       const elements = {
         homeTab: document.querySelector("#home-tab"),
@@ -324,6 +337,7 @@
         elements.form.addEventListener("submit", submitRestaurant);
         elements.restaurantList.addEventListener("click", handleRestaurantListClick);
         elements.historyList.addEventListener("click", handleHistoryClick);
+        elements.historyList.addEventListener("submit", submitReview);
       }
 
       function readJson(key, fallback) {
@@ -393,8 +407,10 @@
         });
       }
 
-      function formatLocation(address) {
-        return address ? `杭州市 · ${getDistrict(address)} · ${address}` : "杭州市 · 位置待补充";
+      function formatLocation(address, restaurant = {}) {
+        const district = restaurant.district || getDistrict(address);
+        const area = restaurant.businessArea ? ` · ${restaurant.businessArea}` : "";
+        return address ? `杭州市 · ${district}${area} · ${address}` : `杭州市 · ${district}${area} · 位置待补充`;
       }
 
       function getMapUrl(restaurant) {
@@ -477,8 +493,11 @@
           <article class="reel-card ${revealed && index === 0 ? "is-final" : ""}" style="${getSphereStyle(index, sequence.length, revealed)}" key="${restaurant.id}-${index}">
             <div class="food-photo" style="--food-image: url('${getRestaurantImage(restaurant)}')"><span>${escapeHtml(restaurant.name.slice(0, 2))}</span></div>
             <h3>${escapeHtml(restaurant.name)}</h3>
-            <p>${escapeHtml(formatLocation(restaurant.address))}</p>
-            <div class="tag-line"><span class="mini-tag">${escapeHtml(getCategoryLabel(restaurant.category || inferCategory(restaurant)))}</span></div>
+            <p>${escapeHtml(formatLocation(restaurant.address, restaurant))}</p>
+            <div class="tag-line">
+              <span class="mini-tag">${escapeHtml(getCategoryLabel(restaurant.category || inferCategory(restaurant)))}</span>
+              ${restaurant.source ? `<span class="mini-tag">${escapeHtml(restaurant.source)}${restaurant.rank ? ` #${escapeHtml(String(restaurant.rank))}` : ""}</span>` : ""}
+            </div>
           </article>
         `).join("");
         requestAnimationFrame(() => {
@@ -509,7 +528,10 @@
           elements.resultArea.innerHTML = `
             <div><p class="eyebrow">锁定目的地</p><h3>${escapeHtml(selectedRestaurant.name)}</h3></div>
             <dl>
-              <div><dt>位置</dt><dd>${escapeHtml(formatLocation(selectedRestaurant.address))}</dd></div>
+              <div><dt>位置</dt><dd>${escapeHtml(formatLocation(selectedRestaurant.address, selectedRestaurant))}</dd></div>
+              <div><dt>分类</dt><dd>${escapeHtml(getCategoryLabel(selectedRestaurant.category || inferCategory(selectedRestaurant)))}</dd></div>
+              ${selectedRestaurant.businessArea ? `<div><dt>商圈</dt><dd>${escapeHtml(selectedRestaurant.businessArea)}</dd></div>` : ""}
+              ${selectedRestaurant.source ? `<div><dt>来源</dt><dd>${escapeHtml(selectedRestaurant.source)}${selectedRestaurant.rank ? ` · 第 ${escapeHtml(String(selectedRestaurant.rank))} 名` : ""}</dd></div>` : ""}
               <div><dt>推荐菜</dt><dd>${escapeHtml(selectedRestaurant.note || "暂无推荐菜")}</dd></div>
             </dl>
             <div class="result-actions">
@@ -540,12 +562,14 @@
         selectedRestaurant = null;
         pendingRestaurant = finalRestaurant;
         isRolling = true;
+        playRollingSound();
         render();
         renderReel(sequence, true);
         window.setTimeout(() => {
           selectedRestaurant = pendingRestaurant;
           pendingRestaurant = null;
           isRolling = false;
+          playLockSound();
           showMessage("已锁定本次打卡餐厅。");
           render();
           renderReel(buildFinalReel(selectedRestaurant), false, true);
@@ -554,7 +578,7 @@
 
       function getSphereStyle(index, total, revealed = false) {
         if (revealed && index === 0) {
-          return "--theta: 0deg; --phi: 0deg; --radius: 232px; --depth-opacity: 1; --depth-saturation: 1.12; --card-scale: 1;";
+          return "--theta: 0deg; --phi: 0deg; --twist: 0deg; --radius: 260px; --depth-opacity: 1; --depth-saturation: 1.12; --depth-light: 1.04; --curve-scale: 1; --card-scale: 1;";
         }
 
         const adjustedIndex = revealed ? index - 1 : index;
@@ -569,8 +593,53 @@
         const cardPhi = Math.asin(y) * 180 / Math.PI;
         const depthOpacity = Math.max(0.24, 0.56 + z * 0.38).toFixed(2);
         const depthSaturation = Math.max(0.58, 0.82 + z * 0.24).toFixed(2);
+        const depthLight = Math.max(0.58, 0.88 + z * 0.18).toFixed(2);
         const cardScale = Math.max(0.62, 0.8 + z * 0.18).toFixed(2);
-        return `--theta: ${cardTheta.toFixed(2)}deg; --phi: ${cardPhi.toFixed(2)}deg; --radius: 214px; --depth-opacity: ${depthOpacity}; --depth-saturation: ${depthSaturation}; --card-scale: ${cardScale};`;
+        const curveScale = Math.max(0.62, 0.96 - Math.abs(x) * 0.2 - Math.max(0, -z) * 0.16).toFixed(2);
+        const twist = (x * -9 + y * 5).toFixed(2);
+        return `--theta: ${cardTheta.toFixed(2)}deg; --phi: ${cardPhi.toFixed(2)}deg; --twist: ${twist}deg; --radius: 214px; --depth-opacity: ${depthOpacity}; --depth-saturation: ${depthSaturation}; --depth-light: ${depthLight}; --curve-scale: ${curveScale}; --card-scale: ${cardScale};`;
+      }
+
+      function getAudioContext() {
+        const AudioCtor = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtor) return null;
+        if (!audioContext) audioContext = new AudioCtor();
+        return audioContext;
+      }
+
+      function playTone(frequency, startOffset, duration, volume = 0.05, type = "sine") {
+        const context = getAudioContext();
+        if (!context) return;
+        const oscillator = context.createOscillator();
+        const gain = context.createGain();
+        const startAt = context.currentTime + startOffset;
+        oscillator.type = type;
+        oscillator.frequency.setValueAtTime(frequency, startAt);
+        gain.gain.setValueAtTime(0.0001, startAt);
+        gain.gain.exponentialRampToValueAtTime(volume, startAt + 0.015);
+        gain.gain.exponentialRampToValueAtTime(0.0001, startAt + duration);
+        oscillator.connect(gain);
+        gain.connect(context.destination);
+        oscillator.start(startAt);
+        oscillator.stop(startAt + duration + 0.03);
+      }
+
+      function playRollingSound() {
+        const context = getAudioContext();
+        if (!context) return;
+        context.resume?.();
+        for (let index = 0; index < 18; index += 1) {
+          playTone(220 + index * 18, index * 0.065, 0.055, 0.026, "triangle");
+        }
+      }
+
+      function playLockSound() {
+        const context = getAudioContext();
+        if (!context) return;
+        context.resume?.();
+        [392, 523.25, 659.25].forEach((frequency, index) => {
+          playTone(frequency, index * 0.08, 0.18, 0.055, "sine");
+        });
       }
 
       function getRestaurantImage(restaurant) {
@@ -599,6 +668,10 @@
           restaurantName: selectedRestaurant.name,
           address: selectedRestaurant.address,
           category: selectedRestaurant.category || inferCategory(selectedRestaurant),
+          district: selectedRestaurant.district || getDistrict(selectedRestaurant.address),
+          businessArea: selectedRestaurant.businessArea,
+          source: selectedRestaurant.source,
+          rank: selectedRestaurant.rank,
           note: selectedRestaurant.note,
           checkedInAt: new Date().toISOString(),
         }, ...checkIns];
@@ -618,18 +691,95 @@
           <article class="list-card">
             <div>
               <h3>${escapeHtml(record.restaurantName)}</h3>
-              <p>${escapeHtml(formatLocation(record.address))}</p>
-              <div class="tag-line"><span class="mini-tag">${escapeHtml(getCategoryLabel(record.category || inferCategory({ name: record.restaurantName, note: record.note, address: record.address })))}</span></div>
+              <p>${escapeHtml(formatLocation(record.address, record))}</p>
+              <div class="tag-line">
+                <span class="mini-tag">${escapeHtml(getCategoryLabel(record.category || inferCategory({ name: record.restaurantName, note: record.note, address: record.address })))}</span>
+                ${record.source ? `<span class="mini-tag">${escapeHtml(record.source)}${record.rank ? ` #${escapeHtml(String(record.rank))}` : ""}</span>` : ""}
+              </div>
               ${record.note ? `<p class="muted">${escapeHtml(record.note)}</p>` : ""}
-              ${record.thought ? `<p class="thought-text">${escapeHtml(record.thought)}</p>` : ""}
+              ${renderRatingSummary(record)}
+              ${editingReviewId === record.id ? renderReviewForm(record) : ""}
               <time>${new Intl.DateTimeFormat("zh-CN", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }).format(new Date(record.checkedInAt))}</time>
             </div>
             <div class="row-actions">
-              <button class="ghost-action" data-action="edit-thought" data-id="${record.id}" type="button">${record.thought ? "修改心得" : "记录心得"}</button>
+              <button class="ghost-action" data-action="edit-review" data-id="${record.id}" type="button">${hasReview(record) ? "修改评价" : "评价"}</button>
             <button class="danger-action" data-action="delete-history" data-id="${record.id}" type="button">删除</button>
             </div>
           </article>
         `).join("");
+      }
+
+      function getReview(record) {
+        return record.review || {
+          taste: 0,
+          service: 0,
+          value: 0,
+          environment: 0,
+          comment: record.thought || "",
+        };
+      }
+
+      function hasReview(record) {
+        const review = getReview(record);
+        return Boolean(review.comment || review.taste || review.service || review.value || review.environment);
+      }
+
+      function getAverageRating(review) {
+        const scores = [review.taste, review.service, review.value, review.environment]
+          .map((score) => Number(score) || 0)
+          .filter((score) => score > 0);
+        if (!scores.length) return "";
+        return (scores.reduce((sum, score) => sum + score, 0) / scores.length).toFixed(1);
+      }
+
+      function renderRatingSummary(record) {
+        if (!hasReview(record)) return "";
+        const review = getReview(record);
+        const average = getAverageRating(review);
+        return `
+          <div class="rating-summary">
+            ${average ? `<strong>综合 ${escapeHtml(average)} / 5</strong>` : ""}
+            <div class="rating-grid">
+              ${renderRatingChip("口味", review.taste)}
+              ${renderRatingChip("服务", review.service)}
+              ${renderRatingChip("性价比", review.value)}
+              ${renderRatingChip("环境", review.environment)}
+            </div>
+            ${review.comment ? `<p class="thought-text">${escapeHtml(review.comment)}</p>` : ""}
+          </div>
+        `;
+      }
+
+      function renderRatingChip(label, score) {
+        return `<div class="rating-chip"><span>${label}</span>${score ? `${"★".repeat(Number(score))}<small>${score}/5</small>` : "未评"}</div>`;
+      }
+
+      function renderReviewForm(record) {
+        const review = getReview(record);
+        return `
+          <form class="review-form" data-review-form="${record.id}">
+            <div class="review-score-grid">
+              ${renderScoreSelect("taste", "口味", review.taste)}
+              ${renderScoreSelect("service", "服务", review.service)}
+              ${renderScoreSelect("value", "性价比", review.value)}
+              ${renderScoreSelect("environment", "环境", review.environment)}
+            </div>
+            <label><span>点评</span><textarea name="comment" rows="3" placeholder="这家店哪里值得记住？">${escapeHtml(review.comment || "")}</textarea></label>
+            <div class="form-actions">
+              <button class="secondary-action" type="submit">保存评价</button>
+              <button class="ghost-action" data-action="cancel-review" data-id="${record.id}" type="button">取消</button>
+            </div>
+          </form>
+        `;
+      }
+
+      function renderScoreSelect(name, label, value) {
+        const options = ['<option value="0">未评分</option>']
+          .concat([1, 2, 3, 4, 5].map((score) =>
+            `<option value="${score}" ${Number(value) === score ? "selected" : ""}>${score} 分</option>`
+          ))
+          .join("");
+        return `<label><span>${label}</span><select name="${name}">${options}</select></label>`;
       }
 
       function renderRestaurantForm() {
@@ -654,8 +804,11 @@
           <article class="list-card ${editingRestaurantId === restaurant.id ? "is-editing" : ""}">
             <div>
               <h3>${escapeHtml(restaurant.name)}</h3>
-              <p>${escapeHtml(formatLocation(restaurant.address))}</p>
-              <div class="tag-line"><span class="mini-tag">${escapeHtml(getCategoryLabel(restaurant.category || inferCategory(restaurant)))}</span></div>
+              <p>${escapeHtml(formatLocation(restaurant.address, restaurant))}</p>
+              <div class="tag-line">
+                <span class="mini-tag">${escapeHtml(getCategoryLabel(restaurant.category || inferCategory(restaurant)))}</span>
+                ${restaurant.source ? `<span class="mini-tag">${escapeHtml(restaurant.source)}${restaurant.rank ? ` #${escapeHtml(String(restaurant.rank))}` : ""}</span>` : ""}
+              </div>
               ${restaurant.note ? `<p class="muted">${escapeHtml(restaurant.note)}</p>` : ""}
             </div>
             <div class="row-actions">
@@ -727,29 +880,57 @@
       function handleHistoryClick(event) {
         const button = event.target.closest("button");
         if (!button) return;
-        if (button.dataset.action === "edit-thought") {
+        if (button.dataset.action === "edit-review") {
           const record = checkIns.find((item) => item.id === button.dataset.id);
           if (!record) return;
-          const nextThought = prompt(`记录「${record.restaurantName}」的打卡心得`, record.thought || "");
-          if (nextThought === null) return;
-          checkIns = checkIns.map((item) =>
-            item.id === record.id ? { ...item, thought: nextThought.trim() } : item,
-          );
-          showMessage(nextThought.trim() ? "心得已保存。" : "心得已清空。");
+          editingReviewId = record.id;
+          render();
+          return;
+        }
+        if (button.dataset.action === "cancel-review") {
+          editingReviewId = null;
           render();
           return;
         }
         if (button.dataset.action === "delete-history") {
           checkIns = checkIns.filter((record) => record.id !== button.dataset.id);
+          if (editingReviewId === button.dataset.id) editingReviewId = null;
           showMessage("打卡记录已删除。");
           render();
         }
+      }
+
+      function submitReview(event) {
+        const form = event.target.closest("[data-review-form]");
+        if (!form) return;
+        event.preventDefault();
+        const id = form.dataset.reviewForm;
+        const formData = new FormData(form);
+        const review = {
+          taste: Number(formData.get("taste")) || 0,
+          service: Number(formData.get("service")) || 0,
+          value: Number(formData.get("value")) || 0,
+          environment: Number(formData.get("environment")) || 0,
+          comment: String(formData.get("comment") || "").trim(),
+          updatedAt: new Date().toISOString(),
+        };
+        checkIns = checkIns.map((record) =>
+          record.id === id ? { ...record, review, thought: review.comment } : record,
+        );
+        editingReviewId = null;
+        showMessage(hasAnyReviewValue(review) ? "评价已保存。" : "评价已清空。");
+        render();
+      }
+
+      function hasAnyReviewValue(review) {
+        return Boolean(review.comment || review.taste || review.service || review.value || review.environment);
       }
 
       function clearHistory() {
         if (checkIns.length === 0) return;
         if (!confirm("确定清空全部打卡记录吗？此操作不可撤销。")) return;
         checkIns = [];
+        editingReviewId = null;
         showMessage("打卡历史已清空。");
         render();
       }

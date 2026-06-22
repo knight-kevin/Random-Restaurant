@@ -1,0 +1,14 @@
+[
+  {
+    "id": "dianping-xihu-001",
+    "name": "餐厅名称",
+    "address": "杭州市西湖区尽量完整的门店地址",
+    "note": "推荐菜、人均、评分、榜单摘要等",
+    "category": "stir",
+    "district": "西湖区",
+    "businessArea": "商圈名称",
+    "source": "大众点评区域榜",
+    "rank": 1,
+    "createdAt": "2026-06-17T00:00:00.000Z"
+  }
+]
