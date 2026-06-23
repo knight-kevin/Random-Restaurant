@@ -248,7 +248,7 @@
     <script>
       const RESTAURANTS_KEY = "random-restaurant-checkin:restaurants";
       const RESTAURANTS_VERSION_KEY = "random-restaurant-checkin:restaurants-version";
-      const CURRENT_DATASET_VERSION = "amap-hangzhou-390-2026-06-23";
+      const CURRENT_DATASET_VERSION = "amap-hangzhou-390-2026-06-24-v2";
       const CHECK_INS_KEY = "random-restaurant-checkin:check-ins";
       const ROLL_DURATION_MS = 3000;
       const REEL_LENGTH = 32;
@@ -319,7 +319,7 @@
       bootstrap();
 
       async function bootstrap() {
-        initialRestaurants = await fetch("restaurants.json").then((response) => response.json());
+        initialRestaurants = await fetch(`restaurants.json?v=${CURRENT_DATASET_VERSION}`, { cache: "no-store" }).then((response) => response.json());
         restaurants = readRestaurants();
         bindEvents();
         render();
@@ -378,7 +378,20 @@
           return initialRestaurants;
         }
         const stored = readJson(RESTAURANTS_KEY, initialRestaurants);
+        if (!isCurrentDataset(stored)) {
+          localStorage.setItem(RESTAURANTS_KEY, JSON.stringify(initialRestaurants));
+          return initialRestaurants;
+        }
         return isPlaceholderRestaurantList(stored) ? initialRestaurants : stored;
+      }
+
+      function isCurrentDataset(items) {
+        if (!Array.isArray(items) || items.length !== 390) return false;
+        const districts = new Map();
+        items.forEach((restaurant) => {
+          districts.set(restaurant.district, (districts.get(restaurant.district) || 0) + 1);
+        });
+        return districts.size === 13 && [...districts.values()].every((count) => count === 30);
       }
 
       function isPlaceholderRestaurantList(items) {
