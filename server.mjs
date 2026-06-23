@@ -21,7 +21,7 @@ const server = createServer((request, response) => {
 
   if (url.pathname === '/restaurants.json') {
     response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-    response.end(JSON.stringify(readInitialRestaurants()));
+    response.end(readFileSync(join(root, 'restaurants.json'), 'utf8'));
     return;
   }
 

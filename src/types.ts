@@ -7,6 +7,11 @@ export type Restaurant = {
   businessArea?: string;
   source?: string;
   rank?: number;
+  rating?: number;
+  location?: string;
+  locationVerified?: boolean;
+  amapId?: string;
+  amapDistrict?: string;
   note?: string;
   createdAt: string;
 };
@@ -21,6 +26,9 @@ export type CheckInRecord = {
   businessArea?: string;
   source?: string;
   rank?: number;
+  rating?: number;
+  location?: string;
+  locationVerified?: boolean;
   note?: string;
   thought?: string;
   review?: RestaurantReview;
@@ -33,6 +41,7 @@ export type RestaurantReview = {
   value: number;
   environment: number;
   comment?: string;
+  images?: string[];
   updatedAt?: string;
 };
 

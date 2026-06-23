@@ -1,0 +1,14 @@
+[
+  {
+    "name": "餐厅名称",
+    "address": "杭州市西湖区尽量完整的门店地址",
+    "note": "推荐菜、人均、评分、上榜理由等",
+    "category": "stir",
+    "district": "西湖区",
+    "businessArea": "黄龙 / 文教 / 转塘等",
+    "source": "公开口碑整理",
+    "rank": 1,
+    "rating": 4.8,
+    "createdAt": "2026-06-23T00:00:00.000Z"
+  }
+]

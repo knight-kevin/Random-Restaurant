@@ -15,8 +15,10 @@
       :root {
         color: #1e2329;
         background:
-          radial-gradient(circle at 12% 8%, rgba(255, 213, 128, 0.35), transparent 32rem),
-          linear-gradient(135deg, #fff7e8 0%, #f4f7f1 46%, #eaf3f6 100%);
+          radial-gradient(circle at 12% 8%, rgba(255, 88, 110, 0.26), transparent 28rem),
+          radial-gradient(circle at 88% 16%, rgba(66, 211, 255, 0.22), transparent 30rem),
+          radial-gradient(circle at 55% 96%, rgba(255, 205, 78, 0.24), transparent 30rem),
+          linear-gradient(135deg, #fff8f0 0%, #f7fbff 48%, #fff3fb 100%);
         font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
       }
 
@@ -32,23 +34,23 @@
       h1, h2, h3 { margin: 0; letter-spacing: 0; }
       h1 { margin-top: 4px; font-size: clamp(2rem, 4.8vw, 4rem); line-height: 1.02; }
       .eyebrow { margin: 0; color: #7d5544; font-size: 0.78rem; font-weight: 800; letter-spacing: 0; }
-      .top-actions { display: flex; gap: 8px; padding: 6px; border: 1px solid rgba(36, 91, 71, 0.16); border-radius: 999px; background: rgba(255,255,255,.72); box-shadow: 0 18px 42px rgba(45,54,60,.08); }
+      .top-actions { display: flex; gap: 8px; padding: 6px; border: 1px solid rgba(255, 91, 91, 0.18); border-radius: 999px; background: rgba(255,255,255,.78); box-shadow: 0 18px 42px rgba(45,54,60,.08); }
       .nav-action { min-height: 42px; border-radius: 999px; padding: 0 16px; background: transparent; color: #33423a; font-weight: 800; }
-      .nav-action.is-active { background: #1f5d4a; color: #fff; }
+      .nav-action.is-active { background: linear-gradient(135deg, #ff5b6e, #ff8a3d); color: #fff; }
 
       .home-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(320px, .65fr); gap: 18px; align-items: start; }
-      .panel, .hero-stage { border: 1px solid rgba(44,71,60,.14); border-radius: 8px; background: rgba(255,255,255,.82); box-shadow: 0 24px 60px rgba(45,54,60,.1); backdrop-filter: blur(14px); }
+      .panel, .hero-stage { border: 1px solid rgba(255,255,255,.74); border-radius: 8px; background: rgba(255,255,255,.86); box-shadow: 0 24px 70px rgba(42,55,83,.13); backdrop-filter: blur(18px); }
       .hero-stage { overflow: hidden; padding: clamp(20px, 3vw, 32px); }
       .hero-copy { display: grid; gap: 10px; max-width: 720px; }
       .hero-copy h2 { font-size: clamp(2.1rem, 6vw, 5.4rem); line-height: .98; }
       .hero-copy p:last-child { max-width: 560px; margin: 0; color: #5d6870; font-size: 1.02rem; line-height: 1.7; }
-      .filter-panel { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)) auto; gap: 12px; align-items: end; margin-top: 20px; padding: 14px; border: 1px solid rgba(31,93,74,.14); border-radius: 8px; background: rgba(255,255,255,.74); }
+      .filter-panel { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) auto; gap: 12px; align-items: end; margin-top: 20px; padding: 14px; border: 1px solid rgba(255,91,91,.18); border-radius: 8px; background: rgba(255,255,255,.82); }
       .filter-panel label { display: grid; gap: 7px; color: #39493f; font-weight: 800; }
       .filter-panel span { font-size: .82rem; color: #7d5544; }
       .filter-panel select { min-height: 42px; border: 1px solid #cbd5c4; border-radius: 8px; padding: 0 12px; background: #fff; color: #1f2933; outline: none; font-weight: 700; }
       .filter-summary { margin: 0; color: #53655a; font-size: .9rem; font-weight: 800; white-space: nowrap; }
 
-      .reel-shell { position: relative; margin-top: 24px; padding: 18px; border-radius: 8px; background: radial-gradient(circle at 50% 45%, rgba(255,211,108,.2), transparent 34%), linear-gradient(160deg, #24343d, #12191f); box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+      .reel-shell { position: relative; margin-top: 24px; padding: 18px; border-radius: 8px; background: radial-gradient(circle at 38% 28%, rgba(255,125,99,.38), transparent 30%), radial-gradient(circle at 70% 18%, rgba(87,204,255,.26), transparent 32%), linear-gradient(160deg, #222a5a, #111827 72%); box-shadow: inset 0 0 0 1px rgba(255,255,255,.12), 0 18px 46px rgba(35,45,85,.18); }
       .reel-window { position: relative; height: 430px; overflow: hidden; border-radius: 8px; perspective: 1200px; }
       .reel-window::before { position: absolute; z-index: 0; inset: 42px 10%; content: ""; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.11), rgba(255,211,108,.08) 42%, transparent 68%); box-shadow: inset 0 0 50px rgba(255,255,255,.1), 0 0 60px rgba(255,211,108,.14); }
       .reel-marker { position: absolute; z-index: 4; top: 50%; left: 50%; width: 10px; height: 10px; border-radius: 50%; transform: translate(-50%, -50%); background: #ffd36c; box-shadow: 0 0 0 8px rgba(255,211,108,.16), 0 0 30px rgba(255,211,108,.55); }
@@ -74,14 +76,14 @@
       @keyframes finalReveal { 0% { transform: translate(-50%, -50%) rotateY(-34deg) rotateX(12deg) translateZ(120px) scale(.56); opacity: 0; filter: blur(8px) saturate(.8); } 55% { opacity: 1; filter: blur(0) saturate(1.05); } 100% { transform: translate(-50%, -50%) rotateY(var(--theta)) rotateX(var(--phi)) rotateZ(0deg) translateZ(var(--radius)) scaleX(1) scale(var(--card-scale)); opacity: 1; filter: blur(0) saturate(1.12); } }
 
       .random-controls { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; margin-top: 22px; }
-      .count-pill { display: grid; min-width: 98px; min-height: 98px; place-items: center; padding: 12px; border-radius: 50%; background: #fff4d4; color: #8a421f; box-shadow: inset 0 0 0 1px rgba(138,66,31,.1); }
+      .count-pill { display: grid; min-width: 98px; min-height: 98px; place-items: center; padding: 12px; border-radius: 50%; background: #fff2f5; color: #f04462; box-shadow: inset 0 0 0 1px rgba(240,68,98,.12), 0 14px 30px rgba(240,68,98,.12); }
       .count-pill strong { font-size: 2rem; line-height: 1; }
       .count-pill span { font-size: .82rem; font-weight: 800; }
-      .random-button { min-height: clamp(108px, 15vw, 160px); border-radius: 999px; background: radial-gradient(circle at 34% 18%, rgba(255,255,255,.32), transparent 30%), linear-gradient(135deg, #e55438, #bb3428 48%, #7e231f); color: #fff; font-size: clamp(1.45rem, 4vw, 2.65rem); font-weight: 900; box-shadow: 0 22px 40px rgba(179,52,40,.28), inset 0 -10px 24px rgba(70,18,14,.22); transition: transform .18s ease, filter .18s ease; }
+      .random-button { min-height: clamp(108px, 15vw, 160px); border-radius: 999px; background: radial-gradient(circle at 34% 18%, rgba(255,255,255,.38), transparent 30%), linear-gradient(135deg, #ff5b6e, #ff8a3d 50%, #8b5cf6); color: #fff; font-size: clamp(1.45rem, 4vw, 2.65rem); font-weight: 900; box-shadow: 0 22px 44px rgba(255,91,110,.28), inset 0 -10px 24px rgba(88,30,110,.18); transition: transform .18s ease, filter .18s ease; }
       .random-button:hover { transform: translateY(-2px) scale(1.01); }
       .random-button:active { transform: translateY(1px) scale(.99); }
 
-      .result-card { display: grid; gap: 16px; margin-top: 22px; padding: 20px; border: 1px solid rgba(255,211,108,.48); border-radius: 8px; background: linear-gradient(135deg, #fffdf7, #fff1da); }
+      .result-card { display: grid; gap: 16px; margin-top: 22px; padding: 20px; border: 1px solid rgba(255,91,110,.22); border-radius: 8px; background: linear-gradient(135deg, #fff, #fff1f5 52%, #fff8e8); box-shadow: 0 18px 44px rgba(255,91,110,.12); }
       .result-card h3 { margin-top: 4px; font-size: clamp(1.8rem, 5vw, 3.2rem); }
       .result-card dl { display: grid; gap: 12px; margin: 0; }
       .result-card dt { color: #7d5544; font-size: .85rem; font-weight: 900; }
@@ -123,6 +125,9 @@
       .review-form { display: grid; gap: 12px; margin-top: 12px; padding: 12px; border: 1px solid #dfe7d9; border-radius: 8px; background: #fbfcf8; }
       .review-score-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
       .review-form select { min-height: 40px; }
+      .review-images { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+      .review-images img { width: 72px; height: 72px; object-fit: cover; border-radius: 8px; border: 2px solid #fff; box-shadow: 0 10px 22px rgba(31,41,51,.16); }
+      .file-hint { margin: 0; color: #687274; font-size: .82rem; }
       .empty-state { margin-top: 14px; padding: 18px; border: 1px dashed #bdc9b7; border-radius: 8px; background: #fbfcf8; color: #5d6e61; line-height: 1.6; text-align: center; }
       .toast { position: fixed; z-index: 20; left: 50%; bottom: 22px; transform: translateX(-50%); max-width: min(520px, calc(100% - 28px)); padding: 12px 16px; border-radius: 8px; background: #1f2933; color: #fff; box-shadow: 0 16px 40px rgba(31,41,51,.22); }
       [hidden] { display: none !important; }
@@ -184,6 +189,10 @@
               <span>杭州区域</span>
               <select id="location-filter"></select>
             </label>
+            <label>
+              <span>商圈 / 片区</span>
+              <select id="business-filter"></select>
+            </label>
             <p class="filter-summary" id="filter-summary">全部餐厅</p>
           </div>
           <div class="reel-shell">
@@ -238,6 +247,8 @@
 
     <script>
       const RESTAURANTS_KEY = "random-restaurant-checkin:restaurants";
+      const RESTAURANTS_VERSION_KEY = "random-restaurant-checkin:restaurants-version";
+      const CURRENT_DATASET_VERSION = "amap-hangzhou-390-2026-06-23";
       const CHECK_INS_KEY = "random-restaurant-checkin:check-ins";
       const ROLL_DURATION_MS = 3000;
       const REEL_LENGTH = 32;
@@ -272,6 +283,7 @@
       let editingReviewId = null;
       let selectedCategory = "all";
       let selectedLocation = "all";
+      let selectedBusinessArea = "all";
       let isRolling = false;
       let toastTimer = 0;
       let audioContext = null;
@@ -286,6 +298,7 @@
         manageCount: document.querySelector("#manage-count"),
         categoryFilter: document.querySelector("#category-filter"),
         locationFilter: document.querySelector("#location-filter"),
+        businessFilter: document.querySelector("#business-filter"),
         filterSummary: document.querySelector("#filter-summary"),
         pickButton: document.querySelector("#pick-button"),
         reelArea: document.querySelector("#reel-area"),
@@ -326,6 +339,14 @@
         });
         elements.locationFilter.addEventListener("change", () => {
           selectedLocation = elements.locationFilter.value;
+          selectedBusinessArea = "all";
+          selectedRestaurant = null;
+          pendingRestaurant = null;
+          render();
+          renderReel(buildRollingReel(), false);
+        });
+        elements.businessFilter.addEventListener("change", () => {
+          selectedBusinessArea = elements.businessFilter.value;
           selectedRestaurant = null;
           pendingRestaurant = null;
           render();
@@ -350,6 +371,12 @@
       }
 
       function readRestaurants() {
+        const storedVersion = localStorage.getItem(RESTAURANTS_VERSION_KEY);
+        if (storedVersion !== CURRENT_DATASET_VERSION) {
+          localStorage.setItem(RESTAURANTS_VERSION_KEY, CURRENT_DATASET_VERSION);
+          localStorage.setItem(RESTAURANTS_KEY, JSON.stringify(initialRestaurants));
+          return initialRestaurants;
+        }
         const stored = readJson(RESTAURANTS_KEY, initialRestaurants);
         return isPlaceholderRestaurantList(stored) ? initialRestaurants : stored;
       }
@@ -360,6 +387,7 @@
 
       function saveAll() {
         localStorage.setItem(RESTAURANTS_KEY, JSON.stringify(restaurants));
+        localStorage.setItem(RESTAURANTS_VERSION_KEY, CURRENT_DATASET_VERSION);
         localStorage.setItem(CHECK_INS_KEY, JSON.stringify(checkIns));
       }
 
@@ -388,7 +416,8 @@
         return CATEGORY_OPTIONS.find((category) => category.value === value)?.label || "炒菜";
       }
 
-      function getDistrict(address = "") {
+      function getDistrict(address = "", restaurant = {}) {
+        if (restaurant.district) return restaurant.district;
         const matched = DISTRICT_RULES.find((rule) =>
           rule.keywords.some((keyword) => address.includes(keyword)),
         );
@@ -396,24 +425,36 @@
       }
 
       function getLocations() {
-        return [...new Set(restaurants.map((restaurant) => getDistrict(restaurant.address)))].sort((a, b) => a.localeCompare(b, "zh-CN"));
+        return [...new Set(restaurants.map((restaurant) => getDistrict(restaurant.address, restaurant)))].sort((a, b) => a.localeCompare(b, "zh-CN"));
+      }
+
+      function getBusinessAreas() {
+        const scoped = restaurants.filter((restaurant) =>
+          selectedLocation === "all" || getDistrict(restaurant.address, restaurant) === selectedLocation
+        );
+        return [...new Set(scoped.map((restaurant) => restaurant.businessArea).filter(Boolean))]
+          .sort((a, b) => a.localeCompare(b, "zh-CN"));
       }
 
       function getFilteredRestaurants() {
         return restaurants.filter((restaurant) => {
           const categoryMatched = matchesCategory(restaurant, selectedCategory);
-          const locationMatched = selectedLocation === "all" || getDistrict(restaurant.address) === selectedLocation;
-          return categoryMatched && locationMatched;
+          const locationMatched = selectedLocation === "all" || getDistrict(restaurant.address, restaurant) === selectedLocation;
+          const businessMatched = selectedBusinessArea === "all" || restaurant.businessArea === selectedBusinessArea;
+          return categoryMatched && locationMatched && businessMatched;
         });
       }
 
       function formatLocation(address, restaurant = {}) {
-        const district = restaurant.district || getDistrict(address);
+        const district = restaurant.district || getDistrict(address, restaurant);
         const area = restaurant.businessArea ? ` · ${restaurant.businessArea}` : "";
         return address ? `杭州市 · ${district}${area} · ${address}` : `杭州市 · ${district}${area} · 位置待补充`;
       }
 
       function getMapUrl(restaurant) {
+        if (restaurant.location) {
+          return `https://uri.amap.com/marker?position=${encodeURIComponent(restaurant.location)}&name=${encodeURIComponent(restaurant.name)}&src=renjianxunweiji&callnative=1`;
+        }
         const query = `杭州 ${restaurant.address || ""} ${restaurant.name}`.trim();
         return `https://uri.amap.com/search?keyword=${encodeURIComponent(query)}&src=renjianxunweiji&callnative=1`;
       }
@@ -421,6 +462,7 @@
       function renderFilters(filteredRestaurants) {
         const currentCategory = selectedCategory;
         const currentLocation = selectedLocation;
+        const currentBusinessArea = selectedBusinessArea;
         elements.categoryFilter.innerHTML = CATEGORY_OPTIONS.map((category) =>
           `<option value="${category.value}">${category.label}</option>`
         ).join("");
@@ -431,6 +473,13 @@
         elements.categoryFilter.value = currentCategory;
         elements.locationFilter.value = getLocations().includes(currentLocation) ? currentLocation : "all";
         selectedLocation = elements.locationFilter.value;
+        const businessAreas = getBusinessAreas();
+        elements.businessFilter.innerHTML = [
+          '<option value="all">全部商圈</option>',
+          ...businessAreas.map((area) => `<option value="${escapeHtml(area)}">${escapeHtml(area)}</option>`),
+        ].join("");
+        elements.businessFilter.value = businessAreas.includes(currentBusinessArea) ? currentBusinessArea : "all";
+        selectedBusinessArea = elements.businessFilter.value;
         elements.filterSummary.textContent = `当前可抽 ${filteredRestaurants.length} / ${restaurants.length} 家`;
       }
 
@@ -530,6 +579,7 @@
             <dl>
               <div><dt>位置</dt><dd>${escapeHtml(formatLocation(selectedRestaurant.address, selectedRestaurant))}</dd></div>
               <div><dt>分类</dt><dd>${escapeHtml(getCategoryLabel(selectedRestaurant.category || inferCategory(selectedRestaurant)))}</dd></div>
+              ${selectedRestaurant.rating ? `<div><dt>高德评分</dt><dd>${escapeHtml(selectedRestaurant.rating)} 分 · 坐标已校验</dd></div>` : ""}
               ${selectedRestaurant.businessArea ? `<div><dt>商圈</dt><dd>${escapeHtml(selectedRestaurant.businessArea)}</dd></div>` : ""}
               ${selectedRestaurant.source ? `<div><dt>来源</dt><dd>${escapeHtml(selectedRestaurant.source)}${selectedRestaurant.rank ? ` · 第 ${escapeHtml(String(selectedRestaurant.rank))} 名` : ""}</dd></div>` : ""}
               <div><dt>推荐菜</dt><dd>${escapeHtml(selectedRestaurant.note || "暂无推荐菜")}</dd></div>
@@ -672,6 +722,9 @@
           businessArea: selectedRestaurant.businessArea,
           source: selectedRestaurant.source,
           rank: selectedRestaurant.rank,
+          rating: selectedRestaurant.rating,
+          location: selectedRestaurant.location,
+          locationVerified: selectedRestaurant.locationVerified,
           note: selectedRestaurant.note,
           checkedInAt: new Date().toISOString(),
         }, ...checkIns];
@@ -716,12 +769,13 @@
           value: 0,
           environment: 0,
           comment: record.thought || "",
+          images: [],
         };
       }
 
       function hasReview(record) {
         const review = getReview(record);
-        return Boolean(review.comment || review.taste || review.service || review.value || review.environment);
+        return Boolean(review.comment || review.taste || review.service || review.value || review.environment || review.images?.length);
       }
 
       function getAverageRating(review) {
@@ -746,6 +800,7 @@
               ${renderRatingChip("环境", review.environment)}
             </div>
             ${review.comment ? `<p class="thought-text">${escapeHtml(review.comment)}</p>` : ""}
+            ${renderReviewImages(review.images)}
           </div>
         `;
       }
@@ -765,6 +820,9 @@
               ${renderScoreSelect("environment", "环境", review.environment)}
             </div>
             <label><span>点评</span><textarea name="comment" rows="3" placeholder="这家店哪里值得记住？">${escapeHtml(review.comment || "")}</textarea></label>
+            ${renderReviewImages(review.images)}
+            <label><span>添加图片</span><input name="images" type="file" accept="image/*" multiple /></label>
+            <p class="file-hint">最多保留 3 张，会自动压缩保存在本机。</p>
             <div class="form-actions">
               <button class="secondary-action" type="submit">保存评价</button>
               <button class="ghost-action" data-action="cancel-review" data-id="${record.id}" type="button">取消</button>
@@ -780,6 +838,11 @@
           ))
           .join("");
         return `<label><span>${label}</span><select name="${name}">${options}</select></label>`;
+      }
+
+      function renderReviewImages(images = []) {
+        if (!images.length) return "";
+        return `<div class="review-images">${images.map((src) => `<img src="${escapeHtml(src)}" alt="打卡照片" loading="lazy" />`).join("")}</div>`;
       }
 
       function renderRestaurantForm() {
@@ -900,18 +963,22 @@
         }
       }
 
-      function submitReview(event) {
+      async function submitReview(event) {
         const form = event.target.closest("[data-review-form]");
         if (!form) return;
         event.preventDefault();
         const id = form.dataset.reviewForm;
+        const record = checkIns.find((item) => item.id === id);
         const formData = new FormData(form);
+        const existingImages = getReview(record || {}).images || [];
+        const uploadedImages = await readCompressedImages(formData.getAll("images").filter((file) => file && file.size));
         const review = {
           taste: Number(formData.get("taste")) || 0,
           service: Number(formData.get("service")) || 0,
           value: Number(formData.get("value")) || 0,
           environment: Number(formData.get("environment")) || 0,
           comment: String(formData.get("comment") || "").trim(),
+          images: [...existingImages, ...uploadedImages].slice(0, 3),
           updatedAt: new Date().toISOString(),
         };
         checkIns = checkIns.map((record) =>
@@ -923,7 +990,34 @@
       }
 
       function hasAnyReviewValue(review) {
-        return Boolean(review.comment || review.taste || review.service || review.value || review.environment);
+        return Boolean(review.comment || review.taste || review.service || review.value || review.environment || review.images?.length);
+      }
+
+      function readCompressedImages(files) {
+        return Promise.all(files.slice(0, 3).map((file) => compressImage(file)));
+      }
+
+      function compressImage(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            const image = new Image();
+            image.onload = () => {
+              const maxSide = 900;
+              const ratio = Math.min(1, maxSide / Math.max(image.width, image.height));
+              const canvas = document.createElement("canvas");
+              canvas.width = Math.max(1, Math.round(image.width * ratio));
+              canvas.height = Math.max(1, Math.round(image.height * ratio));
+              const context = canvas.getContext("2d");
+              context.drawImage(image, 0, 0, canvas.width, canvas.height);
+              resolve(canvas.toDataURL("image/jpeg", 0.72));
+            };
+            image.onerror = reject;
+            image.src = reader.result;
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
       }
 
       function clearHistory() {
