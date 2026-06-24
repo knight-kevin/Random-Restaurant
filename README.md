@@ -1,64 +1,93 @@
-# 随机餐厅打卡
+# 人间寻味记
 
-一个使用 React + Vite + TypeScript 编写的单页小程序。餐厅库和打卡历史都保存在浏览器 `localStorage` 中，不需要后端服务。
+一个面向手机浏览器的杭州随机餐厅打卡应用。无需后端，餐厅库、筛选状态和打卡记录均保存在浏览器 `localStorage` 中。
 
-## 安装
+## 当前功能
 
-```bash
-npm install
-```
+- 内置杭州 13 个区县共 1300 家餐厅，每个区域 100 家
+- 按餐厅分类、行政区、商圈、距离和排序条件筛选
+- 支持定位附近餐厅及“距离优先”
+- 球体餐厅动画，随机过程由快到慢并配有音效
+- 最终餐厅展示地址、分类、评分、人均、商圈和推荐菜
+- 可跳转地图查看餐厅位置
+- 餐厅添加、编辑、删除和分类管理
+- 打卡后可选择保留或移除餐厅
+- 从口味、服务、性价比、环境四方面评分
+- 支持文字点评和最多 3 张本地图片
+- 打卡图片支持全屏预览
+- 数据使用 `localStorage` 持久保存
+- 适配 iPhone、移动端浏览器和桌面浏览器
+- 支持添加到 iPhone 主屏幕
 
-如果在 Windows PowerShell 中遇到 `npm.ps1 cannot be loaded`，可以改用：
+## 本地运行
 
-```bash
-npm.cmd install
-```
-
-## 启动
-
-```bash
-npm run dev
-```
-
-Windows PowerShell 中也可以使用：
-
-```bash
-npm.cmd run dev
-```
-
-启动后在浏览器打开终端提示的本地地址，通常是：
-
-```text
-http://localhost:5173
-```
-
-## 免安装临时启动
-
-如果依赖还没有安装，或者 `vite` 命令不可用，可以先用项目内置的静态服务器打开单文件版：
+项目主页面是 `modern.html`，可以使用内置静态服务器运行：
 
 ```bash
 node server.mjs
 ```
 
-然后打开：
+然后访问：
 
 ```text
-http://localhost:5173
+http://localhost:5173/
 ```
 
-这个方式会加载 `standalone.html`，功能和主应用一致，也使用浏览器 `localStorage` 保存数据。
-
-## 构建
+也可以安装依赖后使用 Vite：
 
 ```bash
-npm run build
+npm install
+npm run dev
 ```
 
-## 功能
+Windows PowerShell 如果限制执行 `npm.ps1`，可改用：
 
-- 初始预置 99 家餐厅，名称为“餐厅 001”到“餐厅 099”
-- 随机抽取当前待打卡餐厅
-- 完成打卡后生成历史记录，并可选择移除或保留餐厅
-- 添加、编辑、删除餐厅
-- 查看、删除、清空打卡历史
-- 所有数据刷新后仍保留在 `localStorage`
+```bash
+npm.cmd install
+npm.cmd run dev
+```
+
+## 数据文件
+
+- `restaurants.json`：1300 家餐厅数据
+- `scripts/categories.js`：餐厅分类与筛选规则
+- `scripts/location-fixed.js`：定位、距离计算和人均解析
+- `scripts/validate-restaurants.cjs`：餐厅数据校验
+
+运行数据校验：
+
+```bash
+node scripts/validate-restaurants.cjs
+```
+
+## GitHub Pages
+
+仓库根目录已经包含 GitHub Pages 可直接访问的入口文件：
+
+- `index.html`
+- `modern.html`
+- `restaurants.json`
+- `manifest.webmanifest`
+- `scripts/`
+
+在 GitHub 仓库中进入：
+
+```text
+Settings > Pages > Build and deployment
+```
+
+将 Source 选择为 **Deploy from a branch**，Branch 选择 `main`，目录选择 `/ (root)`，保存后等待部署完成。
+
+线上地址：
+
+```text
+https://knight-kevin.github.io/Random-Restaurant/
+```
+
+## iPhone 使用
+
+使用 Safari 打开线上地址，点击“分享”，选择“添加到主屏幕”。定位功能需要允许 Safari 访问当前位置。
+
+## 隐私说明
+
+定位只在当前设备中用于计算餐厅距离，不会上传到服务器。评分、点评和图片也只保存在当前浏览器的 `localStorage` 中；清理浏览器网站数据后这些内容会被删除。
