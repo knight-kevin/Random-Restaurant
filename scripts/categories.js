@@ -1,5 +1,5 @@
 export const CATEGORY_TABS = [
-  { value: "recommend", label: "推荐", categories: [] },
+  { value: "recommend", label: "全部", categories: [] },
   { value: "dessert", label: "奶茶咖啡", categories: ["dessert"] },
   { value: "snack", label: "快餐小吃", categories: ["snack", "noodle"] },
   { value: "hotpot", label: "火锅", categories: ["hotpot"] },

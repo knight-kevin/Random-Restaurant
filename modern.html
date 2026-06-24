@@ -44,7 +44,8 @@
       .panel, .hero-stage { border: 1px solid rgba(255,255,255,.74); border-radius: 8px; background: rgba(255,255,255,.86); box-shadow: 0 24px 70px rgba(42,55,83,.13); backdrop-filter: blur(18px); }
       .hero-stage { width: 100%; min-width: 0; overflow: visible; padding: clamp(20px, 3vw, 32px); backdrop-filter: none; }
       .hero-copy { display: grid; gap: 10px; max-width: 720px; }
-      .hero-copy h2 { font-size: clamp(2.1rem, 6vw, 5.4rem); line-height: .98; }
+      .hero-copy .eyebrow { font-size: clamp(.98rem, 1.5vw, 1.12rem); }
+      .hero-copy h2 { font-family: inherit; font-size: clamp(1.9rem, 5vw, 4.6rem); font-weight: 900; line-height: 1.02; }
       .hero-copy p:last-child { max-width: 560px; margin: 0; color: #5d6870; font-size: 1.02rem; line-height: 1.7; }
       .filter-panel { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) auto; gap: 12px; align-items: end; margin-top: 20px; padding: 14px; border: 1px solid rgba(255,91,91,.18); border-radius: 8px; background: rgba(255,255,255,.82); }
       .filter-panel label, .filter-field { display: grid; gap: 7px; color: #39493f; font-weight: 800; min-width: 0; }
@@ -67,14 +68,14 @@
       .category-tab { position: relative; flex: 0 0 auto; padding: 8px 0; background: transparent; color: #20252a; font-weight: 900; white-space: nowrap; }
       .category-tab.is-active { color: #ff5b37; }
       .category-tab.is-active::after { position: absolute; right: 0; bottom: 0; left: 0; height: 4px; border-radius: 4px; background: #ff5b37; content: ""; }
-      .filter-entry-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-      .filter-entry { display: grid; min-height: 58px; place-items: center; padding: 8px; border: 1px solid #ece8e3; border-radius: 8px; background: #f8f8f7; color: #25292d; font-weight: 900; box-shadow: 0 4px 12px rgba(38,42,47,.04); }
-      .filter-entry::after { margin-left: 7px; content: "⌄"; color: #596068; }
+      .filter-entry-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+      .filter-entry { display: flex; min-width: 0; min-height: 42px; align-items: center; justify-content: center; gap: 5px; padding: 6px 9px; border: 1px solid #ece8e3; border-radius: 9px; background: #f8f8f7; color: #25292d; font-size: .9rem; font-weight: 900; line-height: 1; white-space: nowrap; box-shadow: 0 4px 12px rgba(38,42,47,.04); }
+      .filter-entry::after { flex: 0 0 auto; content: "⌄"; color: #596068; font-size: .82rem; line-height: 1; }
       .filter-entry.is-active { border-color: #ffb6a2; background: #fff1eb; color: #ff5b37; }
       .filter-entry.is-active::after { transform: rotate(180deg); }
       .filter-entry small { display: block; max-width: 100%; overflow: hidden; color: #777d82; font-size: .7rem; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
-      .filter-dropdown { position: absolute; top: calc(100% + 10px); right: 0; left: 0; border: 1px solid #eee9e4; border-radius: 8px; background: #fff; box-shadow: 0 22px 50px rgba(42,55,83,.16); overflow: hidden; }
-      .filter-dropdown-inner { max-height: min(70vh, 590px); overflow: auto; overscroll-behavior: contain; padding: 18px; }
+      .filter-dropdown { position: absolute; top: calc(100% + 10px); right: 0; left: 0; display: flex; max-height: min(75vh, 650px); flex-direction: column; border: 1px solid #eee9e4; border-radius: 8px; background: #fff; box-shadow: 0 22px 50px rgba(42,55,83,.16); overflow: hidden; }
+      .filter-dropdown-inner { min-height: 0; overflow: auto; overscroll-behavior: contain; padding: 18px; -webkit-overflow-scrolling: touch; }
       .filter-backdrop { position: fixed; z-index: 25; inset: 0; background: rgba(25,29,34,.22); backdrop-filter: blur(1px); }
       .filter-panel-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; font-weight: 900; }
       .location-status { color: #5d6870; font-size: .86rem; font-weight: 700; }
@@ -101,7 +102,7 @@
       .sort-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
       .sort-option { display: flex; min-height: 50px; align-items: center; justify-content: space-between; padding: 0 14px; border: 1px solid #ece8e3; border-radius: 7px; background: #fff; color: #30353a; font-weight: 800; }
       .sort-option.is-selected { border-color: #ff6547; background: #fff2ed; color: #ff5433; }
-      .filter-footer { display: flex; justify-content: space-between; gap: 10px; padding: 12px 18px calc(12px + env(safe-area-inset-bottom)); border-top: 1px solid #eee9e4; background: #fff; }
+      .filter-footer { display: flex; flex: 0 0 auto; justify-content: space-between; gap: 10px; padding: 12px 18px calc(12px + env(safe-area-inset-bottom)); border-top: 1px solid #eee9e4; background: #fff; box-shadow: 0 -8px 20px rgba(31,41,51,.06); }
       .filter-footer button { min-height: 44px; border-radius: 8px; padding: 0 22px; font-weight: 900; }
       .filter-reset { background: #f5f5f4; color: #454b50; }
       .filter-confirm { flex: 1; max-width: 280px; background: linear-gradient(135deg, #ff704d, #ff4d32); color: #fff; }
@@ -118,14 +119,16 @@
       .reel-card { position: absolute; top: 50%; left: 50%; width: 128px; height: 154px; overflow: hidden; border-radius: 44% / 18%; clip-path: ellipse(61% 51% at 50% 50%); background: #fffaf2; box-shadow: 0 18px 36px rgba(0,0,0,.24); transform: translate(-50%, -50%) rotateY(var(--theta)) rotateX(var(--phi)) rotateZ(var(--twist)) translateZ(var(--radius)) scaleX(var(--curve-scale)) scale(var(--card-scale)); transform-style: preserve-3d; opacity: var(--depth-opacity); filter: saturate(var(--depth-saturation)) brightness(var(--depth-light)); backface-visibility: visible; transition: opacity .24s ease, filter .24s ease; }
       .reel-card::before { position: absolute; z-index: 3; inset: -2px; content: ""; border-radius: inherit; background: radial-gradient(circle at 50% 42%, transparent 0 46%, rgba(10,25,36,.24) 72%, rgba(10,25,36,.42) 100%); pointer-events: none; mix-blend-mode: multiply; }
       .reel-card::after { position: absolute; z-index: 4; inset: 0; content: ""; border-radius: inherit; background: linear-gradient(100deg, rgba(255,255,255,.38), transparent 34%, rgba(0,0,0,.28)); pointer-events: none; }
-      .reel-card.is-final { z-index: 8; width: 230px; height: 266px; border-radius: 28px; clip-path: inset(0 round 28px); box-shadow: 0 34px 70px rgba(0,0,0,.4), 0 0 0 4px rgba(255,211,108,.78), 0 0 44px rgba(255,211,108,.34); }
+      .reel-card.is-final { z-index: 8; width: 238px; height: 300px; border-radius: 24px; clip-path: inset(0 round 24px); box-shadow: 0 28px 58px rgba(0,0,0,.36), 0 0 0 3px rgba(255,211,108,.76), 0 0 36px rgba(255,211,108,.28); }
       .food-photo { display: grid; height: 94px; place-items: center; background-color: #cf4f35; background-image: radial-gradient(circle at 50% 48%, rgba(255,255,255,.18), rgba(255,255,255,0) 38%), linear-gradient(135deg, rgba(243,180,92,.65), rgba(207,79,53,.24)), var(--food-image); background-size: cover; background-position: center; }
       .food-photo span { display: grid; width: 58px; height: 58px; place-items: center; border-radius: 50%; background: rgba(255,255,255,.88); color: #a33824; font-size: 1.25rem; font-weight: 900; box-shadow: 0 16px 28px rgba(30,35,41,.18); }
       .reel-card h3 { padding: 10px 10px 0; font-size: .86rem; }
       .reel-card p { margin: 4px 0 0; padding: 0 10px; color: #687274; font-size: .76rem; }
-      .reel-card.is-final .food-photo { height: 146px; }
-      .reel-card.is-final h3 { font-size: 1.05rem; }
-      .reel-card.is-final p { font-size: .86rem; }
+      .reel-card.is-final .food-photo { height: 96px; }
+      .reel-card.is-final h3 { padding: 11px 13px 0; overflow-wrap: anywhere; font-size: .92rem; line-height: 1.25; }
+      .reel-card.is-final p { padding-inline: 13px; overflow-wrap: anywhere; font-size: .7rem; line-height: 1.38; }
+      .reel-card.is-final .tag-line { padding: 7px 13px 0; }
+      .reel-card.is-final .tag-line .mini-tag:nth-child(n+2) { display: none; }
       .reel-placeholder { display: grid; position: relative; z-index: 2; height: 100%; place-items: center; color: rgba(255,255,255,.72); text-align: center; }
       @keyframes finalReveal { 0% { transform: translate(-50%, -50%) rotateY(-34deg) rotateX(12deg) translateZ(120px) scale(.56); opacity: 0; filter: blur(8px) saturate(.8); } 55% { opacity: 1; filter: blur(0) saturate(1.05); } 100% { transform: translate(-50%, -50%) rotateY(var(--theta)) rotateX(var(--phi)) rotateZ(0deg) translateZ(var(--radius)) scaleX(1) scale(var(--card-scale)); opacity: 1; filter: blur(0) saturate(1.12); } }
 
@@ -180,7 +183,12 @@
       .review-score-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
       .review-form select { min-height: 40px; }
       .review-images { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-      .review-images img { width: 72px; height: 72px; object-fit: cover; border-radius: 8px; border: 2px solid #fff; box-shadow: 0 10px 22px rgba(31,41,51,.16); }
+      .review-images img { width: 72px; height: 72px; object-fit: cover; border-radius: 8px; border: 2px solid #fff; box-shadow: 0 10px 22px rgba(31,41,51,.16); cursor: zoom-in; }
+      .image-preview { position: fixed; z-index: 60; inset: 0; display: grid; place-items: center; padding: max(20px, env(safe-area-inset-top)) 18px max(20px, env(safe-area-inset-bottom)); background: rgba(12,15,20,.9); }
+      .image-preview[hidden] { display: none; }
+      .image-preview img { display: block; max-width: min(94vw, 1100px); max-height: 88vh; object-fit: contain; border-radius: 8px; box-shadow: 0 30px 80px rgba(0,0,0,.48); }
+      .image-preview-close { position: fixed; top: max(14px, env(safe-area-inset-top)); right: max(14px, env(safe-area-inset-right)); display: grid; width: 44px; height: 44px; place-items: center; border-radius: 50%; background: rgba(255,255,255,.16); color: #fff; font-size: 1.7rem; line-height: 1; backdrop-filter: blur(10px); }
+      body.is-image-preview-open { overflow: hidden; }
       .history-list .list-card { grid-template-columns: minmax(0, 1fr); align-items: start; }
       .history-list .list-card > div { min-width: 0; }
       .history-list .row-actions { justify-content: flex-end; }
@@ -200,16 +208,16 @@
         .multi-filter-menu { position: static; width: 100%; margin-top: 7px; box-shadow: 0 12px 28px rgba(42,55,83,.12); }
         .filter-summary { white-space: normal; }
         .food-filter { margin-top: 16px; }
-        .filter-dropdown { right: -8px; left: -8px; }
+        .filter-dropdown { position: fixed; top: var(--mobile-filter-top, 300px); right: 11px; bottom: max(8px, env(safe-area-inset-bottom)); left: 11px; max-height: none; }
         .topbar { display: grid; padding-inline: 0; }
         .top-actions { width: 100%; }
         .nav-action { flex: 1; }
         .home-grid { display: grid; }
         .reel-window { height: 390px; }
         .reel-card { width: 112px; height: 140px; }
-        .reel-card.is-final { width: 172px; height: 206px; }
+        .reel-card.is-final { width: min(238px, calc(100vw - 104px)); height: 300px; }
         .food-photo { height: 86px; }
-        .reel-card.is-final .food-photo { height: 122px; }
+        .reel-card.is-final .food-photo { height: 96px; }
       }
 
       @media (max-width: 560px) {
@@ -223,9 +231,9 @@
         .form-actions, .row-actions { display: grid; grid-template-columns: 1fr 1fr; }
         .form-actions .secondary-action { grid-column: 1 / -1; }
         .category-tabs { gap: 21px; margin-inline: -4px; }
-        .filter-entry-row { gap: 7px; }
-        .filter-entry { min-height: 54px; padding-inline: 5px; font-size: .9rem; }
-        .filter-dropdown-inner { max-height: 70vh; padding: 14px; }
+        .filter-entry-row { gap: 6px; }
+        .filter-entry { min-height: 38px; padding: 5px 6px; font-size: .82rem; }
+        .filter-dropdown-inner { max-height: none; padding: 14px; }
         .choice-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
         .area-picker { grid-template-columns: 92px minmax(0, .9fr) minmax(0, 1.1fr); min-height: 360px; }
         .area-option { padding-inline: 9px; font-size: .86rem; }
@@ -321,6 +329,10 @@
       </section>
     </main>
     <button class="filter-backdrop" id="filter-backdrop" type="button" aria-label="关闭筛选面板" hidden></button>
+    <div class="image-preview" id="image-preview" role="dialog" aria-modal="true" aria-label="图片预览" hidden>
+      <button class="image-preview-close" id="image-preview-close" type="button" aria-label="关闭图片预览">×</button>
+      <img id="image-preview-content" alt="打卡图片预览" />
+    </div>
     <div class="toast" id="toast" hidden></div>
 
     <script type="module">
@@ -332,17 +344,17 @@
         inferRestaurantCategory,
         inferSubcategory,
         matchesFoodSelection,
-      } from "./scripts/categories.js?v=20260624-v6";
+      } from "./scripts/categories.js?v=20260625-v13";
       import {
         formatDistance,
         getRestaurantDistance,
         parseAverageCost,
         requestCurrentPosition,
-      } from "./scripts/location.js?v=20260624-v6";
+      } from "./scripts/location-fixed.js?v=20260625-v13";
 
       const RESTAURANTS_KEY = "random-restaurant-checkin:restaurants";
       const RESTAURANTS_VERSION_KEY = "random-restaurant-checkin:restaurants-version";
-      const CURRENT_DATASET_VERSION = "amap-hangzhou-1300-2026-06-24-v6";
+      const CURRENT_DATASET_VERSION = "amap-hangzhou-1300-2026-06-25-v13";
       const CHECK_INS_KEY = "random-restaurant-checkin:check-ins";
       const ROLL_DURATION_MS = 3000;
       const REEL_LENGTH = 32;
@@ -420,6 +432,9 @@
         filterBackdrop: document.querySelector("#filter-backdrop"),
         filterResetButton: document.querySelector("#filter-reset-button"),
         filterConfirmButton: document.querySelector("#filter-confirm-button"),
+        imagePreview: document.querySelector("#image-preview"),
+        imagePreviewClose: document.querySelector("#image-preview-close"),
+        imagePreviewContent: document.querySelector("#image-preview-content"),
         filterSummary: document.querySelector("#filter-summary"),
         pickButton: document.querySelector("#pick-button"),
         reelArea: document.querySelector("#reel-area"),
@@ -454,10 +469,20 @@
         elements.backHomeButton.addEventListener("click", () => { closeFilterPanel(); switchView("home"); });
         elements.categoryTabs.addEventListener("click", handleCategoryTabClick);
         document.querySelectorAll("[data-filter-panel]").forEach((button) => {
-          button.addEventListener("click", () => toggleFilterPanel(button.dataset.filterPanel));
+          button.addEventListener("click", (event) => {
+            event.stopPropagation();
+            toggleFilterPanel(button.dataset.filterPanel);
+          });
         });
         elements.filterDropdownContent.addEventListener("click", handleFilterPanelClick);
         elements.filterBackdrop.addEventListener("click", closeFilterPanel);
+        elements.imagePreview.addEventListener("click", (event) => {
+          if (event.target === elements.imagePreview) closeImagePreview();
+        });
+        elements.imagePreviewClose.addEventListener("click", closeImagePreview);
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape" && !elements.imagePreview.hidden) closeImagePreview();
+        });
         elements.filterResetButton.addEventListener("click", resetActiveFilterPanel);
         elements.filterConfirmButton.addEventListener("click", closeFilterPanel);
         document.addEventListener("click", (event) => {
@@ -520,10 +545,14 @@
           if (selectedDistance > 0 && !userPosition) locateUser();
         }
         if (target.dataset.areaLevel) activeAreaLevel = target.dataset.areaLevel;
-        if (target.dataset.district) {
+        if (target.dataset.district !== undefined) {
           const value = target.dataset.district;
-          activeAreaDistrict = value;
-          toggleSetValue(selectedLocations, value);
+          if (value) {
+            activeAreaDistrict = value;
+            toggleSetValue(selectedLocations, value);
+          } else {
+            selectedLocations.clear();
+          }
           selectedBusinessAreas.clear();
         }
         if (target.dataset.businessArea !== undefined) {
@@ -532,7 +561,10 @@
         }
         if (target.dataset.foodValue) toggleSetValue(selectedFoodValues, target.dataset.foodValue);
         if (target.dataset.foodGroup) activeFoodGroup = target.dataset.foodGroup;
-        if (target.dataset.sort) selectedSort = target.dataset.sort;
+        if (target.dataset.sort) {
+          selectedSort = target.dataset.sort;
+          if (selectedSort === "distance" && !userPosition) locateUser();
+        }
         if (target.dataset.action === "locate") locateUser();
         resetSelectionAfterFilterChange();
       }
@@ -658,7 +690,8 @@
           const distanceMatched = !selectedDistance || (distance !== null && distance <= selectedDistance);
           return tabMatched && categoryMatched && locationMatched && businessMatched && distanceMatched;
         });
-        return sortRestaurants(filtered);
+        const sorted = sortRestaurants(filtered);
+        return selectedSort === "recommended" ? sorted : sorted.slice(0, 100);
       }
 
       function getDistanceForRestaurant(restaurant) {
@@ -672,7 +705,9 @@
       function sortRestaurants(items) {
         const sorted = [...items];
         if (selectedSort === "distance") {
-          return sorted.sort((left, right) => (getDistanceForRestaurant(left) ?? Infinity) - (getDistanceForRestaurant(right) ?? Infinity));
+          return sorted.sort((left, right) =>
+            (getDistanceForRestaurant(left) ?? Infinity) - (getDistanceForRestaurant(right) ?? Infinity)
+          );
         }
         if (selectedSort === "rating") {
           return sorted.sort((left, right) => Number(right.rating || 0) - Number(left.rating || 0));
@@ -732,6 +767,12 @@
         elements.filterDropdown.hidden = !activeFilterPanel;
         elements.filterBackdrop.hidden = !activeFilterPanel;
         if (activeFilterPanel) {
+          const entryRow = document.querySelector(".filter-entry-row");
+          const mobileTop = Math.min(
+            window.innerHeight - 240,
+            Math.max(8, (entryRow?.getBoundingClientRect().bottom || 0) + 8),
+          );
+          elements.filterDropdown.style.setProperty("--mobile-filter-top", `${mobileTop}px`);
           lockPageScroll();
           elements.filterDropdownContent.innerHTML = renderActiveFilterPanel();
         } else {
@@ -772,9 +813,9 @@
           <div class="area-picker">
             <div class="area-level">
               <button class="area-option ${activeAreaLevel === "district" ? "is-selected" : ""}" data-area-level="district" type="button">行政区</button>
-              <button class="area-option ${activeAreaLevel === "business" ? "is-selected" : ""}" data-area-level="business" type="button">商圈</button>
             </div>
             <div class="area-level">
+              <button class="area-option ${selectedLocations.size === 0 ? "is-selected" : ""}" data-area-level="district" data-district="" type="button">不限</button>
               ${districts.map((district) => `
                 <button class="area-option ${activeAreaDistrict === district ? "is-selected" : ""}" data-area-level="district" data-district="${escapeHtml(district)}" type="button">${escapeHtml(district)}</button>
               `).join("")}
@@ -971,12 +1012,12 @@
             <dl>
               <div><dt>位置</dt><dd>${escapeHtml(formatLocation(selectedRestaurant.address, selectedRestaurant))}</dd></div>
               <div><dt>分类</dt><dd>${escapeHtml(getCategoryLabel(selectedRestaurant.category || inferCategory(selectedRestaurant)))}</dd></div>
-              ${selectedRestaurant.rating ? `<div><dt>高德评分</dt><dd>${escapeHtml(selectedRestaurant.rating)} 分 · 坐标已校验</dd></div>` : ""}
+              ${selectedRestaurant.rating ? `<div><dt>高德评分</dt><dd>${escapeHtml(selectedRestaurant.rating)} 分</dd></div>` : ""}
               ${getDistanceForRestaurant(selectedRestaurant) !== null ? `<div><dt>距离</dt><dd>距你约 ${escapeHtml(formatDistance(getDistanceForRestaurant(selectedRestaurant)))}</dd></div>` : ""}
               ${parseAverageCost(selectedRestaurant) ? `<div><dt>人均</dt><dd>约 ¥${escapeHtml(parseAverageCost(selectedRestaurant))}</dd></div>` : ""}
               ${selectedRestaurant.businessArea ? `<div><dt>商圈</dt><dd>${escapeHtml(selectedRestaurant.businessArea)}</dd></div>` : ""}
               ${selectedRestaurant.source ? `<div><dt>来源</dt><dd>${escapeHtml(selectedRestaurant.source)}${selectedRestaurant.rank ? ` · 第 ${escapeHtml(String(selectedRestaurant.rank))} 名` : ""}</dd></div>` : ""}
-              <div><dt>推荐菜</dt><dd>${escapeHtml(selectedRestaurant.note || "暂无推荐菜")}</dd></div>
+              <div><dt>推荐菜</dt><dd>${escapeHtml(getRecommendationText(selectedRestaurant.note))}</dd></div>
             </dl>
             <div class="result-actions">
               <a class="map-action" href="${getMapUrl(selectedRestaurant)}" target="_blank" rel="noreferrer">打开地图</a>
@@ -988,6 +1029,18 @@
         }
         elements.resultArea.className = "quiet-hint";
         elements.resultArea.textContent = isRolling ? "餐厅正在飞速路过，马上揭晓。" : "还没有抽取餐厅。";
+      }
+
+      function getRecommendationText(note) {
+        const cleaned = String(note || "")
+          .split(/[；;]/)
+          .map((part) => part.trim())
+          .filter((part) => part && !/^人均\s*[：:]/.test(part))
+          .join("；")
+          .replace(/^标签\s*[：:]\s*/, "")
+          .replaceAll(",", "、")
+          .trim();
+        return cleaned || "暂无推荐菜";
       }
 
       function pickRestaurant() {
@@ -1025,7 +1078,7 @@
 
       function getSphereStyle(index, total, revealed = false) {
         if (revealed && index === 0) {
-          return "--theta: 0deg; --phi: 0deg; --twist: 0deg; --radius: 260px; --depth-opacity: 1; --depth-saturation: 1.12; --depth-light: 1.04; --curve-scale: 1; --card-scale: 1;";
+          return "--theta: 0deg; --phi: 0deg; --twist: 0deg; --radius: 0px; --depth-opacity: 1; --depth-saturation: 1.12; --depth-light: 1.04; --curve-scale: 1; --card-scale: 1;";
         }
 
         const adjustedIndex = revealed ? index - 1 : index;
@@ -1257,7 +1310,19 @@
 
       function renderReviewImages(images = []) {
         if (!images.length) return "";
-        return `<div class="review-images">${images.map((src) => `<img src="${escapeHtml(src)}" alt="打卡照片" loading="lazy" />`).join("")}</div>`;
+        return `<div class="review-images">${images.map((src) => `<img src="${escapeHtml(src)}" alt="打卡照片，点击放大" loading="lazy" data-review-image />`).join("")}</div>`;
+      }
+
+      function openImagePreview(source) {
+        elements.imagePreviewContent.src = source;
+        elements.imagePreview.hidden = false;
+        document.body.classList.add("is-image-preview-open");
+      }
+
+      function closeImagePreview() {
+        elements.imagePreview.hidden = true;
+        elements.imagePreviewContent.removeAttribute("src");
+        document.body.classList.remove("is-image-preview-open");
       }
 
       function renderRestaurantForm() {
@@ -1355,6 +1420,11 @@
       }
 
       function handleHistoryClick(event) {
+        const image = event.target.closest("[data-review-image]");
+        if (image) {
+          openImagePreview(image.currentSrc || image.src);
+          return;
+        }
         const button = event.target.closest("button");
         if (!button) return;
         if (button.dataset.action === "edit-review") {
