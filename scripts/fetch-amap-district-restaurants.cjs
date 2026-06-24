@@ -151,7 +151,10 @@ function normalizePoi(poi, district) {
     name: poi.name || "",
     address: poi.address || "",
     note: recommend || "高德公开 POI 评分较高",
-    category: inferCategory(`${poi.name || ""} ${business.tag || ""} ${poi.type || ""}`),
+    category: inferCategory({
+      name: poi.name || "",
+      note: `${business.tag || ""} ${poi.type || ""}`,
+    }),
     district,
     amapDistrict,
     businessArea: business.business_area || business.business_area_name || "",
@@ -173,16 +176,23 @@ function replaceRestaurants(incoming) {
   console.log(`Replaced ${RESTAURANTS_PATH} with ${incoming.length} verified Amap restaurants.`);
 }
 
-function inferCategory(text) {
-  const rules = [
-    ["bbq", ["烧烤", "烤", "串", "烤肉"]],
-    ["hotpot", ["火锅", "涮", "锅"]],
-    ["noodle", ["面", "粉", "馄饨", "饺子", "麻辣烫"]],
-    ["seafood", ["海鲜", "小龙虾", "龙虾", "虾", "蟹", "鱼"]],
-    ["beef", ["牛", "羊"]],
-    ["fast", ["肯德基", "麦当劳", "汉堡", "披萨", "咖啡", "茶"]],
-  ];
-  return rules.find(([, keywords]) => keywords.some((keyword) => text.includes(keyword)))?.[0] || "stir";
+function inferCategory(restaurant) {
+  const name = String(restaurant.name || "").toLowerCase();
+  const note = String(restaurant.note || "").toLowerCase();
+  const hasName = (keywords) => keywords.some((keyword) => name.includes(keyword.toLowerCase()));
+  const hasNote = (keywords) => keywords.some((keyword) => note.includes(keyword.toLowerCase()));
+  if (hasName(["自助", "buffet"]) || hasNote(["自助餐"])) return "buffet";
+  if (hasName(["日料", "日本料理", "日式料理", "寿司", "割烹", "居酒屋", "韩食", "韩国料理", "韩式料理"])) return "asian";
+  if (hasName(["西餐", "意式", "披萨", "pizza", "bistro", "牛排", "汉堡", "麦当劳", "肯德基", "萨莉亚"])) return "western";
+  if (hasName(["火锅", "豆捞", "涮", "暖锅", "羊蝎子", "羊肉炉", "打边炉"])) return "hotpot";
+  if (hasName(["烧烤", "烤肉", "烤串", "串串", "烤鱼", "炭烤", "碳烤"])) return "bbq";
+  if (hasName(["咖啡", "coffee", "甜品", "烘焙", "蛋糕", "下午茶", "酒馆"])) return "dessert";
+  if (hasName(["海鲜", "河鲜", "湖鲜", "鱼馆", "鱼宴", "鱼味", "鱼府", "渔庄", "龙虾"])) return "seafood";
+  if (hasName(["牛肉馆", "羊肉馆", "清真", "西域", "新疆"])) return "beef";
+  if (hasName(["面馆", "拉面", "拌面", "米粉", "馄饨", "饺子", "麻辣烫", "小吃"])) return "noodle";
+  if (hasNote(["寿司", "刺身", "日式料理", "韩国料理"])) return "asian";
+  if (hasNote(["意面", "披萨", "pizza", "汉堡"]) && hasNote(["牛排", "沙拉", "薯条", "芝士"])) return "western";
+  return "stir";
 }
 
 function requestJson(url) {

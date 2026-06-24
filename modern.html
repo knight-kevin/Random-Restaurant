@@ -45,18 +45,26 @@
       .hero-copy h2 { font-size: clamp(2.1rem, 6vw, 5.4rem); line-height: .98; }
       .hero-copy p:last-child { max-width: 560px; margin: 0; color: #5d6870; font-size: 1.02rem; line-height: 1.7; }
       .filter-panel { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) auto; gap: 12px; align-items: end; margin-top: 20px; padding: 14px; border: 1px solid rgba(255,91,91,.18); border-radius: 8px; background: rgba(255,255,255,.82); }
-      .filter-panel label { display: grid; gap: 7px; color: #39493f; font-weight: 800; }
+      .filter-panel label, .filter-field { display: grid; gap: 7px; color: #39493f; font-weight: 800; min-width: 0; }
       .filter-panel span { font-size: .82rem; color: #7d5544; }
       .filter-panel select { min-height: 42px; border: 1px solid #cbd5c4; border-radius: 8px; padding: 0 12px; background: #fff; color: #1f2933; outline: none; font-weight: 700; }
+      .multi-filter { position: relative; min-width: 0; }
+      .multi-filter-button { display: flex; width: 100%; min-height: 42px; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid #cbd5c4; border-radius: 8px; padding: 0 12px; background: #fff; color: #1f2933; font-weight: 700; text-align: left; }
+      .multi-filter-button::after { content: "⌄"; color: #687274; font-size: 1rem; transition: transform .18s ease; }
+      .multi-filter.is-open .multi-filter-button { border-color: #ff725e; box-shadow: 0 0 0 3px rgba(255,114,94,.12); }
+      .multi-filter.is-open .multi-filter-button::after { transform: rotate(180deg); }
+      .multi-filter-menu { position: absolute; z-index: 12; top: calc(100% + 7px); left: 0; width: max(100%, 220px); max-height: 280px; overflow: auto; padding: 8px; border: 1px solid rgba(255,114,94,.2); border-radius: 8px; background: #fff; box-shadow: 0 18px 42px rgba(42,55,83,.18); }
+      .multi-filter-option { display: flex; grid-template-columns: none; align-items: center; gap: 9px; padding: 9px 8px; border-radius: 6px; color: #33423a; cursor: pointer; }
+      .multi-filter-option:hover { background: #fff3ee; }
+      .multi-filter-option input { width: 18px; height: 18px; margin: 0; accent-color: #ff654f; }
+      .multi-filter-option span { color: inherit; font-size: .88rem; }
       .filter-summary { margin: 0; color: #53655a; font-size: .9rem; font-weight: 800; white-space: nowrap; }
 
       .reel-shell { position: relative; margin-top: 24px; padding: 18px; border-radius: 8px; background: radial-gradient(circle at 38% 28%, rgba(255,125,99,.38), transparent 30%), radial-gradient(circle at 70% 18%, rgba(87,204,255,.26), transparent 32%), linear-gradient(160deg, #222a5a, #111827 72%); box-shadow: inset 0 0 0 1px rgba(255,255,255,.12), 0 18px 46px rgba(35,45,85,.18); }
       .reel-window { position: relative; height: 430px; overflow: hidden; border-radius: 8px; perspective: 1200px; }
       .reel-window::before { position: absolute; z-index: 0; inset: 42px 10%; content: ""; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.11), rgba(255,211,108,.08) 42%, transparent 68%); box-shadow: inset 0 0 50px rgba(255,255,255,.1), 0 0 60px rgba(255,211,108,.14); }
       .reel-marker { position: absolute; z-index: 4; top: 50%; left: 50%; width: 10px; height: 10px; border-radius: 50%; transform: translate(-50%, -50%); background: #ffd36c; box-shadow: 0 0 0 8px rgba(255,211,108,.16), 0 0 30px rgba(255,211,108,.55); }
-      .reel-track { position: absolute; z-index: 2; inset: 0; transform-style: preserve-3d; transform: rotateX(0deg) rotateY(0deg); will-change: transform; }
-      .reel-track.is-idle { animation: sphereIdle 18s linear infinite; }
-      .reel-track.is-rolling { animation: sphereSpin 3s cubic-bezier(.2,.72,.18,1) forwards; }
+      .reel-track { position: absolute; z-index: 2; inset: 0; transform-style: preserve-3d; transform: rotateX(10deg) rotateY(0deg); will-change: transform; }
       .reel-track.is-revealed .reel-card:not(.is-final) { opacity: 0; filter: blur(10px) saturate(.45); pointer-events: none; transition: opacity .38s ease, filter .38s ease; }
       .reel-track.is-revealed .reel-card.is-final { animation: finalReveal 1.05s cubic-bezier(.16,1,.3,1) both; }
       .reel-card { position: absolute; top: 50%; left: 50%; width: 128px; height: 154px; overflow: hidden; border-radius: 44% / 18%; clip-path: ellipse(61% 51% at 50% 50%); background: #fffaf2; box-shadow: 0 18px 36px rgba(0,0,0,.24); transform: translate(-50%, -50%) rotateY(var(--theta)) rotateX(var(--phi)) rotateZ(var(--twist)) translateZ(var(--radius)) scaleX(var(--curve-scale)) scale(var(--card-scale)); transform-style: preserve-3d; opacity: var(--depth-opacity); filter: saturate(var(--depth-saturation)) brightness(var(--depth-light)); backface-visibility: visible; transition: opacity .24s ease, filter .24s ease; }
@@ -71,8 +79,6 @@
       .reel-card.is-final h3 { font-size: 1.05rem; }
       .reel-card.is-final p { font-size: .86rem; }
       .reel-placeholder { display: grid; position: relative; z-index: 2; height: 100%; place-items: center; color: rgba(255,255,255,.72); text-align: center; }
-      @keyframes sphereIdle { from { transform: rotateX(10deg) rotateY(0deg) rotateZ(0deg); } to { transform: rotateX(10deg) rotateY(-360deg) rotateZ(0deg); } }
-      @keyframes sphereSpin { 0% { transform: rotateX(18deg) rotateY(-24deg) rotateZ(-2deg); } 35% { transform: rotateX(-14deg) rotateY(-560deg) rotateZ(2deg); } 70% { transform: rotateX(10deg) rotateY(-1030deg) rotateZ(-1deg); } 100% { transform: rotateX(0deg) rotateY(-1440deg) rotateZ(0deg); } }
       @keyframes finalReveal { 0% { transform: translate(-50%, -50%) rotateY(-34deg) rotateX(12deg) translateZ(120px) scale(.56); opacity: 0; filter: blur(8px) saturate(.8); } 55% { opacity: 1; filter: blur(0) saturate(1.05); } 100% { transform: translate(-50%, -50%) rotateY(var(--theta)) rotateX(var(--phi)) rotateZ(0deg) translateZ(var(--radius)) scaleX(1) scale(var(--card-scale)); opacity: 1; filter: blur(0) saturate(1.12); } }
 
       .random-controls { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; margin-top: 22px; }
@@ -127,6 +133,13 @@
       .review-form select { min-height: 40px; }
       .review-images { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
       .review-images img { width: 72px; height: 72px; object-fit: cover; border-radius: 8px; border: 2px solid #fff; box-shadow: 0 10px 22px rgba(31,41,51,.16); }
+      .history-list .list-card { grid-template-columns: minmax(0, 1fr); align-items: start; }
+      .history-list .list-card > div { min-width: 0; }
+      .history-list .row-actions { justify-content: flex-end; }
+      .history-list .rating-grid, .history-list .review-score-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .history-list .review-form, .history-list .rating-summary { width: 100%; min-width: 0; overflow: hidden; }
+      .history-list textarea { min-height: 96px; }
+      .history-list .rating-chip { min-width: 0; overflow-wrap: anywhere; }
       .file-hint { margin: 0; color: #687274; font-size: .82rem; }
       .empty-state { margin-top: 14px; padding: 18px; border: 1px dashed #bdc9b7; border-radius: 8px; background: #fbfcf8; color: #5d6e61; line-height: 1.6; text-align: center; }
       .toast { position: fixed; z-index: 20; left: 50%; bottom: 22px; transform: translateX(-50%); max-width: min(520px, calc(100% - 28px)); padding: 12px 16px; border-radius: 8px; background: #1f2933; color: #fff; box-shadow: 0 16px 40px rgba(31,41,51,.22); }
@@ -136,6 +149,7 @@
         .app-shell { width: min(100% - 22px, 720px); padding-top: 12px; }
         .topbar, .home-grid, .form-grid { grid-template-columns: 1fr; }
         .filter-panel { grid-template-columns: 1fr; }
+        .multi-filter-menu { position: static; width: 100%; margin-top: 7px; box-shadow: 0 12px 28px rgba(42,55,83,.12); }
         .filter-summary { white-space: normal; }
         .topbar { display: grid; padding-inline: 0; }
         .top-actions { width: 100%; }
@@ -181,14 +195,20 @@
             <h2>让命运先替你排个号</h2>
           </div>
           <div class="filter-panel" aria-label="筛选餐厅">
-            <label>
+            <div class="filter-field">
               <span>餐厅种类</span>
-              <select id="category-filter"></select>
-            </label>
-            <label>
+              <div class="multi-filter" id="category-filter">
+                <button class="multi-filter-button" id="category-filter-button" type="button" aria-expanded="false">全部种类</button>
+                <div class="multi-filter-menu" id="category-filter-menu" hidden></div>
+              </div>
+            </div>
+            <div class="filter-field">
               <span>杭州区域</span>
-              <select id="location-filter"></select>
-            </label>
+              <div class="multi-filter" id="location-filter">
+                <button class="multi-filter-button" id="location-filter-button" type="button" aria-expanded="false">全部区域</button>
+                <div class="multi-filter-menu" id="location-filter-menu" hidden></div>
+              </div>
+            </div>
             <label>
               <span>商圈 / 片区</span>
               <select id="business-filter"></select>
@@ -248,19 +268,22 @@
     <script>
       const RESTAURANTS_KEY = "random-restaurant-checkin:restaurants";
       const RESTAURANTS_VERSION_KEY = "random-restaurant-checkin:restaurants-version";
-      const CURRENT_DATASET_VERSION = "amap-hangzhou-390-2026-06-24-v2";
+      const CURRENT_DATASET_VERSION = "amap-hangzhou-390-2026-06-24-v3";
       const CHECK_INS_KEY = "random-restaurant-checkin:check-ins";
       const ROLL_DURATION_MS = 3000;
       const REEL_LENGTH = 32;
       const CATEGORY_OPTIONS = [
         { value: "all", label: "全部种类", keywords: [] },
-        { value: "bbq", label: "烧烤", keywords: ["烧烤", "烤", "串", "生蚝"] },
-        { value: "hotpot", label: "火锅", keywords: ["火锅", "涮", "羊蝎子", "锅"] },
-        { value: "stir", label: "炒菜", keywords: ["小炒", "炒", "菜馆", "饭店", "私房菜", "下饭菜"] },
-        { value: "noodle", label: "面 / 粉", keywords: ["面", "粉", "拌川", "麻辣烫"] },
-        { value: "seafood", label: "海鲜 / 小龙虾", keywords: ["海鲜", "小龙虾", "龙虾", "虾", "蟹", "鱼"] },
-        { value: "beef", label: "牛羊肉", keywords: ["牛", "羊"] },
-        { value: "fast", label: "快餐 / 西式", keywords: ["肯德基", "麦当劳", "必胜客", "汉堡王", "汉堡", "披萨"] },
+        { value: "stir", label: "中餐 / 炒菜", keywords: [] },
+        { value: "hotpot", label: "火锅 / 暖锅", keywords: [] },
+        { value: "bbq", label: "烧烤 / 烤肉", keywords: [] },
+        { value: "noodle", label: "面食 / 小吃", keywords: [] },
+        { value: "seafood", label: "海鲜 / 河鲜", keywords: [] },
+        { value: "beef", label: "牛羊肉", keywords: [] },
+        { value: "asian", label: "日料 / 韩餐", keywords: [] },
+        { value: "western", label: "西餐 / 快餐", keywords: [] },
+        { value: "dessert", label: "咖啡 / 甜品", keywords: [] },
+        { value: "buffet", label: "自助餐", keywords: [] },
       ];
       const DISTRICT_RULES = [
         { district: "西湖区", keywords: ["象山", "小和山", "屏峰", "转塘", "龙坞", "袁浦", "之江", "小和山新苑", "西溪", "留下", "石马", "西联", "西文", "高教园", "首尔印象", "星光荟", "奥莱金街", "象山国际", "象山站", "七贤山居"] },
@@ -281,12 +304,16 @@
       let pendingRestaurant = null;
       let editingRestaurantId = null;
       let editingReviewId = null;
-      let selectedCategory = "all";
-      let selectedLocation = "all";
+      let selectedCategories = new Set();
+      let selectedLocations = new Set();
       let selectedBusinessArea = "all";
       let isRolling = false;
       let toastTimer = 0;
       let audioContext = null;
+      let sphereFrame = 0;
+      let sphereLastTime = performance.now();
+      let sphereRotationY = 0;
+      let rollStartedAt = 0;
 
       const elements = {
         homeTab: document.querySelector("#home-tab"),
@@ -297,7 +324,11 @@
         count: document.querySelector("#restaurant-count"),
         manageCount: document.querySelector("#manage-count"),
         categoryFilter: document.querySelector("#category-filter"),
+        categoryFilterButton: document.querySelector("#category-filter-button"),
+        categoryFilterMenu: document.querySelector("#category-filter-menu"),
         locationFilter: document.querySelector("#location-filter"),
+        locationFilterButton: document.querySelector("#location-filter-button"),
+        locationFilterMenu: document.querySelector("#location-filter-menu"),
         businessFilter: document.querySelector("#business-filter"),
         filterSummary: document.querySelector("#filter-summary"),
         pickButton: document.querySelector("#pick-button"),
@@ -324,33 +355,30 @@
         bindEvents();
         render();
         renderReel(buildRollingReel(), false);
+        sphereFrame = requestAnimationFrame(animateSphere);
       }
 
       function bindEvents() {
         elements.homeTab.addEventListener("click", () => switchView("home"));
         elements.manageTab.addEventListener("click", () => switchView("manage"));
         elements.backHomeButton.addEventListener("click", () => switchView("home"));
-        elements.categoryFilter.addEventListener("change", () => {
-          selectedCategory = elements.categoryFilter.value;
-          selectedRestaurant = null;
-          pendingRestaurant = null;
-          render();
-          renderReel(buildRollingReel(), false);
+        bindMultiFilter(elements.categoryFilter, elements.categoryFilterButton, elements.categoryFilterMenu);
+        bindMultiFilter(elements.locationFilter, elements.locationFilterButton, elements.locationFilterMenu);
+        elements.categoryFilterMenu.addEventListener("change", () => {
+          selectedCategories = getCheckedValues(elements.categoryFilterMenu);
+          resetSelectionAfterFilterChange();
         });
-        elements.locationFilter.addEventListener("change", () => {
-          selectedLocation = elements.locationFilter.value;
+        elements.locationFilterMenu.addEventListener("change", () => {
+          selectedLocations = getCheckedValues(elements.locationFilterMenu);
           selectedBusinessArea = "all";
-          selectedRestaurant = null;
-          pendingRestaurant = null;
-          render();
-          renderReel(buildRollingReel(), false);
+          resetSelectionAfterFilterChange();
         });
         elements.businessFilter.addEventListener("change", () => {
           selectedBusinessArea = elements.businessFilter.value;
-          selectedRestaurant = null;
-          pendingRestaurant = null;
-          render();
-          renderReel(buildRollingReel(), false);
+          resetSelectionAfterFilterChange();
+        });
+        document.addEventListener("click", (event) => {
+          if (!event.target.closest(".multi-filter")) closeMultiFilters();
         });
         elements.pickButton.addEventListener("click", pickRestaurant);
         elements.clearHistoryButton.addEventListener("click", clearHistory);
@@ -359,6 +387,38 @@
         elements.restaurantList.addEventListener("click", handleRestaurantListClick);
         elements.historyList.addEventListener("click", handleHistoryClick);
         elements.historyList.addEventListener("submit", submitReview);
+      }
+
+      function bindMultiFilter(container, button, menu) {
+        button.addEventListener("click", () => {
+          const willOpen = menu.hidden;
+          closeMultiFilters();
+          menu.hidden = !willOpen;
+          container.classList.toggle("is-open", willOpen);
+          button.setAttribute("aria-expanded", String(willOpen));
+        });
+      }
+
+      function closeMultiFilters() {
+        [
+          [elements.categoryFilter, elements.categoryFilterButton, elements.categoryFilterMenu],
+          [elements.locationFilter, elements.locationFilterButton, elements.locationFilterMenu],
+        ].forEach(([container, button, menu]) => {
+          menu.hidden = true;
+          container.classList.remove("is-open");
+          button.setAttribute("aria-expanded", "false");
+        });
+      }
+
+      function getCheckedValues(menu) {
+        return new Set([...menu.querySelectorAll('input[type="checkbox"]:checked')].map((input) => input.value));
+      }
+
+      function resetSelectionAfterFilterChange() {
+        selectedRestaurant = null;
+        pendingRestaurant = null;
+        render();
+        renderReel(buildRollingReel(), false);
       }
 
       function readJson(key, fallback) {
@@ -378,20 +438,11 @@
           return initialRestaurants;
         }
         const stored = readJson(RESTAURANTS_KEY, initialRestaurants);
-        if (!isCurrentDataset(stored)) {
+        if (!Array.isArray(stored)) {
           localStorage.setItem(RESTAURANTS_KEY, JSON.stringify(initialRestaurants));
           return initialRestaurants;
         }
         return isPlaceholderRestaurantList(stored) ? initialRestaurants : stored;
-      }
-
-      function isCurrentDataset(items) {
-        if (!Array.isArray(items) || items.length !== 390) return false;
-        const districts = new Map();
-        items.forEach((restaurant) => {
-          districts.set(restaurant.district, (districts.get(restaurant.district) || 0) + 1);
-        });
-        return districts.size === 13 && [...districts.values()].every((count) => count === 30);
       }
 
       function isPlaceholderRestaurantList(items) {
@@ -409,20 +460,28 @@
       }
 
       function matchesCategory(restaurant, categoryValue) {
-        if (categoryValue === "all") return true;
-        const category = CATEGORY_OPTIONS.find((item) => item.value === categoryValue);
-        if (!category) return true;
-        if ((restaurant.category || inferCategory(restaurant)) === categoryValue) return true;
-        const text = getRestaurantText(restaurant);
-        return category.keywords.some((keyword) => text.includes(keyword));
+        return (restaurant.category || inferCategory(restaurant)) === categoryValue;
       }
 
       function inferCategory(restaurant) {
-        const text = getRestaurantText(restaurant);
-        const matched = CATEGORY_OPTIONS.find((category) =>
-          category.value !== "all" && category.keywords.some((keyword) => text.includes(keyword)),
-        );
-        return matched ? matched.value : "stir";
+        const name = String(restaurant.name || "").toLowerCase();
+        const note = String(restaurant.note || "").toLowerCase();
+        const hasName = (keywords) => keywords.some((keyword) => name.includes(keyword.toLowerCase()));
+        const hasNote = (keywords) => keywords.some((keyword) => note.includes(keyword.toLowerCase()));
+        if (hasName(["自助", "buffet"]) || hasNote(["自助餐"])) return "buffet";
+        if (hasName(["日料", "日本料理", "日式料理", "寿司", "割烹", "居酒屋", "韩食", "韩国料理", "韩式料理"])) return "asian";
+        if (hasName(["西餐", "意式", "披萨", "pizza", "bistro", "steak", "牛排", "汉堡", "麦当劳", "肯德基", "必胜客", "萨莉亚", "commune", "pub"])) return "western";
+        if (hasName(["火锅", "豆捞", "涮", "暖锅", "羊蝎子", "羊肉炉", "打边炉", "肉蟹煲", "鸡公煲"])) return "hotpot";
+        if (hasName(["烧烤", "烤肉", "烤串", "串串", "烤鱼", "烤羊", "炭烤", "碳烤"])) return "bbq";
+        if (hasName(["咖啡", "coffee", "甜品", "烘焙", "蛋糕", "茶饮", "下午茶", "酒馆"])) return "dessert";
+        if (hasName(["海鲜", "河鲜", "湖鲜", "鱼馆", "鱼宴", "鱼味", "鱼府", "渔庄", "渔村", "龙虾", "虾馆", "蟹馆"])) return "seafood";
+        if (hasName(["牛肉馆", "牛肉汤", "羊肉馆", "羊肉汤", "清真", "西域", "新疆"])) return "beef";
+        if (hasName(["面馆", "拉面", "拌面", "米粉", "粉店", "馄饨", "饺子", "煎饺", "麻辣烫", "小吃"])) return "noodle";
+        if (hasNote(["寿司", "刺身", "日式料理", "韩国料理"])) return "asian";
+        if (hasNote(["意面", "披萨", "pizza", "汉堡"]) && hasNote(["牛排", "沙拉", "薯条", "芝士"])) return "western";
+        const fishMentions = (note.match(/鱼头|海鲜|河鲜|湖鲜|龙虾|螃蟹|鲜鱼/g) || []).length;
+        if (fishMentions >= 3) return "seafood";
+        return "stir";
       }
 
       function getCategoryLabel(value) {
@@ -443,7 +502,7 @@
 
       function getBusinessAreas() {
         const scoped = restaurants.filter((restaurant) =>
-          selectedLocation === "all" || getDistrict(restaurant.address, restaurant) === selectedLocation
+          selectedLocations.size === 0 || selectedLocations.has(getDistrict(restaurant.address, restaurant))
         );
         return [...new Set(scoped.map((restaurant) => restaurant.businessArea).filter(Boolean))]
           .sort((a, b) => a.localeCompare(b, "zh-CN"));
@@ -451,8 +510,10 @@
 
       function getFilteredRestaurants() {
         return restaurants.filter((restaurant) => {
-          const categoryMatched = matchesCategory(restaurant, selectedCategory);
-          const locationMatched = selectedLocation === "all" || getDistrict(restaurant.address, restaurant) === selectedLocation;
+          const categoryMatched = selectedCategories.size === 0 ||
+            [...selectedCategories].some((category) => matchesCategory(restaurant, category));
+          const locationMatched = selectedLocations.size === 0 ||
+            selectedLocations.has(getDistrict(restaurant.address, restaurant));
           const businessMatched = selectedBusinessArea === "all" || restaurant.businessArea === selectedBusinessArea;
           return categoryMatched && locationMatched && businessMatched;
         });
@@ -473,19 +534,21 @@
       }
 
       function renderFilters(filteredRestaurants) {
-        const currentCategory = selectedCategory;
-        const currentLocation = selectedLocation;
         const currentBusinessArea = selectedBusinessArea;
-        elements.categoryFilter.innerHTML = CATEGORY_OPTIONS.map((category) =>
-          `<option value="${category.value}">${category.label}</option>`
-        ).join("");
-        elements.locationFilter.innerHTML = [
-          '<option value="all">全部区域</option>',
-          ...getLocations().map((location) => `<option value="${escapeHtml(location)}">${escapeHtml(location)}</option>`),
-        ].join("");
-        elements.categoryFilter.value = currentCategory;
-        elements.locationFilter.value = getLocations().includes(currentLocation) ? currentLocation : "all";
-        selectedLocation = elements.locationFilter.value;
+        renderMultiFilter(
+          elements.categoryFilterMenu,
+          elements.categoryFilterButton,
+          CATEGORY_OPTIONS.filter((category) => category.value !== "all"),
+          selectedCategories,
+          "全部种类",
+        );
+        renderMultiFilter(
+          elements.locationFilterMenu,
+          elements.locationFilterButton,
+          getLocations().map((location) => ({ value: location, label: location })),
+          selectedLocations,
+          "全部区域",
+        );
         const businessAreas = getBusinessAreas();
         elements.businessFilter.innerHTML = [
           '<option value="all">全部商圈</option>',
@@ -494,6 +557,23 @@
         elements.businessFilter.value = businessAreas.includes(currentBusinessArea) ? currentBusinessArea : "all";
         selectedBusinessArea = elements.businessFilter.value;
         elements.filterSummary.textContent = `当前可抽 ${filteredRestaurants.length} / ${restaurants.length} 家`;
+      }
+
+      function renderMultiFilter(menu, button, options, selectedValues, emptyLabel) {
+        const validValues = new Set(options.map((option) => option.value));
+        [...selectedValues].forEach((value) => {
+          if (!validValues.has(value)) selectedValues.delete(value);
+        });
+        menu.innerHTML = options.map((option) => `
+          <label class="multi-filter-option">
+            <input type="checkbox" value="${escapeHtml(option.value)}" ${selectedValues.has(option.value) ? "checked" : ""} />
+            <span>${escapeHtml(option.label)}</span>
+          </label>
+        `).join("");
+        const labels = options.filter((option) => selectedValues.has(option.value)).map((option) => option.label);
+        button.textContent = labels.length === 0
+          ? emptyLabel
+          : labels.length <= 2 ? labels.join("、") : `已选 ${labels.length} 项`;
       }
 
       function escapeHtml(value) {
@@ -550,7 +630,7 @@
           elements.reelArea.innerHTML = "";
           return;
         }
-        elements.reelArea.className = `reel-track ${revealed ? "is-revealed" : ""} ${!rolling && !revealed ? "is-idle" : ""}`;
+        elements.reelArea.className = `reel-track ${revealed ? "is-revealed" : ""}`;
         elements.reelArea.innerHTML = sequence.map((restaurant, index) => `
           <article class="reel-card ${revealed && index === 0 ? "is-final" : ""}" style="${getSphereStyle(index, sequence.length, revealed)}" key="${restaurant.id}-${index}">
             <div class="food-photo" style="--food-image: url('${getRestaurantImage(restaurant)}')"><span>${escapeHtml(restaurant.name.slice(0, 2))}</span></div>
@@ -562,9 +642,37 @@
             </div>
           </article>
         `).join("");
-        requestAnimationFrame(() => {
-          if (rolling) elements.reelArea.classList.add("is-rolling");
-        });
+      }
+
+      function animateSphere(timestamp) {
+        const delta = Math.min(34, Math.max(0, timestamp - sphereLastTime));
+        sphereLastTime = timestamp;
+        if (selectedRestaurant && !isRolling) {
+          elements.reelArea.style.transform = "rotateX(0deg) rotateY(0deg) rotateZ(0deg)";
+        } else {
+          let speed = 0.014;
+          let tilt = 9 + Math.sin(timestamp / 2300) * 3;
+          if (isRolling) {
+            const progress = Math.min(1, (timestamp - rollStartedAt) / ROLL_DURATION_MS);
+            if (progress < 0.14) {
+              const ramp = 1 - Math.pow(1 - progress / 0.14, 3);
+              speed = 0.014 + (0.72 - 0.014) * ramp;
+            } else {
+              const slowProgress = (progress - 0.14) / 0.86;
+              const smooth = slowProgress * slowProgress * (3 - 2 * slowProgress);
+              speed = 0.72 + (0.018 - 0.72) * smooth;
+            }
+            tilt = 10 + Math.sin(progress * Math.PI * 5) * 7 * (1 - progress);
+            if (progress >= 1) {
+              finishPick();
+              sphereFrame = requestAnimationFrame(animateSphere);
+              return;
+            }
+          }
+          sphereRotationY -= speed * delta;
+          elements.reelArea.style.transform = `rotateX(${tilt.toFixed(2)}deg) rotateY(${sphereRotationY.toFixed(2)}deg) rotateZ(0deg)`;
+        }
+        sphereFrame = requestAnimationFrame(animateSphere);
       }
 
       function shuffleRestaurants(items) {
@@ -625,18 +733,21 @@
         selectedRestaurant = null;
         pendingRestaurant = finalRestaurant;
         isRolling = true;
+        rollStartedAt = performance.now();
         playRollingSound();
         render();
         renderReel(sequence, true);
-        window.setTimeout(() => {
-          selectedRestaurant = pendingRestaurant;
-          pendingRestaurant = null;
-          isRolling = false;
-          playLockSound();
-          showMessage("已锁定本次打卡餐厅。");
-          render();
-          renderReel(buildFinalReel(selectedRestaurant), false, true);
-        }, ROLL_DURATION_MS);
+      }
+
+      function finishPick() {
+        if (!isRolling || !pendingRestaurant) return;
+        selectedRestaurant = pendingRestaurant;
+        pendingRestaurant = null;
+        isRolling = false;
+        playLockSound();
+        showMessage("已锁定本次打卡餐厅。");
+        render();
+        renderReel(buildFinalReel(selectedRestaurant), false, true);
       }
 
       function getSphereStyle(index, total, revealed = false) {
@@ -691,9 +802,27 @@
         const context = getAudioContext();
         if (!context) return;
         context.resume?.();
-        for (let index = 0; index < 18; index += 1) {
-          playTone(220 + index * 18, index * 0.065, 0.055, 0.026, "triangle");
+        let offset = 0;
+        let index = 0;
+        while (offset < ROLL_DURATION_MS / 1000 - 0.08) {
+          const progress = offset / (ROLL_DURATION_MS / 1000);
+          playTone(520 - progress * 250 + (index % 3) * 22, offset, 0.038 + progress * 0.02, 0.022 - progress * 0.008, "triangle");
+          offset += 0.045 + progress * progress * 0.15;
+          index += 1;
         }
+        const oscillator = context.createOscillator();
+        const gain = context.createGain();
+        const startAt = context.currentTime;
+        oscillator.type = "sine";
+        oscillator.frequency.setValueAtTime(150, startAt);
+        oscillator.frequency.exponentialRampToValueAtTime(62, startAt + ROLL_DURATION_MS / 1000);
+        gain.gain.setValueAtTime(0.0001, startAt);
+        gain.gain.exponentialRampToValueAtTime(0.014, startAt + 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.0001, startAt + ROLL_DURATION_MS / 1000);
+        oscillator.connect(gain);
+        gain.connect(context.destination);
+        oscillator.start(startAt);
+        oscillator.stop(startAt + ROLL_DURATION_MS / 1000 + 0.04);
       }
 
       function playLockSound() {
