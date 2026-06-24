@@ -24,6 +24,7 @@
 
       * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
       body { margin: 0; min-width: 320px; min-height: 100vh; min-height: 100dvh; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); overscroll-behavior-y: contain; }
+      body.is-filter-open { position: fixed; width: 100%; overflow: hidden; }
       button, input, textarea { font: inherit; }
       button, a { touch-action: manipulation; }
       button { border: 0; cursor: pointer; }
@@ -39,8 +40,9 @@
       .nav-action.is-active { background: linear-gradient(135deg, #ff5b6e, #ff8a3d); color: #fff; }
 
       .home-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(320px, .65fr); gap: 18px; align-items: start; }
+      .home-grid > * { min-width: 0; }
       .panel, .hero-stage { border: 1px solid rgba(255,255,255,.74); border-radius: 8px; background: rgba(255,255,255,.86); box-shadow: 0 24px 70px rgba(42,55,83,.13); backdrop-filter: blur(18px); }
-      .hero-stage { overflow: hidden; padding: clamp(20px, 3vw, 32px); }
+      .hero-stage { width: 100%; min-width: 0; overflow: visible; padding: clamp(20px, 3vw, 32px); backdrop-filter: none; }
       .hero-copy { display: grid; gap: 10px; max-width: 720px; }
       .hero-copy h2 { font-size: clamp(2.1rem, 6vw, 5.4rem); line-height: .98; }
       .hero-copy p:last-child { max-width: 560px; margin: 0; color: #5d6870; font-size: 1.02rem; line-height: 1.7; }
@@ -59,6 +61,52 @@
       .multi-filter-option input { width: 18px; height: 18px; margin: 0; accent-color: #ff654f; }
       .multi-filter-option span { color: inherit; font-size: .88rem; }
       .filter-summary { margin: 0; color: #53655a; font-size: .9rem; font-weight: 800; white-space: nowrap; }
+      .food-filter { position: relative; z-index: 31; width: 100%; min-width: 0; margin-top: 20px; }
+      .category-tabs { display: flex; width: 100%; min-width: 0; gap: 24px; overflow-x: auto; padding: 0 4px 12px; scrollbar-width: none; }
+      .category-tabs::-webkit-scrollbar { display: none; }
+      .category-tab { position: relative; flex: 0 0 auto; padding: 8px 0; background: transparent; color: #20252a; font-weight: 900; white-space: nowrap; }
+      .category-tab.is-active { color: #ff5b37; }
+      .category-tab.is-active::after { position: absolute; right: 0; bottom: 0; left: 0; height: 4px; border-radius: 4px; background: #ff5b37; content: ""; }
+      .filter-entry-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+      .filter-entry { display: grid; min-height: 58px; place-items: center; padding: 8px; border: 1px solid #ece8e3; border-radius: 8px; background: #f8f8f7; color: #25292d; font-weight: 900; box-shadow: 0 4px 12px rgba(38,42,47,.04); }
+      .filter-entry::after { margin-left: 7px; content: "⌄"; color: #596068; }
+      .filter-entry.is-active { border-color: #ffb6a2; background: #fff1eb; color: #ff5b37; }
+      .filter-entry.is-active::after { transform: rotate(180deg); }
+      .filter-entry small { display: block; max-width: 100%; overflow: hidden; color: #777d82; font-size: .7rem; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+      .filter-dropdown { position: absolute; top: calc(100% + 10px); right: 0; left: 0; border: 1px solid #eee9e4; border-radius: 8px; background: #fff; box-shadow: 0 22px 50px rgba(42,55,83,.16); overflow: hidden; }
+      .filter-dropdown-inner { max-height: min(70vh, 590px); overflow: auto; overscroll-behavior: contain; padding: 18px; }
+      .filter-backdrop { position: fixed; z-index: 25; inset: 0; background: rgba(25,29,34,.22); backdrop-filter: blur(1px); }
+      .filter-panel-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; font-weight: 900; }
+      .location-status { color: #5d6870; font-size: .86rem; font-weight: 700; }
+      .location-action { padding: 8px 10px; border-radius: 7px; background: #fff1eb; color: #ff5b37; font-weight: 900; }
+      .choice-row { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+      .choice-button { min-height: 42px; border: 1px solid transparent; border-radius: 7px; background: #f7f7f6; color: #30353a; font-weight: 800; }
+      .choice-button.is-selected { border-color: #ff6547; background: #fff2ed; color: #ff5433; }
+      .area-picker { display: grid; grid-template-columns: 128px minmax(0, .8fr) minmax(0, 1.2fr); min-height: 330px; margin-top: 16px; border-top: 1px solid #f0ece8; }
+      .area-level { display: grid; align-content: start; gap: 2px; padding: 10px 0; }
+      .area-level + .area-level { border-left: 1px solid #f0ece8; }
+      .area-option { min-height: 44px; padding: 8px 14px; background: transparent; color: #30353a; text-align: left; }
+      .area-option.is-selected { background: #f7f7f6; color: #ff5b37; font-weight: 900; }
+      .food-picker { display: grid; grid-template-columns: 112px minmax(0, 1fr); min-height: 390px; }
+      .food-group-nav { display: grid; align-content: start; border-right: 1px solid #f0ece8; background: #fafafa; }
+      .food-group-nav-button { min-height: 52px; padding: 8px 12px; background: transparent; color: #30353a; text-align: left; font-weight: 800; }
+      .food-group-nav-button.is-selected { background: #fff; color: #ff5b37; }
+      .food-groups { display: grid; align-content: start; gap: 18px; padding-left: 16px; }
+      .food-group { display: grid; gap: 14px; align-items: start; }
+      .food-group-title { display: grid; gap: 5px; justify-items: start; color: #25292d; font-weight: 900; }
+      .food-group-title span:first-child { display: grid; width: 34px; height: 34px; place-items: center; border-radius: 50%; background: #fff1eb; color: #ff5b37; }
+      .food-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .food-option { min-height: 46px; padding: 8px 10px; border: 1px solid transparent; border-radius: 7px; background: #f8f8f7; color: #30353a; font-weight: 800; }
+      .food-option.is-selected { border-color: #ff6547; background: #fff2ed; color: #ff5433; }
+      .sort-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .sort-option { display: flex; min-height: 50px; align-items: center; justify-content: space-between; padding: 0 14px; border: 1px solid #ece8e3; border-radius: 7px; background: #fff; color: #30353a; font-weight: 800; }
+      .sort-option.is-selected { border-color: #ff6547; background: #fff2ed; color: #ff5433; }
+      .filter-footer { display: flex; justify-content: space-between; gap: 10px; padding: 12px 18px calc(12px + env(safe-area-inset-bottom)); border-top: 1px solid #eee9e4; background: #fff; }
+      .filter-footer button { min-height: 44px; border-radius: 8px; padding: 0 22px; font-weight: 900; }
+      .filter-reset { background: #f5f5f4; color: #454b50; }
+      .filter-confirm { flex: 1; max-width: 280px; background: linear-gradient(135deg, #ff704d, #ff4d32); color: #fff; }
+      .active-filter-summary { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; margin: 12px 2px 0; color: #53655a; font-size: .86rem; font-weight: 800; }
+      .filter-token { padding: 4px 8px; border-radius: 999px; background: #fff1eb; color: #ff5b37; }
 
       .reel-shell { position: relative; margin-top: 24px; padding: 18px; border-radius: 8px; background: radial-gradient(circle at 38% 28%, rgba(255,125,99,.38), transparent 30%), radial-gradient(circle at 70% 18%, rgba(87,204,255,.26), transparent 32%), linear-gradient(160deg, #222a5a, #111827 72%); box-shadow: inset 0 0 0 1px rgba(255,255,255,.12), 0 18px 46px rgba(35,45,85,.18); }
       .reel-window { position: relative; height: 430px; overflow: hidden; border-radius: 8px; perspective: 1200px; }
@@ -146,11 +194,13 @@
       [hidden] { display: none !important; }
 
       @media (max-width: 900px) {
-        .app-shell { width: min(100% - 22px, 720px); padding-top: 12px; }
+        .app-shell { width: min(calc(100% - 22px), 720px); padding-top: 12px; }
         .topbar, .home-grid, .form-grid { grid-template-columns: 1fr; }
         .filter-panel { grid-template-columns: 1fr; }
         .multi-filter-menu { position: static; width: 100%; margin-top: 7px; box-shadow: 0 12px 28px rgba(42,55,83,.12); }
         .filter-summary { white-space: normal; }
+        .food-filter { margin-top: 16px; }
+        .filter-dropdown { right: -8px; left: -8px; }
         .topbar { display: grid; padding-inline: 0; }
         .top-actions { width: 100%; }
         .nav-action { flex: 1; }
@@ -172,6 +222,18 @@
         .rating-grid, .review-score-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .form-actions, .row-actions { display: grid; grid-template-columns: 1fr 1fr; }
         .form-actions .secondary-action { grid-column: 1 / -1; }
+        .category-tabs { gap: 21px; margin-inline: -4px; }
+        .filter-entry-row { gap: 7px; }
+        .filter-entry { min-height: 54px; padding-inline: 5px; font-size: .9rem; }
+        .filter-dropdown-inner { max-height: 70vh; padding: 14px; }
+        .choice-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .area-picker { grid-template-columns: 92px minmax(0, .9fr) minmax(0, 1.1fr); min-height: 360px; }
+        .area-option { padding-inline: 9px; font-size: .86rem; }
+        .food-picker { grid-template-columns: 92px minmax(0, 1fr); margin: -14px; }
+        .food-groups { padding: 14px 10px; }
+        .food-group-title { display: none; }
+        .food-options, .sort-options { grid-template-columns: 1fr 1fr; gap: 7px; }
+        .food-option { min-height: 44px; padding-inline: 6px; font-size: .86rem; }
       }
     </style>
   </head>
@@ -194,26 +256,21 @@
             <p class="eyebrow">今天吃哪家</p>
             <h2>让命运先替你排个号</h2>
           </div>
-          <div class="filter-panel" aria-label="筛选餐厅">
-            <div class="filter-field">
-              <span>餐厅种类</span>
-              <div class="multi-filter" id="category-filter">
-                <button class="multi-filter-button" id="category-filter-button" type="button" aria-expanded="false">全部种类</button>
-                <div class="multi-filter-menu" id="category-filter-menu" hidden></div>
+          <div class="food-filter" aria-label="筛选餐厅">
+            <div class="category-tabs" id="category-tabs"></div>
+            <div class="filter-entry-row">
+              <button class="filter-entry" data-filter-panel="nearby" id="nearby-filter-button" type="button">附近</button>
+              <button class="filter-entry" data-filter-panel="food" id="food-filter-button" type="button">全部美食</button>
+              <button class="filter-entry" data-filter-panel="sort" id="sort-filter-button" type="button">排序</button>
+            </div>
+            <div class="filter-dropdown" id="filter-dropdown" hidden>
+              <div class="filter-dropdown-inner" id="filter-dropdown-content"></div>
+              <div class="filter-footer">
+                <button class="filter-reset" id="filter-reset-button" type="button">重置</button>
+                <button class="filter-confirm" id="filter-confirm-button" type="button">确定</button>
               </div>
             </div>
-            <div class="filter-field">
-              <span>杭州区域</span>
-              <div class="multi-filter" id="location-filter">
-                <button class="multi-filter-button" id="location-filter-button" type="button" aria-expanded="false">全部区域</button>
-                <div class="multi-filter-menu" id="location-filter-menu" hidden></div>
-              </div>
-            </div>
-            <label>
-              <span>商圈 / 片区</span>
-              <select id="business-filter"></select>
-            </label>
-            <p class="filter-summary" id="filter-summary">全部餐厅</p>
+            <div class="active-filter-summary" id="filter-summary">当前可抽 0 家</div>
           </div>
           <div class="reel-shell">
             <div class="reel-window">
@@ -263,27 +320,46 @@
         <div class="restaurant-list" id="restaurant-list"></div>
       </section>
     </main>
+    <button class="filter-backdrop" id="filter-backdrop" type="button" aria-label="关闭筛选面板" hidden></button>
     <div class="toast" id="toast" hidden></div>
 
-    <script>
+    <script type="module">
+      import {
+        CATEGORY_LABELS,
+        CATEGORY_TABS,
+        FOOD_GROUPS,
+        getCategoryLabel,
+        inferRestaurantCategory,
+        inferSubcategory,
+        matchesFoodSelection,
+      } from "./scripts/categories.js?v=20260624-v6";
+      import {
+        formatDistance,
+        getRestaurantDistance,
+        parseAverageCost,
+        requestCurrentPosition,
+      } from "./scripts/location.js?v=20260624-v6";
+
       const RESTAURANTS_KEY = "random-restaurant-checkin:restaurants";
       const RESTAURANTS_VERSION_KEY = "random-restaurant-checkin:restaurants-version";
-      const CURRENT_DATASET_VERSION = "amap-hangzhou-390-2026-06-24-v3";
+      const CURRENT_DATASET_VERSION = "amap-hangzhou-1300-2026-06-24-v6";
       const CHECK_INS_KEY = "random-restaurant-checkin:check-ins";
       const ROLL_DURATION_MS = 3000;
       const REEL_LENGTH = 32;
-      const CATEGORY_OPTIONS = [
-        { value: "all", label: "全部种类", keywords: [] },
-        { value: "stir", label: "中餐 / 炒菜", keywords: [] },
-        { value: "hotpot", label: "火锅 / 暖锅", keywords: [] },
-        { value: "bbq", label: "烧烤 / 烤肉", keywords: [] },
-        { value: "noodle", label: "面食 / 小吃", keywords: [] },
-        { value: "seafood", label: "海鲜 / 河鲜", keywords: [] },
-        { value: "beef", label: "牛羊肉", keywords: [] },
-        { value: "asian", label: "日料 / 韩餐", keywords: [] },
-        { value: "western", label: "西餐 / 快餐", keywords: [] },
-        { value: "dessert", label: "咖啡 / 甜品", keywords: [] },
-        { value: "buffet", label: "自助餐", keywords: [] },
+      const DISTANCE_OPTIONS = [
+        { value: 0, label: "不限" },
+        { value: 500, label: "500m" },
+        { value: 1000, label: "1km" },
+        { value: 3000, label: "3km" },
+        { value: 5000, label: "5km" },
+        { value: 10000, label: "10km" },
+      ];
+      const SORT_OPTIONS = [
+        { value: "recommended", label: "综合排序" },
+        { value: "distance", label: "距离优先" },
+        { value: "rating", label: "好评优先" },
+        { value: "cost-asc", label: "人均从低到高" },
+        { value: "cost-desc", label: "人均从高到低" },
       ];
       const DISTRICT_RULES = [
         { district: "西湖区", keywords: ["象山", "小和山", "屏峰", "转塘", "龙坞", "袁浦", "之江", "小和山新苑", "西溪", "留下", "石马", "西联", "西文", "高教园", "首尔印象", "星光荟", "奥莱金街", "象山国际", "象山站", "七贤山居"] },
@@ -304,9 +380,21 @@
       let pendingRestaurant = null;
       let editingRestaurantId = null;
       let editingReviewId = null;
-      let selectedCategories = new Set();
+      let activeCategoryTab = "recommend";
+      let selectedFoodValues = new Set();
       let selectedLocations = new Set();
-      let selectedBusinessArea = "all";
+      let selectedBusinessAreas = new Set();
+      let selectedDistance = 0;
+      let selectedSort = "recommended";
+      let activeFilterPanel = "";
+      let activeAreaLevel = "district";
+      let activeAreaDistrict = "";
+      let activeFoodGroup = "popular";
+      let userPosition = null;
+      let locationStatus = "尚未定位";
+      let isLocating = false;
+      let lockedScrollY = 0;
+      let restaurantDistances = new Map();
       let isRolling = false;
       let toastTimer = 0;
       let audioContext = null;
@@ -323,13 +411,15 @@
         backHomeButton: document.querySelector("#back-home-button"),
         count: document.querySelector("#restaurant-count"),
         manageCount: document.querySelector("#manage-count"),
-        categoryFilter: document.querySelector("#category-filter"),
-        categoryFilterButton: document.querySelector("#category-filter-button"),
-        categoryFilterMenu: document.querySelector("#category-filter-menu"),
-        locationFilter: document.querySelector("#location-filter"),
-        locationFilterButton: document.querySelector("#location-filter-button"),
-        locationFilterMenu: document.querySelector("#location-filter-menu"),
-        businessFilter: document.querySelector("#business-filter"),
+        categoryTabs: document.querySelector("#category-tabs"),
+        nearbyFilterButton: document.querySelector("#nearby-filter-button"),
+        foodFilterButton: document.querySelector("#food-filter-button"),
+        sortFilterButton: document.querySelector("#sort-filter-button"),
+        filterDropdown: document.querySelector("#filter-dropdown"),
+        filterDropdownContent: document.querySelector("#filter-dropdown-content"),
+        filterBackdrop: document.querySelector("#filter-backdrop"),
+        filterResetButton: document.querySelector("#filter-reset-button"),
+        filterConfirmButton: document.querySelector("#filter-confirm-button"),
         filterSummary: document.querySelector("#filter-summary"),
         pickButton: document.querySelector("#pick-button"),
         reelArea: document.querySelector("#reel-area"),
@@ -359,26 +449,19 @@
       }
 
       function bindEvents() {
-        elements.homeTab.addEventListener("click", () => switchView("home"));
-        elements.manageTab.addEventListener("click", () => switchView("manage"));
-        elements.backHomeButton.addEventListener("click", () => switchView("home"));
-        bindMultiFilter(elements.categoryFilter, elements.categoryFilterButton, elements.categoryFilterMenu);
-        bindMultiFilter(elements.locationFilter, elements.locationFilterButton, elements.locationFilterMenu);
-        elements.categoryFilterMenu.addEventListener("change", () => {
-          selectedCategories = getCheckedValues(elements.categoryFilterMenu);
-          resetSelectionAfterFilterChange();
+        elements.homeTab.addEventListener("click", () => { closeFilterPanel(); switchView("home"); });
+        elements.manageTab.addEventListener("click", () => { closeFilterPanel(); switchView("manage"); });
+        elements.backHomeButton.addEventListener("click", () => { closeFilterPanel(); switchView("home"); });
+        elements.categoryTabs.addEventListener("click", handleCategoryTabClick);
+        document.querySelectorAll("[data-filter-panel]").forEach((button) => {
+          button.addEventListener("click", () => toggleFilterPanel(button.dataset.filterPanel));
         });
-        elements.locationFilterMenu.addEventListener("change", () => {
-          selectedLocations = getCheckedValues(elements.locationFilterMenu);
-          selectedBusinessArea = "all";
-          resetSelectionAfterFilterChange();
-        });
-        elements.businessFilter.addEventListener("change", () => {
-          selectedBusinessArea = elements.businessFilter.value;
-          resetSelectionAfterFilterChange();
-        });
+        elements.filterDropdownContent.addEventListener("click", handleFilterPanelClick);
+        elements.filterBackdrop.addEventListener("click", closeFilterPanel);
+        elements.filterResetButton.addEventListener("click", resetActiveFilterPanel);
+        elements.filterConfirmButton.addEventListener("click", closeFilterPanel);
         document.addEventListener("click", (event) => {
-          if (!event.target.closest(".multi-filter")) closeMultiFilters();
+          if (!event.composedPath().includes(document.querySelector(".food-filter"))) closeFilterPanel();
         });
         elements.pickButton.addEventListener("click", pickRestaurant);
         elements.clearHistoryButton.addEventListener("click", clearHistory);
@@ -389,36 +472,107 @@
         elements.historyList.addEventListener("submit", submitReview);
       }
 
-      function bindMultiFilter(container, button, menu) {
-        button.addEventListener("click", () => {
-          const willOpen = menu.hidden;
-          closeMultiFilters();
-          menu.hidden = !willOpen;
-          container.classList.toggle("is-open", willOpen);
-          button.setAttribute("aria-expanded", String(willOpen));
-        });
-      }
-
-      function closeMultiFilters() {
-        [
-          [elements.categoryFilter, elements.categoryFilterButton, elements.categoryFilterMenu],
-          [elements.locationFilter, elements.locationFilterButton, elements.locationFilterMenu],
-        ].forEach(([container, button, menu]) => {
-          menu.hidden = true;
-          container.classList.remove("is-open");
-          button.setAttribute("aria-expanded", "false");
-        });
-      }
-
-      function getCheckedValues(menu) {
-        return new Set([...menu.querySelectorAll('input[type="checkbox"]:checked')].map((input) => input.value));
-      }
-
       function resetSelectionAfterFilterChange() {
         selectedRestaurant = null;
         pendingRestaurant = null;
         render();
         renderReel(buildRollingReel(), false);
+      }
+
+      function handleCategoryTabClick(event) {
+        const button = event.target.closest("[data-category-tab]");
+        if (!button) return;
+        closeFilterPanel();
+        activeCategoryTab = button.dataset.categoryTab;
+        resetSelectionAfterFilterChange();
+      }
+
+      function toggleFilterPanel(panel) {
+        activeFilterPanel = activeFilterPanel === panel ? "" : panel;
+        renderFilterControls();
+      }
+
+      function closeFilterPanel() {
+        if (!activeFilterPanel) return;
+        activeFilterPanel = "";
+        renderFilterControls();
+      }
+
+      function lockPageScroll() {
+        if (document.body.classList.contains("is-filter-open")) return;
+        lockedScrollY = window.scrollY;
+        document.body.style.top = `-${lockedScrollY}px`;
+        document.body.classList.add("is-filter-open");
+      }
+
+      function unlockPageScroll() {
+        if (!document.body.classList.contains("is-filter-open")) return;
+        document.body.classList.remove("is-filter-open");
+        document.body.style.top = "";
+        window.scrollTo(0, lockedScrollY);
+      }
+
+      function handleFilterPanelClick(event) {
+        const target = event.target.closest("button");
+        if (!target) return;
+        if (target.dataset.distance !== undefined) {
+          selectedDistance = Number(target.dataset.distance);
+          if (selectedDistance > 0 && !userPosition) locateUser();
+        }
+        if (target.dataset.areaLevel) activeAreaLevel = target.dataset.areaLevel;
+        if (target.dataset.district) {
+          const value = target.dataset.district;
+          activeAreaDistrict = value;
+          toggleSetValue(selectedLocations, value);
+          selectedBusinessAreas.clear();
+        }
+        if (target.dataset.businessArea !== undefined) {
+          if (target.dataset.businessArea) toggleSetValue(selectedBusinessAreas, target.dataset.businessArea);
+          else selectedBusinessAreas.clear();
+        }
+        if (target.dataset.foodValue) toggleSetValue(selectedFoodValues, target.dataset.foodValue);
+        if (target.dataset.foodGroup) activeFoodGroup = target.dataset.foodGroup;
+        if (target.dataset.sort) selectedSort = target.dataset.sort;
+        if (target.dataset.action === "locate") locateUser();
+        resetSelectionAfterFilterChange();
+      }
+
+      function toggleSetValue(set, value) {
+        if (set.has(value)) set.delete(value);
+        else set.add(value);
+      }
+
+      async function locateUser() {
+        if (isLocating) return;
+        isLocating = true;
+        locationStatus = "正在定位...";
+        renderFilterControls();
+        try {
+          userPosition = await requestCurrentPosition();
+          restaurantDistances = new Map();
+          locationStatus = `定位成功，精度约 ${Math.round(userPosition.accuracy)}m`;
+          if (!selectedDistance) selectedDistance = 3000;
+          showMessage("已获取当前位置，可以随机周边美食。");
+        } catch (error) {
+          userPosition = null;
+          selectedDistance = 0;
+          locationStatus = error.message;
+          showMessage(error.message);
+        } finally {
+          isLocating = false;
+          resetSelectionAfterFilterChange();
+        }
+      }
+
+      function resetActiveFilterPanel() {
+        if (activeFilterPanel === "nearby") {
+          selectedDistance = 0;
+          selectedLocations.clear();
+          selectedBusinessAreas.clear();
+        }
+        if (activeFilterPanel === "food") selectedFoodValues.clear();
+        if (activeFilterPanel === "sort") selectedSort = "recommended";
+        resetSelectionAfterFilterChange();
       }
 
       function readJson(key, fallback) {
@@ -460,32 +614,11 @@
       }
 
       function matchesCategory(restaurant, categoryValue) {
-        return (restaurant.category || inferCategory(restaurant)) === categoryValue;
+        return inferCategory(restaurant) === categoryValue;
       }
 
       function inferCategory(restaurant) {
-        const name = String(restaurant.name || "").toLowerCase();
-        const note = String(restaurant.note || "").toLowerCase();
-        const hasName = (keywords) => keywords.some((keyword) => name.includes(keyword.toLowerCase()));
-        const hasNote = (keywords) => keywords.some((keyword) => note.includes(keyword.toLowerCase()));
-        if (hasName(["自助", "buffet"]) || hasNote(["自助餐"])) return "buffet";
-        if (hasName(["日料", "日本料理", "日式料理", "寿司", "割烹", "居酒屋", "韩食", "韩国料理", "韩式料理"])) return "asian";
-        if (hasName(["西餐", "意式", "披萨", "pizza", "bistro", "steak", "牛排", "汉堡", "麦当劳", "肯德基", "必胜客", "萨莉亚", "commune", "pub"])) return "western";
-        if (hasName(["火锅", "豆捞", "涮", "暖锅", "羊蝎子", "羊肉炉", "打边炉", "肉蟹煲", "鸡公煲"])) return "hotpot";
-        if (hasName(["烧烤", "烤肉", "烤串", "串串", "烤鱼", "烤羊", "炭烤", "碳烤"])) return "bbq";
-        if (hasName(["咖啡", "coffee", "甜品", "烘焙", "蛋糕", "茶饮", "下午茶", "酒馆"])) return "dessert";
-        if (hasName(["海鲜", "河鲜", "湖鲜", "鱼馆", "鱼宴", "鱼味", "鱼府", "渔庄", "渔村", "龙虾", "虾馆", "蟹馆"])) return "seafood";
-        if (hasName(["牛肉馆", "牛肉汤", "羊肉馆", "羊肉汤", "清真", "西域", "新疆"])) return "beef";
-        if (hasName(["面馆", "拉面", "拌面", "米粉", "粉店", "馄饨", "饺子", "煎饺", "麻辣烫", "小吃"])) return "noodle";
-        if (hasNote(["寿司", "刺身", "日式料理", "韩国料理"])) return "asian";
-        if (hasNote(["意面", "披萨", "pizza", "汉堡"]) && hasNote(["牛排", "沙拉", "薯条", "芝士"])) return "western";
-        const fishMentions = (note.match(/鱼头|海鲜|河鲜|湖鲜|龙虾|螃蟹|鲜鱼/g) || []).length;
-        if (fishMentions >= 3) return "seafood";
-        return "stir";
-      }
-
-      function getCategoryLabel(value) {
-        return CATEGORY_OPTIONS.find((category) => category.value === value)?.label || "炒菜";
+        return inferRestaurantCategory(restaurant);
       }
 
       function getDistrict(address = "", restaurant = {}) {
@@ -500,28 +633,65 @@
         return [...new Set(restaurants.map((restaurant) => getDistrict(restaurant.address, restaurant)))].sort((a, b) => a.localeCompare(b, "zh-CN"));
       }
 
+      function getBusinessArea(restaurant) {
+        return typeof restaurant.businessArea === "string" ? restaurant.businessArea : "";
+      }
+
       function getBusinessAreas() {
         const scoped = restaurants.filter((restaurant) =>
           selectedLocations.size === 0 || selectedLocations.has(getDistrict(restaurant.address, restaurant))
         );
-        return [...new Set(scoped.map((restaurant) => restaurant.businessArea).filter(Boolean))]
+        return [...new Set(scoped.map(getBusinessArea).filter(Boolean))]
           .sort((a, b) => a.localeCompare(b, "zh-CN"));
       }
 
       function getFilteredRestaurants() {
-        return restaurants.filter((restaurant) => {
-          const categoryMatched = selectedCategories.size === 0 ||
-            [...selectedCategories].some((category) => matchesCategory(restaurant, category));
+        const activeTab = CATEGORY_TABS.find((tab) => tab.value === activeCategoryTab);
+        const filtered = restaurants.filter((restaurant) => {
+          const tabMatched = !activeTab?.categories.length || activeTab.categories.includes(inferCategory(restaurant));
+          const categoryMatched = matchesFoodSelection(restaurant, selectedFoodValues);
           const locationMatched = selectedLocations.size === 0 ||
             selectedLocations.has(getDistrict(restaurant.address, restaurant));
-          const businessMatched = selectedBusinessArea === "all" || restaurant.businessArea === selectedBusinessArea;
-          return categoryMatched && locationMatched && businessMatched;
+          const businessMatched = selectedBusinessAreas.size === 0 ||
+            selectedBusinessAreas.has(getBusinessArea(restaurant));
+          const distance = getDistanceForRestaurant(restaurant);
+          const distanceMatched = !selectedDistance || (distance !== null && distance <= selectedDistance);
+          return tabMatched && categoryMatched && locationMatched && businessMatched && distanceMatched;
         });
+        return sortRestaurants(filtered);
+      }
+
+      function getDistanceForRestaurant(restaurant) {
+        if (!userPosition) return null;
+        if (!restaurantDistances.has(restaurant.id)) {
+          restaurantDistances.set(restaurant.id, getRestaurantDistance(restaurant, userPosition));
+        }
+        return restaurantDistances.get(restaurant.id);
+      }
+
+      function sortRestaurants(items) {
+        const sorted = [...items];
+        if (selectedSort === "distance") {
+          return sorted.sort((left, right) => (getDistanceForRestaurant(left) ?? Infinity) - (getDistanceForRestaurant(right) ?? Infinity));
+        }
+        if (selectedSort === "rating") {
+          return sorted.sort((left, right) => Number(right.rating || 0) - Number(left.rating || 0));
+        }
+        if (selectedSort === "cost-asc") {
+          return sorted.sort((left, right) => (parseAverageCost(left) ?? Infinity) - (parseAverageCost(right) ?? Infinity));
+        }
+        if (selectedSort === "cost-desc") {
+          return sorted.sort((left, right) => (parseAverageCost(right) ?? -1) - (parseAverageCost(left) ?? -1));
+        }
+        return sorted.sort((left, right) =>
+          Number(right.rating || 0) - Number(left.rating || 0) ||
+          Number(left.rank || Infinity) - Number(right.rank || Infinity)
+        );
       }
 
       function formatLocation(address, restaurant = {}) {
         const district = restaurant.district || getDistrict(address, restaurant);
-        const area = restaurant.businessArea ? ` · ${restaurant.businessArea}` : "";
+        const area = getBusinessArea(restaurant) ? ` · ${getBusinessArea(restaurant)}` : "";
         return address ? `杭州市 · ${district}${area} · ${address}` : `杭州市 · ${district}${area} · 位置待补充`;
       }
 
@@ -534,46 +704,147 @@
       }
 
       function renderFilters(filteredRestaurants) {
-        const currentBusinessArea = selectedBusinessArea;
-        renderMultiFilter(
-          elements.categoryFilterMenu,
-          elements.categoryFilterButton,
-          CATEGORY_OPTIONS.filter((category) => category.value !== "all"),
-          selectedCategories,
-          "全部种类",
-        );
-        renderMultiFilter(
-          elements.locationFilterMenu,
-          elements.locationFilterButton,
-          getLocations().map((location) => ({ value: location, label: location })),
-          selectedLocations,
-          "全部区域",
-        );
-        const businessAreas = getBusinessAreas();
-        elements.businessFilter.innerHTML = [
-          '<option value="all">全部商圈</option>',
-          ...businessAreas.map((area) => `<option value="${escapeHtml(area)}">${escapeHtml(area)}</option>`),
-        ].join("");
-        elements.businessFilter.value = businessAreas.includes(currentBusinessArea) ? currentBusinessArea : "all";
-        selectedBusinessArea = elements.businessFilter.value;
-        elements.filterSummary.textContent = `当前可抽 ${filteredRestaurants.length} / ${restaurants.length} 家`;
+        renderFilterControls();
+        const tokens = [];
+        const activeTab = CATEGORY_TABS.find((tab) => tab.value === activeCategoryTab);
+        if (activeCategoryTab !== "recommend") tokens.push(activeTab?.label);
+        if (selectedDistance) tokens.push(DISTANCE_OPTIONS.find((option) => option.value === selectedDistance)?.label);
+        if (selectedLocations.size) tokens.push(...[...selectedLocations]);
+        if (selectedBusinessAreas.size) tokens.push(...[...selectedBusinessAreas].slice(0, 2));
+        if (selectedFoodValues.size) tokens.push(getSelectedFoodLabel());
+        if (selectedSort !== "recommended") tokens.push(getSortLabel());
+        elements.filterSummary.innerHTML = `
+          <span>当前可抽 ${filteredRestaurants.length} / ${restaurants.length} 家</span>
+          ${tokens.filter(Boolean).map((token) => `<span class="filter-token">${escapeHtml(token)}</span>`).join("")}
+        `;
       }
 
-      function renderMultiFilter(menu, button, options, selectedValues, emptyLabel) {
-        const validValues = new Set(options.map((option) => option.value));
-        [...selectedValues].forEach((value) => {
-          if (!validValues.has(value)) selectedValues.delete(value);
-        });
-        menu.innerHTML = options.map((option) => `
-          <label class="multi-filter-option">
-            <input type="checkbox" value="${escapeHtml(option.value)}" ${selectedValues.has(option.value) ? "checked" : ""} />
-            <span>${escapeHtml(option.label)}</span>
-          </label>
+      function renderFilterControls() {
+        elements.categoryTabs.innerHTML = CATEGORY_TABS.map((tab) => `
+          <button class="category-tab ${activeCategoryTab === tab.value ? "is-active" : ""}" data-category-tab="${tab.value}" type="button">${escapeHtml(tab.label)}</button>
         `).join("");
-        const labels = options.filter((option) => selectedValues.has(option.value)).map((option) => option.label);
-        button.textContent = labels.length === 0
-          ? emptyLabel
-          : labels.length <= 2 ? labels.join("、") : `已选 ${labels.length} 项`;
+        elements.nearbyFilterButton.innerHTML = escapeHtml(getNearbyButtonLabel());
+        elements.foodFilterButton.innerHTML = escapeHtml(getSelectedFoodLabel());
+        elements.sortFilterButton.innerHTML = escapeHtml(getSortLabel());
+        document.querySelectorAll("[data-filter-panel]").forEach((button) => {
+          button.classList.toggle("is-active", button.dataset.filterPanel === activeFilterPanel);
+        });
+        elements.filterDropdown.hidden = !activeFilterPanel;
+        elements.filterBackdrop.hidden = !activeFilterPanel;
+        if (activeFilterPanel) {
+          lockPageScroll();
+          elements.filterDropdownContent.innerHTML = renderActiveFilterPanel();
+        } else {
+          unlockPageScroll();
+          elements.filterDropdownContent.innerHTML = "";
+        }
+      }
+
+      function renderActiveFilterPanel() {
+        if (activeFilterPanel === "nearby") return renderNearbyPanel();
+        if (activeFilterPanel === "food") return renderFoodPanel();
+        return renderSortPanel();
+      }
+
+      function renderNearbyPanel() {
+        const districts = getLocations();
+        if (!activeAreaDistrict || !districts.includes(activeAreaDistrict)) {
+          activeAreaDistrict = [...selectedLocations][0] || districts[0] || "";
+        }
+        const businessAreas = [...new Set(restaurants
+          .filter((restaurant) => !activeAreaDistrict || getDistrict(restaurant.address, restaurant) === activeAreaDistrict)
+          .map(getBusinessArea)
+          .filter(Boolean))]
+          .sort((left, right) => left.localeCompare(right, "zh-CN"));
+        return `
+          <div class="filter-panel-title">
+            <div>
+              <strong>距离 ${escapeHtml(locationStatus)}</strong>
+              <div class="location-status">定位仅用于本机距离计算</div>
+            </div>
+            <button class="location-action" data-action="locate" type="button">${isLocating ? "定位中" : "重新定位"}</button>
+          </div>
+          <div class="choice-row">
+            ${DISTANCE_OPTIONS.map((option) => `
+              <button class="choice-button ${selectedDistance === option.value ? "is-selected" : ""}" data-distance="${option.value}" type="button">${option.label}</button>
+            `).join("")}
+          </div>
+          <div class="area-picker">
+            <div class="area-level">
+              <button class="area-option ${activeAreaLevel === "district" ? "is-selected" : ""}" data-area-level="district" type="button">行政区</button>
+              <button class="area-option ${activeAreaLevel === "business" ? "is-selected" : ""}" data-area-level="business" type="button">商圈</button>
+            </div>
+            <div class="area-level">
+              ${districts.map((district) => `
+                <button class="area-option ${activeAreaDistrict === district ? "is-selected" : ""}" data-area-level="district" data-district="${escapeHtml(district)}" type="button">${escapeHtml(district)}</button>
+              `).join("")}
+            </div>
+            <div class="area-level">
+              <button class="area-option ${selectedBusinessAreas.size === 0 ? "is-selected" : ""}" data-business-area="" type="button">全部商圈</button>
+              ${businessAreas.map((area) => `
+                <button class="area-option ${selectedBusinessAreas.has(area) ? "is-selected" : ""}" data-business-area="${escapeHtml(area)}" type="button">${escapeHtml(area)}</button>
+              `).join("")}
+            </div>
+          </div>
+        `;
+      }
+
+      function renderFoodPanel() {
+        const group = FOOD_GROUPS.find((item) => item.value === activeFoodGroup) || FOOD_GROUPS[0];
+        return `
+          <div class="food-picker">
+            <div class="food-group-nav">
+              ${FOOD_GROUPS.map((item) => `
+                <button class="food-group-nav-button ${item.value === group.value ? "is-selected" : ""}" data-food-group="${item.value}" type="button">${escapeHtml(item.label)}</button>
+              `).join("")}
+            </div>
+            <div class="food-groups">
+              <div class="food-group">
+                <div class="food-group-title"><span>●</span><span>${escapeHtml(group.label)}</span></div>
+                <div class="food-options">
+                  ${group.options.map((option) => `
+                    <button class="food-option ${selectedFoodValues.has(option.value) ? "is-selected" : ""}" data-food-value="${option.value}" type="button">${escapeHtml(option.label)}</button>
+                  `).join("")}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderSortPanel() {
+        return `
+          <div class="filter-panel-title"><strong>排序方式</strong></div>
+          <div class="sort-options">
+            ${SORT_OPTIONS.map((option) => `
+              <button class="sort-option ${selectedSort === option.value ? "is-selected" : ""}" data-sort="${option.value}" type="button">
+                <span>${escapeHtml(option.label)}</span><span>${selectedSort === option.value ? "●" : "○"}</span>
+              </button>
+            `).join("")}
+          </div>
+        `;
+      }
+
+      function getNearbyButtonLabel() {
+        if (selectedDistance) return DISTANCE_OPTIONS.find((option) => option.value === selectedDistance)?.label || "附近";
+        if (selectedBusinessAreas.size === 1) return [...selectedBusinessAreas][0];
+        if (selectedLocations.size === 1) return [...selectedLocations][0];
+        if (selectedLocations.size + selectedBusinessAreas.size > 1) return `已选 ${selectedLocations.size + selectedBusinessAreas.size} 项`;
+        return "附近";
+      }
+
+      function getSelectedFoodLabel() {
+        if (!selectedFoodValues.size) return "全部美食";
+        const allOptions = FOOD_GROUPS.flatMap((group) => group.options);
+        const labels = [...selectedFoodValues].map((value) =>
+          allOptions.find((option) => option.value === value)?.label || getCategoryLabel(value)
+        );
+        return labels.length === 1 ? labels[0] : `已选 ${labels.length} 项`;
+      }
+
+      function getSortLabel() {
+        if (selectedSort === "recommended") return "排序";
+        return SORT_OPTIONS.find((option) => option.value === selectedSort)?.label || "排序";
       }
 
       function escapeHtml(value) {
@@ -701,6 +972,8 @@
               <div><dt>位置</dt><dd>${escapeHtml(formatLocation(selectedRestaurant.address, selectedRestaurant))}</dd></div>
               <div><dt>分类</dt><dd>${escapeHtml(getCategoryLabel(selectedRestaurant.category || inferCategory(selectedRestaurant)))}</dd></div>
               ${selectedRestaurant.rating ? `<div><dt>高德评分</dt><dd>${escapeHtml(selectedRestaurant.rating)} 分 · 坐标已校验</dd></div>` : ""}
+              ${getDistanceForRestaurant(selectedRestaurant) !== null ? `<div><dt>距离</dt><dd>距你约 ${escapeHtml(formatDistance(getDistanceForRestaurant(selectedRestaurant)))}</dd></div>` : ""}
+              ${parseAverageCost(selectedRestaurant) ? `<div><dt>人均</dt><dd>约 ¥${escapeHtml(parseAverageCost(selectedRestaurant))}</dd></div>` : ""}
               ${selectedRestaurant.businessArea ? `<div><dt>商圈</dt><dd>${escapeHtml(selectedRestaurant.businessArea)}</dd></div>` : ""}
               ${selectedRestaurant.source ? `<div><dt>来源</dt><dd>${escapeHtml(selectedRestaurant.source)}${selectedRestaurant.rank ? ` · 第 ${escapeHtml(String(selectedRestaurant.rank))} 名` : ""}</dd></div>` : ""}
               <div><dt>推荐菜</dt><dd>${escapeHtml(selectedRestaurant.note || "暂无推荐菜")}</dd></div>
@@ -989,13 +1262,12 @@
 
       function renderRestaurantForm() {
         const editingRestaurant = restaurants.find((restaurant) => restaurant.id === editingRestaurantId);
-        elements.restaurantCategoryInput.innerHTML = CATEGORY_OPTIONS
-          .filter((category) => category.value !== "all")
-          .map((category) => `<option value="${category.value}">${category.label}</option>`)
+        elements.restaurantCategoryInput.innerHTML = Object.entries(CATEGORY_LABELS)
+          .map(([value, label]) => `<option value="${value}">${label}</option>`)
           .join("");
         elements.restaurantCategoryInput.value = editingRestaurant
           ? (editingRestaurant.category || inferCategory(editingRestaurant))
-          : "stir";
+          : "local";
         elements.submitButton.textContent = editingRestaurant ? "保存修改" : "添加餐厅";
         elements.cancelEditButton.hidden = !editingRestaurant;
       }
@@ -1054,7 +1326,7 @@
         editingRestaurantId = null;
         elements.nameInput.value = "";
         elements.addressInput.value = "";
-        elements.restaurantCategoryInput.value = "stir";
+        elements.restaurantCategoryInput.value = "local";
         elements.noteInput.value = "";
       }
 

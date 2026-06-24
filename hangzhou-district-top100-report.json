@@ -1,0 +1,396 @@
+{
+  "generatedAt": "2026-06-24T16:28:30.918Z",
+  "targetPerDistrict": 100,
+  "districts": {
+    "上城区": {
+      "selected": 100,
+      "selectedByCategory": {
+        "local": 16,
+        "hotpot": 16,
+        "bbq": 6,
+        "snack": 6,
+        "noodle": 9,
+        "seafood": 13,
+        "western": 16,
+        "asian": 6,
+        "dessert": 6,
+        "buffet": 6
+      },
+      "candidatesByCategory": {
+        "local": 35,
+        "hotpot": 43,
+        "bbq": 43,
+        "snack": 35,
+        "noodle": 30,
+        "seafood": 35,
+        "western": 49,
+        "asian": 47,
+        "dessert": 50,
+        "buffet": 47
+      },
+      "verifiedLocations": 100,
+      "rated": 100,
+      "withBusinessArea": 100
+    },
+    "拱墅区": {
+      "selected": 100,
+      "selectedByCategory": {
+        "local": 16,
+        "hotpot": 16,
+        "bbq": 6,
+        "snack": 6,
+        "noodle": 6,
+        "seafood": 16,
+        "western": 16,
+        "asian": 6,
+        "dessert": 6,
+        "buffet": 6
+      },
+      "candidatesByCategory": {
+        "local": 45,
+        "hotpot": 46,
+        "bbq": 42,
+        "snack": 34,
+        "noodle": 50,
+        "seafood": 38,
+        "western": 48,
+        "asian": 46,
+        "dessert": 50,
+        "buffet": 48
+      },
+      "verifiedLocations": 100,
+      "rated": 100,
+      "withBusinessArea": 99
+    },
+    "西湖区": {
+      "selected": 100,
+      "selectedByCategory": {
+        "local": 16,
+        "hotpot": 16,
+        "bbq": 6,
+        "snack": 6,
+        "noodle": 6,
+        "seafood": 15,
+        "western": 15,
+        "asian": 6,
+        "dessert": 8,
+        "buffet": 6
+      },
+      "candidatesByCategory": {
+        "local": 49,
+        "hotpot": 48,
+        "bbq": 43,
+        "snack": 32,
+        "noodle": 49,
+        "seafood": 36,
+        "western": 51,
+        "asian": 44,
+        "dessert": 50,
+        "buffet": 46
+      },
+      "verifiedLocations": 100,
+      "rated": 100,
+      "withBusinessArea": 97
+    },
+    "滨江区": {
+      "selected": 100,
+      "selectedByCategory": {
+        "local": 16,
+        "hotpot": 16,
+        "bbq": 13,
+        "snack": 6,
+        "noodle": 6,
+        "seafood": 13,
+        "western": 6,
+        "asian": 11,
+        "dessert": 7,
+        "buffet": 6
+      },
+      "candidatesByCategory": {
+        "local": 43,
+        "hotpot": 42,
+        "bbq": 42,
+        "snack": 32,
+        "noodle": 46,
+        "seafood": 34,
+        "western": 47,
+        "asian": 43,
+        "dessert": 49,
+        "buffet": 37
+      },
+      "verifiedLocations": 100,
+      "rated": 100,
+      "withBusinessArea": 89
+    },
+    "萧山区": {
+      "selected": 100,
+      "selectedByCategory": {
+        "local": 16,
+        "hotpot": 16,
+        "bbq": 13,
+        "snack": 6,
+        "noodle": 6,
+        "seafood": 14,
+        "western": 7,
+        "asian": 8,
+        "dessert": 6,
+        "buffet": 8
+      },
+      "candidatesByCategory": {
+        "local": 66,
+        "hotpot": 42,
+        "bbq": 41,
+        "snack": 38,
+        "noodle": 49,
+        "seafood": 36,
+        "western": 48,
+        "asian": 44,
+        "dessert": 50,
+        "buffet": 45
+      },
+      "verifiedLocations": 100,
+      "rated": 100,
+      "withBusinessArea": 94
+    },
+    "余杭区": {
+      "selected": 100,
+      "selectedByCategory": {
+        "local": 16,
+        "hotpot": 16,
+        "bbq": 6,
+        "snack": 6,
+        "noodle": 10,
+        "seafood": 14,
+        "western": 8,
+        "asian": 12,
+        "dessert": 6,
+        "buffet": 6
+      },
+      "candidatesByCategory": {
+        "local": 49,
+        "hotpot": 42,
+        "bbq": 40,
+        "snack": 32,
+        "noodle": 50,
+        "seafood": 35,
+        "western": 47,
+        "asian": 43,
+        "dessert": 49,
+        "buffet": 47
+      },
+      "verifiedLocations": 100,
+      "rated": 100,
+      "withBusinessArea": 91
+    },
+    "临平区": {
+      "selected": 100,
+      "selectedByCategory": {
+        "local": 16,
+        "hotpot": 16,
+        "bbq": 6,
+        "snack": 6,
+        "noodle": 12,
+        "seafood": 16,
+        "western": 10,
+        "asian": 6,
+        "dessert": 6,
+        "buffet": 6
+      },
+      "candidatesByCategory": {
+        "local": 42,
+        "hotpot": 39,
+        "bbq": 42,
+        "snack": 30,
+        "noodle": 48,
+        "seafood": 38,
+        "western": 52,
+        "asian": 43,
+        "dessert": 50,
+        "buffet": 30
+      },
+      "verifiedLocations": 100,
+      "rated": 100,
+      "withBusinessArea": 85
+    },
+    "钱塘区": {
+      "selected": 100,
+      "selectedByCategory": {
+        "local": 15,
+        "hotpot": 16,
+        "bbq": 16,
+        "snack": 9,
+        "noodle": 6,
+        "seafood": 7,
+        "western": 6,
+        "asian": 6,
+        "dessert": 9,
+        "buffet": 10
+      },
+      "candidatesByCategory": {
+        "local": 43,
+        "hotpot": 40,
+        "bbq": 43,
+        "snack": 32,
+        "noodle": 49,
+        "seafood": 34,
+        "western": 46,
+        "asian": 43,
+        "dessert": 50,
+        "buffet": 49
+      },
+      "verifiedLocations": 100,
+      "rated": 100,
+      "withBusinessArea": 95
+    },
+    "富阳区": {
+      "selected": 100,
+      "selectedByCategory": {
+        "local": 14,
+        "hotpot": 14,
+        "bbq": 12,
+        "snack": 12,
+        "noodle": 9,
+        "seafood": 10,
+        "western": 6,
+        "asian": 6,
+        "dessert": 11,
+        "buffet": 6
+      },
+      "candidatesByCategory": {
+        "local": 46,
+        "hotpot": 48,
+        "bbq": 44,
+        "snack": 30,
+        "noodle": 50,
+        "seafood": 35,
+        "western": 50,
+        "asian": 30,
+        "dessert": 48,
+        "buffet": 20
+      },
+      "verifiedLocations": 100,
+      "rated": 100,
+      "withBusinessArea": 87
+    },
+    "临安区": {
+      "selected": 100,
+      "selectedByCategory": {
+        "local": 16,
+        "hotpot": 16,
+        "bbq": 15,
+        "snack": 6,
+        "noodle": 10,
+        "seafood": 7,
+        "western": 6,
+        "asian": 6,
+        "dessert": 12,
+        "buffet": 6
+      },
+      "candidatesByCategory": {
+        "local": 46,
+        "hotpot": 43,
+        "bbq": 46,
+        "snack": 30,
+        "noodle": 50,
+        "seafood": 52,
+        "western": 37,
+        "asian": 33,
+        "dessert": 49,
+        "buffet": 28
+      },
+      "verifiedLocations": 100,
+      "rated": 100,
+      "withBusinessArea": 75
+    },
+    "桐庐县": {
+      "selected": 100,
+      "selectedByCategory": {
+        "local": 16,
+        "hotpot": 16,
+        "bbq": 12,
+        "snack": 10,
+        "noodle": 6,
+        "seafood": 6,
+        "western": 6,
+        "asian": 6,
+        "dessert": 16,
+        "buffet": 6
+      },
+      "candidatesByCategory": {
+        "local": 52,
+        "hotpot": 41,
+        "bbq": 48,
+        "snack": 39,
+        "noodle": 49,
+        "seafood": 38,
+        "western": 36,
+        "asian": 37,
+        "dessert": 48,
+        "buffet": 25
+      },
+      "verifiedLocations": 100,
+      "rated": 100,
+      "withBusinessArea": 28
+    },
+    "淳安县": {
+      "selected": 100,
+      "selectedByCategory": {
+        "local": 16,
+        "hotpot": 8,
+        "bbq": 13,
+        "snack": 6,
+        "noodle": 11,
+        "seafood": 9,
+        "western": 9,
+        "asian": 6,
+        "dessert": 16,
+        "buffet": 6
+      },
+      "candidatesByCategory": {
+        "local": 38,
+        "hotpot": 32,
+        "bbq": 46,
+        "snack": 31,
+        "noodle": 49,
+        "seafood": 38,
+        "western": 27,
+        "asian": 6,
+        "dessert": 49,
+        "buffet": 15
+      },
+      "verifiedLocations": 100,
+      "rated": 100,
+      "withBusinessArea": 72
+    },
+    "建德市": {
+      "selected": 100,
+      "selectedByCategory": {
+        "local": 16,
+        "hotpot": 16,
+        "bbq": 11,
+        "snack": 9,
+        "noodle": 6,
+        "seafood": 7,
+        "western": 13,
+        "asian": 6,
+        "dessert": 10,
+        "buffet": 6
+      },
+      "candidatesByCategory": {
+        "local": 55,
+        "hotpot": 41,
+        "bbq": 31,
+        "snack": 34,
+        "noodle": 50,
+        "seafood": 38,
+        "western": 44,
+        "asian": 16,
+        "dessert": 49,
+        "buffet": 26
+      },
+      "verifiedLocations": 100,
+      "rated": 100,
+      "withBusinessArea": 62
+    }
+  }
+}

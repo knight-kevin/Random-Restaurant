@@ -3,12 +3,18 @@ export type Restaurant = {
   name: string;
   address?: string;
   category?: string;
+  categoryGroup?: string;
+  subcategory?: string;
+  tags?: string[];
   district?: string;
   businessArea?: string;
   source?: string;
   rank?: number;
   rating?: number;
+  averageCost?: number | null;
   location?: string;
+  latitude?: number | null;
+  longitude?: number | null;
   locationVerified?: boolean;
   amapId?: string;
   amapDistrict?: string;
