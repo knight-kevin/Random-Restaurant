@@ -38,6 +38,7 @@
       .top-actions { display: flex; gap: 8px; padding: 6px; border: 1px solid rgba(255, 91, 91, 0.18); border-radius: 999px; background: rgba(255,255,255,.78); box-shadow: 0 18px 42px rgba(45,54,60,.08); }
       .nav-action { min-height: 42px; border-radius: 999px; padding: 0 16px; background: transparent; color: #33423a; font-weight: 800; }
       .nav-action.is-active { background: linear-gradient(135deg, #ff5b6e, #ff8a3d); color: #fff; }
+      .favorite-action.is-favorite { border-color: #ffc3cf; background: #fff0f4; color: #d92f58; }
 
       .home-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(320px, .65fr); gap: 18px; align-items: start; }
       .home-grid > * { min-width: 0; }
@@ -109,28 +110,59 @@
       .active-filter-summary { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; margin: 12px 2px 0; color: #53655a; font-size: .86rem; font-weight: 800; }
       .filter-token { padding: 4px 8px; border-radius: 999px; background: #fff1eb; color: #ff5b37; }
 
-      .reel-shell { position: relative; margin-top: 24px; padding: 18px; border-radius: 8px; background: radial-gradient(circle at 38% 28%, rgba(255,125,99,.38), transparent 30%), radial-gradient(circle at 70% 18%, rgba(87,204,255,.26), transparent 32%), linear-gradient(160deg, #222a5a, #111827 72%); box-shadow: inset 0 0 0 1px rgba(255,255,255,.12), 0 18px 46px rgba(35,45,85,.18); }
-      .reel-window { position: relative; height: 430px; overflow: hidden; border-radius: 8px; perspective: 1200px; }
-      .reel-window::before { position: absolute; z-index: 0; inset: 42px 10%; content: ""; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.11), rgba(255,211,108,.08) 42%, transparent 68%); box-shadow: inset 0 0 50px rgba(255,255,255,.1), 0 0 60px rgba(255,211,108,.14); }
-      .reel-marker { position: absolute; z-index: 4; top: 50%; left: 50%; width: 10px; height: 10px; border-radius: 50%; transform: translate(-50%, -50%); background: #ffd36c; box-shadow: 0 0 0 8px rgba(255,211,108,.16), 0 0 30px rgba(255,211,108,.55); }
+      .reel-shell { position: relative; margin-top: 24px; padding: 18px; overflow: hidden; border-radius: 8px; background: radial-gradient(circle at 28% 20%, rgba(255,132,105,.28), transparent 31%), radial-gradient(circle at 76% 18%, rgba(94,194,255,.2), transparent 34%), linear-gradient(155deg, #202957, #101725 72%); box-shadow: inset 0 0 0 1px rgba(255,255,255,.12), 0 18px 46px rgba(35,45,85,.18); }
+      .reel-window { position: relative; height: 430px; overflow: hidden; border-radius: 8px; perspective: 1250px; }
+      .reel-window::before { position: absolute; z-index: 0; inset: 34px 8%; content: ""; border-radius: 50%; background: radial-gradient(circle at 36% 28%, rgba(255,255,255,.18), rgba(255,183,112,.07) 28%, rgba(29,42,78,.15) 56%, rgba(5,10,22,.42) 74%, transparent 76%); box-shadow: inset -34px -18px 62px rgba(3,8,20,.42), inset 20px 12px 42px rgba(255,255,255,.08), 0 0 56px rgba(112,177,255,.12); }
+      .reel-window::after { position: absolute; z-index: 5; inset: 31px 7.5%; border: 1px solid rgba(185,218,255,.13); border-radius: 50%; content: ""; box-shadow: inset 18px 0 26px rgba(255,255,255,.05), inset -22px 0 30px rgba(3,8,20,.28); pointer-events: none; }
+      .reel-focus { position: absolute; z-index: 7; top: 50%; left: 50%; width: 22px; height: 22px; border: 1px solid rgba(255,226,184,.66); border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 0 5px rgba(255,206,145,.08), 0 0 22px rgba(255,184,103,.2); pointer-events: none; }
+      .reel-focus::after { position: absolute; top: 50%; left: 50%; width: 4px; height: 4px; border-radius: 50%; transform: translate(-50%, -50%); background: rgba(255,239,214,.9); box-shadow: 0 0 9px rgba(255,205,145,.7); content: ""; }
+      .reel-shell.is-rolling .reel-focus { animation: focusPulse 1.1s ease-in-out infinite; }
+      .reel-shell.is-settling .reel-focus { border-color: rgba(255,235,203,.92); box-shadow: 0 0 0 7px rgba(255,206,145,.1), 0 0 30px rgba(255,184,103,.38); }
+      .reel-shell.is-revealed .reel-focus { opacity: 0; transform: translate(-50%, -50%) scale(.55); animation: none; transition: opacity .3s ease, transform .3s ease; }
       .reel-track { position: absolute; z-index: 2; inset: 0; transform-style: preserve-3d; transform: rotateX(10deg) rotateY(0deg); will-change: transform; }
       .reel-track.is-revealed .reel-card:not(.is-final) { opacity: 0; filter: blur(10px) saturate(.45); pointer-events: none; transition: opacity .38s ease, filter .38s ease; }
       .reel-track.is-revealed .reel-card.is-final { animation: finalReveal 1.05s cubic-bezier(.16,1,.3,1) both; }
-      .reel-card { position: absolute; top: 50%; left: 50%; width: 128px; height: 154px; overflow: hidden; border-radius: 44% / 18%; clip-path: ellipse(61% 51% at 50% 50%); background: #fffaf2; box-shadow: 0 18px 36px rgba(0,0,0,.24); transform: translate(-50%, -50%) rotateY(var(--theta)) rotateX(var(--phi)) rotateZ(var(--twist)) translateZ(var(--radius)) scaleX(var(--curve-scale)) scale(var(--card-scale)); transform-style: preserve-3d; opacity: var(--depth-opacity); filter: saturate(var(--depth-saturation)) brightness(var(--depth-light)); backface-visibility: visible; transition: opacity .24s ease, filter .24s ease; }
-      .reel-card::before { position: absolute; z-index: 3; inset: -2px; content: ""; border-radius: inherit; background: radial-gradient(circle at 50% 42%, transparent 0 46%, rgba(10,25,36,.24) 72%, rgba(10,25,36,.42) 100%); pointer-events: none; mix-blend-mode: multiply; }
-      .reel-card::after { position: absolute; z-index: 4; inset: 0; content: ""; border-radius: inherit; background: linear-gradient(100deg, rgba(255,255,255,.38), transparent 34%, rgba(0,0,0,.28)); pointer-events: none; }
-      .reel-card.is-final { z-index: 8; width: 238px; height: 300px; border-radius: 24px; clip-path: inset(0 round 24px); box-shadow: 0 28px 58px rgba(0,0,0,.36), 0 0 0 3px rgba(255,211,108,.76), 0 0 36px rgba(255,211,108,.28); }
-      .food-photo { display: grid; height: 94px; place-items: center; background-color: #cf4f35; background-image: radial-gradient(circle at 50% 48%, rgba(255,255,255,.18), rgba(255,255,255,0) 38%), linear-gradient(135deg, rgba(243,180,92,.65), rgba(207,79,53,.24)), var(--food-image); background-size: cover; background-position: center; }
-      .food-photo span { display: grid; width: 58px; height: 58px; place-items: center; border-radius: 50%; background: rgba(255,255,255,.88); color: #a33824; font-size: 1.25rem; font-weight: 900; box-shadow: 0 16px 28px rgba(30,35,41,.18); }
+      .reel-track.is-accelerating .reel-card { filter: saturate(.92) brightness(.96); }
+      .reel-track.is-cruising .reel-card { filter: blur(.55px) saturate(.84) brightness(.88); }
+      .reel-track.is-settling .reel-card { opacity: .3 !important; filter: blur(1.8px) saturate(.5) brightness(.68); transition: opacity .55s ease, filter .55s ease; }
+      .reel-card { position: absolute; top: 50%; left: 50%; width: 126px; height: 150px; overflow: hidden; border: 1px solid rgba(255,255,255,.2); border-radius: 20px; background: rgba(18,27,42,.78); box-shadow: 0 12px 26px rgba(0,0,0,.26); transform: translate(-50%, -50%) rotateY(var(--theta)) rotateX(var(--phi)) translateZ(var(--radius)) scaleX(var(--curve-scale)) scale(var(--card-scale)); transform-style: preserve-3d; opacity: var(--depth-opacity); filter: saturate(var(--depth-saturation)) brightness(var(--depth-light)); backface-visibility: visible; transition: opacity .24s ease, filter .24s ease, border-color .24s ease; }
+      .reel-card::before { position: absolute; z-index: 3; inset: 0; content: ""; border-radius: inherit; background: radial-gradient(ellipse at 50% 45%, transparent 0 42%, rgba(5,12,24,.12) 62%, rgba(3,8,18,.52) 100%); pointer-events: none; }
+      .reel-card::after { position: absolute; z-index: 4; inset: 0; content: ""; border-radius: inherit; background: linear-gradient(96deg, rgba(255,255,255,.22), transparent 25%, transparent 68%, rgba(0,0,0,.38)); pointer-events: none; }
+      .reel-card.is-final { z-index: 8; width: 238px; height: 270px; border: 1px solid rgba(255,190,128,.55); border-radius: 24px; background: linear-gradient(155deg, rgba(255,255,255,.96), rgba(255,240,226,.94) 62%, rgba(245,238,255,.94)); box-shadow: 0 30px 64px rgba(0,0,0,.38), 0 0 0 3px rgba(255,190,128,.34), 0 0 42px rgba(255,153,102,.22); backdrop-filter: blur(18px); }
+      .reel-card.is-final::before { background: radial-gradient(circle at 82% 86%, rgba(164,115,255,.13), transparent 34%), radial-gradient(circle at 16% 70%, rgba(255,138,92,.13), transparent 36%); mix-blend-mode: normal; }
+      .reel-card.is-final::after { background: linear-gradient(105deg, rgba(255,255,255,.28), transparent 34%, rgba(255,255,255,.08)); }
+      .food-photo { position: relative; display: grid; height: 94px; place-items: center; background-color: #6d7480; background-image: linear-gradient(145deg, rgba(255,174,105,.12), rgba(24,39,67,.18)), var(--food-image); background-size: cover; background-position: center; }
+      .food-photo[data-image-category="dessert"] { background-color: #8b5e50; }
+      .food-photo[data-image-category="hotpot"] { background-color: #a83d32; }
+      .food-photo[data-image-category="bbq"] { background-color: #6f382b; }
+      .food-photo[data-image-category="noodle"] { background-color: #b06f38; }
+      .food-photo[data-image-category="seafood"] { background-color: #277b8c; }
+      .food-photo[data-image-category="western"] { background-color: #9b4d38; }
+      .food-photo[data-image-category="asian"] { background-color: #9b344c; }
+      .food-photo[data-image-category="snack"] { background-color: #bb783f; }
+      .food-photo[data-image-category="buffet"] { background-color: #4d7861; }
+      .food-photo[data-image-category="local"] { background-color: #9a5d35; }
+      .food-photo span { position: absolute; z-index: 5; right: 8px; bottom: 8px; left: 8px; display: block; overflow: hidden; border: 1px solid rgba(255,255,255,.2); border-radius: 9px; padding: 5px 8px; background: rgba(10,18,30,.5); color: #fff; font-size: .78rem; font-weight: 900; line-height: 1.15; text-align: center; text-overflow: ellipsis; white-space: nowrap; box-shadow: 0 8px 18px rgba(0,0,0,.16); backdrop-filter: blur(9px); }
       .reel-card h3 { padding: 10px 10px 0; font-size: .86rem; }
       .reel-card p { margin: 4px 0 0; padding: 0 10px; color: #687274; font-size: .76rem; }
-      .reel-card.is-final .food-photo { height: 96px; }
+      .reel-card:not(.is-final) .food-photo { height: 100%; }
+      .reel-track.is-rolling .reel-card:not(.is-final) .food-photo span { opacity: 0; transform: translateY(5px); }
+      .reel-card:not(.is-final) .food-photo span { transition: opacity .2s ease, transform .2s ease; }
+      .reel-card:not(.is-final) h3, .reel-card:not(.is-final) p, .reel-card:not(.is-final) .tag-line { display: none; }
+      .reel-card.is-final .food-photo { height: 116px; }
+      .reel-card.is-final .food-photo span { display: none; }
       .reel-card.is-final h3 { padding: 11px 13px 0; overflow-wrap: anywhere; font-size: .92rem; line-height: 1.25; }
       .reel-card.is-final p { padding-inline: 13px; overflow-wrap: anywhere; font-size: .7rem; line-height: 1.38; }
       .reel-card.is-final .tag-line { padding: 7px 13px 0; }
       .reel-card.is-final .tag-line .mini-tag:nth-child(n+2) { display: none; }
       .reel-placeholder { display: grid; position: relative; z-index: 2; height: 100%; place-items: center; color: rgba(255,255,255,.72); text-align: center; }
-      @keyframes finalReveal { 0% { transform: translate(-50%, -50%) rotateY(-34deg) rotateX(12deg) translateZ(120px) scale(.56); opacity: 0; filter: blur(8px) saturate(.8); } 55% { opacity: 1; filter: blur(0) saturate(1.05); } 100% { transform: translate(-50%, -50%) rotateY(var(--theta)) rotateX(var(--phi)) rotateZ(0deg) translateZ(var(--radius)) scaleX(1) scale(var(--card-scale)); opacity: 1; filter: blur(0) saturate(1.12); } }
+      @keyframes finalReveal { 0% { transform: translate(-50%, -50%) rotateY(-24deg) rotateX(8deg) translateZ(82px) scale(.5); opacity: 0; filter: blur(10px) saturate(.72); } 48% { opacity: 1; filter: blur(1px) saturate(1); } 78% { transform: translate(-50%, -50%) rotateY(3deg) rotateX(-1deg) translateZ(12px) scale(1.035); } 100% { transform: translate(-50%, -50%) rotateY(0deg) rotateX(0deg) translateZ(0) scale(1); opacity: 1; filter: blur(0) saturate(1.08); } }
+      @keyframes focusPulse { 0%, 100% { opacity: .62; transform: translate(-50%, -50%) scale(.9); } 50% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); } }
+
+      @media (prefers-reduced-motion: reduce) {
+        .reel-track, .reel-card, .reel-track.is-revealed .reel-card.is-final { animation: none !important; transition-duration: .01ms !important; }
+        .random-button { transition: none; }
+      }
 
       .random-controls { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; margin-top: 22px; }
       .count-pill { display: grid; min-width: 98px; min-height: 98px; place-items: center; padding: 12px; border-radius: 50%; background: #fff2f5; color: #f04462; box-shadow: inset 0 0 0 1px rgba(240,68,98,.12), 0 14px 30px rgba(240,68,98,.12); }
@@ -189,6 +221,20 @@
       .image-preview img { display: block; max-width: min(94vw, 1100px); max-height: 88vh; object-fit: contain; border-radius: 8px; box-shadow: 0 30px 80px rgba(0,0,0,.48); }
       .image-preview-close { position: fixed; top: max(14px, env(safe-area-inset-top)); right: max(14px, env(safe-area-inset-right)); display: grid; width: 44px; height: 44px; place-items: center; border-radius: 50%; background: rgba(255,255,255,.16); color: #fff; font-size: 1.7rem; line-height: 1; backdrop-filter: blur(10px); }
       body.is-image-preview-open { overflow: hidden; }
+      .map-picker { position: fixed; z-index: 70; inset: 0; display: grid; align-items: end; background: rgba(20,24,30,.42); backdrop-filter: blur(3px); }
+      .map-picker[hidden] { display: none; }
+      .map-picker-sheet { width: min(100%, 520px); margin: 0 auto; padding: 20px 18px calc(18px + env(safe-area-inset-bottom)); border-radius: 18px 18px 0 0; background: #fff; box-shadow: 0 -24px 60px rgba(20,24,30,.22); }
+      .map-picker-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+      .map-picker-heading p { margin: 5px 0 0; color: #687274; font-size: .82rem; }
+      .map-picker-close { display: grid; width: 36px; height: 36px; place-items: center; border-radius: 50%; background: #f4f4f2; color: #4b5358; font-size: 1.35rem; }
+      .map-picker-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .map-provider { display: flex; min-height: 54px; align-items: center; justify-content: center; gap: 8px; border: 1px solid #ece8e3; border-radius: 8px; background: #fafaf9; color: #25292d; font-weight: 900; }
+      .map-provider::before { display: grid; width: 28px; height: 28px; place-items: center; border-radius: 8px; color: #fff; content: attr(data-map-symbol); }
+      .map-provider[data-map-provider="amap"]::before { background: #1b73e8; }
+      .map-provider[data-map-provider="baidu"]::before { background: #356ff6; }
+      .map-provider[data-map-provider="tencent"]::before { background: #00a870; }
+      .map-provider[data-map-provider="apple"]::before { background: #202124; }
+      body.is-map-picker-open { overflow: hidden; }
       .history-list .list-card { grid-template-columns: minmax(0, 1fr); align-items: start; }
       .history-list .list-card > div { min-width: 0; }
       .history-list .row-actions { justify-content: flex-end; }
@@ -211,13 +257,13 @@
         .filter-dropdown { position: fixed; top: var(--mobile-filter-top, 300px); right: 11px; bottom: max(8px, env(safe-area-inset-bottom)); left: 11px; max-height: none; }
         .topbar { display: grid; padding-inline: 0; }
         .top-actions { width: 100%; }
-        .nav-action { flex: 1; }
+        .nav-action { flex: 1; padding-inline: 10px; }
         .home-grid { display: grid; }
         .reel-window { height: 390px; }
         .reel-card { width: 112px; height: 140px; }
-        .reel-card.is-final { width: min(238px, calc(100vw - 104px)); height: 300px; }
+        .reel-card.is-final { width: min(238px, calc(100vw - 104px)); height: 270px; }
         .food-photo { height: 86px; }
-        .reel-card.is-final .food-photo { height: 96px; }
+        .reel-card.is-final .food-photo { height: 116px; }
       }
 
       @media (max-width: 560px) {
@@ -233,8 +279,11 @@
         .category-tabs { gap: 21px; margin-inline: -4px; }
         .filter-entry-row { gap: 6px; }
         .filter-entry { min-height: 38px; padding: 5px 6px; font-size: .82rem; }
+        .nav-action { min-height: 40px; padding-inline: 7px; font-size: .82rem; }
         .filter-dropdown-inner { max-height: none; padding: 14px; }
-        .choice-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .choice-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
+        .choice-button { min-height: 34px; padding: 3px 5px; border-radius: 6px; font-size: .76rem; }
+        .choice-row + .area-picker { margin-top: 11px; }
         .area-picker { grid-template-columns: 92px minmax(0, .9fr) minmax(0, 1.1fr); min-height: 360px; }
         .area-option { padding-inline: 9px; font-size: .86rem; }
         .food-picker { grid-template-columns: 92px minmax(0, 1fr); margin: -14px; }
@@ -254,6 +303,7 @@
         </div>
         <nav class="top-actions" aria-label="页面导航">
           <button class="nav-action is-active" id="home-tab" type="button">抽餐厅</button>
+          <button class="nav-action" id="favorites-tab" type="button">我的收藏</button>
           <button class="nav-action" id="manage-tab" type="button">管理餐厅</button>
         </nav>
       </header>
@@ -282,8 +332,8 @@
           </div>
           <div class="reel-shell">
             <div class="reel-window">
-              <div class="reel-marker"></div>
               <div id="reel-area" class="reel-track"></div>
+              <div class="reel-focus" aria-hidden="true"></div>
             </div>
           </div>
           <div class="random-controls">
@@ -327,11 +377,31 @@
         </form>
         <div class="restaurant-list" id="restaurant-list"></div>
       </section>
+
+      <section class="panel manage-panel" id="favorites-view" hidden>
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow" id="favorites-count">0 家收藏</p>
+            <h2>我的收藏</h2>
+          </div>
+          <button class="ghost-action" id="favorites-back-button" type="button">返回抽取</button>
+        </div>
+        <div class="restaurant-list" id="favorites-list"></div>
+      </section>
     </main>
     <button class="filter-backdrop" id="filter-backdrop" type="button" aria-label="关闭筛选面板" hidden></button>
     <div class="image-preview" id="image-preview" role="dialog" aria-modal="true" aria-label="图片预览" hidden>
       <button class="image-preview-close" id="image-preview-close" type="button" aria-label="关闭图片预览">×</button>
       <img id="image-preview-content" alt="打卡图片预览" />
+    </div>
+    <div class="map-picker" id="map-picker" role="dialog" aria-modal="true" aria-label="选择地图应用" hidden>
+      <div class="map-picker-sheet">
+        <div class="map-picker-heading">
+          <div><strong>选择地图应用</strong><p id="map-picker-name"></p></div>
+          <button class="map-picker-close" id="map-picker-close" type="button" aria-label="关闭地图选择">×</button>
+        </div>
+        <div class="map-picker-options" id="map-picker-options"></div>
+      </div>
     </div>
     <div class="toast" id="toast" hidden></div>
 
@@ -344,20 +414,22 @@
         inferRestaurantCategory,
         inferSubcategory,
         matchesFoodSelection,
-      } from "./scripts/categories.js?v=20260625-v13";
+      } from "./scripts/categories.js?v=20260625-v24";
       import {
         formatDistance,
         getRestaurantDistance,
         parseAverageCost,
         requestCurrentPosition,
-      } from "./scripts/location-fixed.js?v=20260625-v13";
+      } from "./scripts/location-fixed.js?v=20260625-v24";
 
       const RESTAURANTS_KEY = "random-restaurant-checkin:restaurants";
       const RESTAURANTS_VERSION_KEY = "random-restaurant-checkin:restaurants-version";
-      const CURRENT_DATASET_VERSION = "amap-hangzhou-1300-2026-06-25-v13";
+      const CURRENT_DATASET_VERSION = "amap-hangzhou-1300-2026-06-25-v24";
       const CHECK_INS_KEY = "random-restaurant-checkin:check-ins";
-      const ROLL_DURATION_MS = 3000;
-      const REEL_LENGTH = 32;
+      const FAVORITES_KEY = "random-restaurant-checkin:favorites";
+      const REDUCED_MOTION = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const ROLL_DURATION_MS = REDUCED_MOTION ? 1600 : 3000;
+      const REEL_LENGTH = REDUCED_MOTION ? 28 : 42;
       const DISTANCE_OPTIONS = [
         { value: 0, label: "不限" },
         { value: 500, label: "500m" },
@@ -388,6 +460,7 @@
       let initialRestaurants = [];
       let restaurants = [];
       let checkIns = readJson(CHECK_INS_KEY, []);
+      let favorites = readJson(FAVORITES_KEY, []);
       let selectedRestaurant = null;
       let pendingRestaurant = null;
       let editingRestaurantId = null;
@@ -410,6 +483,7 @@
       let isRolling = false;
       let toastTimer = 0;
       let audioContext = null;
+      let pendingMapRestaurant = null;
       let sphereFrame = 0;
       let sphereLastTime = performance.now();
       let sphereRotationY = 0;
@@ -417,9 +491,14 @@
 
       const elements = {
         homeTab: document.querySelector("#home-tab"),
+        favoritesTab: document.querySelector("#favorites-tab"),
         manageTab: document.querySelector("#manage-tab"),
         homeView: document.querySelector("#home-view"),
+        favoritesView: document.querySelector("#favorites-view"),
         manageView: document.querySelector("#manage-view"),
+        favoritesBackButton: document.querySelector("#favorites-back-button"),
+        favoritesCount: document.querySelector("#favorites-count"),
+        favoritesList: document.querySelector("#favorites-list"),
         backHomeButton: document.querySelector("#back-home-button"),
         count: document.querySelector("#restaurant-count"),
         manageCount: document.querySelector("#manage-count"),
@@ -435,8 +514,13 @@
         imagePreview: document.querySelector("#image-preview"),
         imagePreviewClose: document.querySelector("#image-preview-close"),
         imagePreviewContent: document.querySelector("#image-preview-content"),
+        mapPicker: document.querySelector("#map-picker"),
+        mapPickerClose: document.querySelector("#map-picker-close"),
+        mapPickerName: document.querySelector("#map-picker-name"),
+        mapPickerOptions: document.querySelector("#map-picker-options"),
         filterSummary: document.querySelector("#filter-summary"),
         pickButton: document.querySelector("#pick-button"),
+        reelShell: document.querySelector(".reel-shell"),
         reelArea: document.querySelector("#reel-area"),
         resultArea: document.querySelector("#result-area"),
         clearHistoryButton: document.querySelector("#clear-history-button"),
@@ -465,8 +549,10 @@
 
       function bindEvents() {
         elements.homeTab.addEventListener("click", () => { closeFilterPanel(); switchView("home"); });
+        elements.favoritesTab.addEventListener("click", () => { closeFilterPanel(); switchView("favorites"); });
         elements.manageTab.addEventListener("click", () => { closeFilterPanel(); switchView("manage"); });
         elements.backHomeButton.addEventListener("click", () => { closeFilterPanel(); switchView("home"); });
+        elements.favoritesBackButton.addEventListener("click", () => switchView("home"));
         elements.categoryTabs.addEventListener("click", handleCategoryTabClick);
         document.querySelectorAll("[data-filter-panel]").forEach((button) => {
           button.addEventListener("click", (event) => {
@@ -480,8 +566,14 @@
           if (event.target === elements.imagePreview) closeImagePreview();
         });
         elements.imagePreviewClose.addEventListener("click", closeImagePreview);
+        elements.mapPicker.addEventListener("click", (event) => {
+          if (event.target === elements.mapPicker) closeMapPicker();
+        });
+        elements.mapPickerClose.addEventListener("click", closeMapPicker);
+        elements.mapPickerOptions.addEventListener("click", handleMapProviderClick);
         document.addEventListener("keydown", (event) => {
           if (event.key === "Escape" && !elements.imagePreview.hidden) closeImagePreview();
+          if (event.key === "Escape" && !elements.mapPicker.hidden) closeMapPicker();
         });
         elements.filterResetButton.addEventListener("click", resetActiveFilterPanel);
         elements.filterConfirmButton.addEventListener("click", closeFilterPanel);
@@ -495,6 +587,7 @@
         elements.restaurantList.addEventListener("click", handleRestaurantListClick);
         elements.historyList.addEventListener("click", handleHistoryClick);
         elements.historyList.addEventListener("submit", submitReview);
+        elements.favoritesList.addEventListener("click", handleFavoritesClick);
       }
 
       function resetSelectionAfterFilterChange() {
@@ -639,6 +732,7 @@
         localStorage.setItem(RESTAURANTS_KEY, JSON.stringify(restaurants));
         localStorage.setItem(RESTAURANTS_VERSION_KEY, CURRENT_DATASET_VERSION);
         localStorage.setItem(CHECK_INS_KEY, JSON.stringify(checkIns));
+        localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
       }
 
       function getRestaurantText(restaurant) {
@@ -730,12 +824,73 @@
         return address ? `杭州市 · ${district}${area} · ${address}` : `杭州市 · ${district}${area} · 位置待补充`;
       }
 
-      function getMapUrl(restaurant) {
+      function getMapUrl(restaurant, provider) {
+        const query = `杭州 ${restaurant.address || ""} ${restaurant.name}`.trim();
+        const isAppleMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        const isAndroidFamily = /Android|HarmonyOS|HUAWEI/i.test(navigator.userAgent);
+        const [longitude = "", latitude = ""] = String(restaurant.location || "").split(",");
+        const encodedQuery = encodeURIComponent(query);
+        if (provider === "baidu") {
+          if (isAppleMobile || isAndroidFamily) {
+            return `baidumap://map/place/search?query=${encodedQuery}&region=${encodeURIComponent("杭州")}&src=webapp.renjianxunweiji`;
+          }
+          return `https://map.baidu.com/search/${encodedQuery}`;
+        }
+        if (provider === "tencent") {
+          if ((isAppleMobile || isAndroidFamily) && latitude && longitude) {
+            const marker = encodeURIComponent(`coord:${latitude},${longitude};title:${restaurant.name};addr:${restaurant.address || ""}`);
+            return `qqmap://map/marker?marker=${marker}&referer=renjianxunweiji`;
+          }
+          return `https://map.qq.com/?type=search&keyword=${encodedQuery}&region=${encodeURIComponent("杭州")}`;
+        }
+        if (provider === "apple") {
+          const coordinate = latitude && longitude ? `&ll=${encodeURIComponent(`${latitude},${longitude}`)}` : "";
+          return `https://maps.apple.com/?q=${encodeURIComponent(restaurant.name)}${coordinate}`;
+        }
         if (restaurant.location) {
+          const params = `sourceApplication=${encodeURIComponent("人间寻味记")}&poiname=${encodeURIComponent(restaurant.name)}&lat=${encodeURIComponent(latitude)}&lon=${encodeURIComponent(longitude)}&dev=0`;
+          if (isAppleMobile) return `iosamap://viewMap?${params}`;
+          if (isAndroidFamily) return `androidamap://viewMap?${params}`;
           return `https://uri.amap.com/marker?position=${encodeURIComponent(restaurant.location)}&name=${encodeURIComponent(restaurant.name)}&src=renjianxunweiji&callnative=1`;
         }
-        const query = `杭州 ${restaurant.address || ""} ${restaurant.name}`.trim();
+        if (isAppleMobile) {
+          return `iosamap://poi?sourceApplication=${encodeURIComponent("人间寻味记")}&name=${encodeURIComponent(query)}`;
+        }
+        if (isAndroidFamily) {
+          return `androidamap://poi?sourceApplication=${encodeURIComponent("人间寻味记")}&keywords=${encodeURIComponent(query)}&dev=0`;
+        }
         return `https://uri.amap.com/search?keyword=${encodeURIComponent(query)}&src=renjianxunweiji&callnative=1`;
+      }
+
+      function openMapPicker(restaurant) {
+        pendingMapRestaurant = restaurant;
+        elements.mapPickerName.textContent = restaurant.name || restaurant.restaurantName || "";
+        const isAppleDevice = /iPhone|iPad|iPod|Macintosh/i.test(navigator.userAgent);
+        const providers = [
+          { value: "amap", label: "高德地图", symbol: "高" },
+          { value: "baidu", label: "百度地图", symbol: "百" },
+          { value: "tencent", label: "腾讯地图", symbol: "腾" },
+          ...(isAppleDevice ? [{ value: "apple", label: "Apple 地图", symbol: "A" }] : []),
+        ];
+        elements.mapPickerOptions.innerHTML = providers.map((provider) => `
+          <button class="map-provider" data-map-provider="${provider.value}" data-map-symbol="${provider.symbol}" type="button">${provider.label}</button>
+        `).join("");
+        elements.mapPicker.hidden = false;
+        document.body.classList.add("is-map-picker-open");
+      }
+
+      function closeMapPicker() {
+        elements.mapPicker.hidden = true;
+        pendingMapRestaurant = null;
+        document.body.classList.remove("is-map-picker-open");
+      }
+
+      function handleMapProviderClick(event) {
+        const button = event.target.closest("[data-map-provider]");
+        if (!button || !pendingMapRestaurant) return;
+        const url = getMapUrl(pendingMapRestaurant, button.dataset.mapProvider);
+        closeMapPicker();
+        window.location.href = url;
       }
 
       function renderFilters(filteredRestaurants) {
@@ -911,8 +1066,10 @@
       function switchView(view) {
         elements.homeView.hidden = view !== "home";
         elements.manageView.hidden = view !== "manage";
+        elements.favoritesView.hidden = view !== "favorites";
         elements.homeTab.classList.toggle("is-active", view === "home");
         elements.manageTab.classList.toggle("is-active", view === "manage");
+        elements.favoritesTab.classList.toggle("is-active", view === "favorites");
         if (view === "home" && !isRolling && !selectedRestaurant) {
           renderReel(buildRollingReel(), false);
         }
@@ -931,6 +1088,7 @@
         elements.clearHistoryButton.disabled = checkIns.length === 0;
         renderResult();
         renderHistory();
+        renderFavorites();
         renderRestaurantForm();
         renderRestaurants();
         saveAll();
@@ -939,13 +1097,17 @@
       function renderReel(sequence, rolling, revealed = false) {
         if (!sequence.length) {
           elements.reelArea.className = "reel-track";
+          elements.reelShell.classList.remove("is-rolling", "is-settling", "is-revealed");
           elements.reelArea.innerHTML = "";
           return;
         }
-        elements.reelArea.className = `reel-track ${revealed ? "is-revealed" : ""}`;
+        elements.reelArea.className = `reel-track ${rolling ? "is-rolling" : ""} ${revealed ? "is-revealed" : ""}`;
+        elements.reelShell.classList.toggle("is-rolling", rolling);
+        elements.reelShell.classList.toggle("is-revealed", revealed);
+        elements.reelShell.classList.remove("is-settling");
         elements.reelArea.innerHTML = sequence.map((restaurant, index) => `
           <article class="reel-card ${revealed && index === 0 ? "is-final" : ""}" style="${getSphereStyle(index, sequence.length, revealed)}" key="${restaurant.id}-${index}">
-            <div class="food-photo" style="--food-image: url('${getRestaurantImage(restaurant)}')"><span>${escapeHtml(restaurant.name.slice(0, 2))}</span></div>
+            <div class="food-photo" data-image-category="${getRestaurantImageCategory(restaurant)}" style="--food-image: url('${getCategoryRestaurantImage(restaurant)}')"><span>${escapeHtml(restaurant.name.slice(0, 2))}</span></div>
             <h3>${escapeHtml(restaurant.name)}</h3>
             <p>${escapeHtml(formatLocation(restaurant.address, restaurant))}</p>
             <div class="tag-line">
@@ -966,20 +1128,34 @@
           let tilt = 9 + Math.sin(timestamp / 2300) * 3;
           if (isRolling) {
             const progress = Math.min(1, (timestamp - rollStartedAt) / ROLL_DURATION_MS);
-            if (progress < 0.14) {
-              const ramp = 1 - Math.pow(1 - progress / 0.14, 3);
-              speed = 0.014 + (0.72 - 0.014) * ramp;
+            const accelerating = progress < 0.18;
+            const cruising = progress >= 0.18 && progress < 0.58;
+            const settling = progress >= 0.58;
+            elements.reelArea.classList.toggle("is-accelerating", accelerating);
+            elements.reelArea.classList.toggle("is-cruising", cruising);
+            elements.reelArea.classList.toggle("is-settling", settling);
+            elements.reelShell.classList.toggle("is-settling", settling);
+            if (accelerating) {
+              const phase = progress / 0.18;
+              const eased = 1 - Math.pow(1 - phase, 3);
+              speed = 0.016 + (0.54 - 0.016) * eased;
+            } else if (cruising) {
+              speed = 0.54;
             } else {
-              const slowProgress = (progress - 0.14) / 0.86;
-              const smooth = slowProgress * slowProgress * (3 - 2 * slowProgress);
-              speed = 0.72 + (0.018 - 0.72) * smooth;
+              const phase = (progress - 0.58) / 0.42;
+              const inertia = Math.pow(1 - phase, 4);
+              speed = 0.018 + (0.54 - 0.018) * inertia;
             }
-            tilt = 10 + Math.sin(progress * Math.PI * 5) * 7 * (1 - progress);
+            tilt = 7 + Math.sin(progress * Math.PI * 2.5) * 2.4 * (1 - progress);
             if (progress >= 1) {
               finishPick();
               sphereFrame = requestAnimationFrame(animateSphere);
               return;
             }
+          }
+          else {
+            elements.reelArea.classList.remove("is-accelerating", "is-cruising", "is-settling");
+            elements.reelShell.classList.remove("is-settling");
           }
           sphereRotationY -= speed * delta;
           elements.reelArea.style.transform = `rotateX(${tilt.toFixed(2)}deg) rotateY(${sphereRotationY.toFixed(2)}deg) rotateZ(0deg)`;
@@ -1020,11 +1196,12 @@
               <div><dt>推荐菜</dt><dd>${escapeHtml(getRecommendationText(selectedRestaurant.note))}</dd></div>
             </dl>
             <div class="result-actions">
-              <a class="map-action" href="${getMapUrl(selectedRestaurant)}" target="_blank" rel="noreferrer">打开地图</a>
+              <button class="map-action" id="map-button" type="button">打开地图</button>
               <button class="success-action" id="complete-button" type="button">完成打卡</button>
             </div>
           `;
           document.querySelector("#complete-button").addEventListener("click", completeCheckIn);
+          document.querySelector("#map-button").addEventListener("click", () => openMapPicker(selectedRestaurant));
           return;
         }
         elements.resultArea.className = "quiet-hint";
@@ -1083,21 +1260,72 @@
 
         const adjustedIndex = revealed ? index - 1 : index;
         const adjustedTotal = Math.max(revealed ? total - 1 : total, 1);
-        const goldenAngle = Math.PI * (3 - Math.sqrt(5));
-        const y = 1 - (adjustedIndex / Math.max(adjustedTotal - 1, 1)) * 2;
-        const horizontalRadius = Math.sqrt(Math.max(0, 1 - y * y));
-        const theta = goldenAngle * adjustedIndex;
-        const x = Math.cos(theta) * horizontalRadius;
-        const z = Math.sin(theta) * horizontalRadius;
+        const sphereRadius = Math.min(196, 112 + Math.sqrt(adjustedTotal) * 11.5);
+        const densityScale = adjustedTotal <= 4
+          ? 1.18
+          : adjustedTotal <= 10
+            ? 1.08
+            : adjustedTotal <= 22
+              ? 0.98
+              : adjustedTotal >= 40
+                ? 0.8
+                : 0.9;
+        const position = getRingSpherePosition(adjustedIndex, adjustedTotal);
+        const { x, y, z } = position;
         const cardTheta = Math.atan2(x, z) * 180 / Math.PI;
         const cardPhi = Math.asin(y) * 180 / Math.PI;
         const depthOpacity = Math.max(0.24, 0.56 + z * 0.38).toFixed(2);
         const depthSaturation = Math.max(0.58, 0.82 + z * 0.24).toFixed(2);
         const depthLight = Math.max(0.58, 0.88 + z * 0.18).toFixed(2);
-        const cardScale = Math.max(0.62, 0.8 + z * 0.18).toFixed(2);
-        const curveScale = Math.max(0.62, 0.96 - Math.abs(x) * 0.2 - Math.max(0, -z) * 0.16).toFixed(2);
-        const twist = (x * -9 + y * 5).toFixed(2);
-        return `--theta: ${cardTheta.toFixed(2)}deg; --phi: ${cardPhi.toFixed(2)}deg; --twist: ${twist}deg; --radius: 214px; --depth-opacity: ${depthOpacity}; --depth-saturation: ${depthSaturation}; --depth-light: ${depthLight}; --curve-scale: ${curveScale}; --card-scale: ${cardScale};`;
+        const cardScale = Math.max(0.56, (0.82 + z * 0.18) * densityScale).toFixed(2);
+        const curveScale = Math.max(0.5, 0.94 - Math.abs(x) * 0.28 - Math.max(0, -z) * 0.18).toFixed(2);
+        return `--theta: ${cardTheta.toFixed(2)}deg; --phi: ${cardPhi.toFixed(2)}deg; --twist: 0deg; --radius: ${sphereRadius.toFixed(1)}px; --depth-opacity: ${depthOpacity}; --depth-saturation: ${depthSaturation}; --depth-light: ${depthLight}; --curve-scale: ${curveScale}; --card-scale: ${cardScale};`;
+      }
+
+      function getRingSpherePosition(index, total) {
+        if (total <= 1) return { x: 0, y: 0, z: 1 };
+        if (total <= 5) {
+          const angle = (index / total) * Math.PI * 2;
+          return { x: Math.sin(angle), y: 0, z: Math.cos(angle) };
+        }
+
+        const ringCount = Math.max(2, Math.min(8, Math.round(Math.sqrt(total / 1.35))));
+        const rings = Array.from({ length: ringCount }, (_, ringIndex) => {
+          const latitude = -Math.PI / 2 + Math.PI * (ringIndex + 0.5) / ringCount;
+          return { latitude, weight: Math.max(0.18, Math.cos(latitude)), count: 1 };
+        });
+        const remaining = total - ringCount;
+        const weightTotal = rings.reduce((sum, ring) => sum + ring.weight, 0);
+        const quotas = rings.map((ring) => remaining * ring.weight / weightTotal);
+        rings.forEach((ring, ringIndex) => {
+          ring.count += Math.floor(quotas[ringIndex]);
+        });
+        let unassigned = total - rings.reduce((sum, ring) => sum + ring.count, 0);
+        const remainderOrder = quotas
+          .map((quota, ringIndex) => ({ ringIndex, remainder: quota - Math.floor(quota) }))
+          .sort((left, right) => right.remainder - left.remainder);
+        for (let extraIndex = 0; extraIndex < unassigned; extraIndex += 1) {
+          rings[remainderOrder[extraIndex % remainderOrder.length].ringIndex].count += 1;
+        }
+
+        let cursor = 0;
+        for (let ringIndex = 0; ringIndex < rings.length; ringIndex += 1) {
+          const ring = rings[ringIndex];
+          if (index >= cursor + ring.count) {
+            cursor += ring.count;
+            continue;
+          }
+          const localIndex = index - cursor;
+          const stagger = ringIndex % 2 ? 0.5 : 0;
+          const longitude = Math.PI * 2 * (localIndex + stagger) / ring.count;
+          const horizontalRadius = Math.cos(ring.latitude);
+          return {
+            x: Math.sin(longitude) * horizontalRadius,
+            y: Math.sin(ring.latitude),
+            z: Math.cos(longitude) * horizontalRadius,
+          };
+        }
+        return { x: 0, y: 0, z: -1 };
       }
 
       function getAudioContext() {
@@ -1177,6 +1405,32 @@
         return matched ? matched[1] : "https://images.unsplash.com/photo-1543353071-873f17a7a088?auto=format&fit=crop&w=520&q=80";
       }
 
+      function getCategoryRestaurantImage(restaurant) {
+        const imageCategory = getRestaurantImageCategory(restaurant);
+        const images = {
+          dessert: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=520&q=82",
+          hotpot: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=520&q=82",
+          bbq: "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=520&q=82",
+          noodle: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=520&q=82",
+          seafood: "https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=520&q=82",
+          western: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=520&q=82",
+          asian: "https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=520&q=82",
+          snack: "https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=520&q=82",
+          buffet: "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=520&q=82",
+          local: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=520&q=82",
+        };
+        return images[imageCategory] || images.local;
+      }
+
+      function getRestaurantImageCategory(restaurant) {
+        const category = restaurant.category || inferCategory(restaurant);
+        if (category !== "buffet") {
+          const name = String(restaurant.name || "").toLowerCase();
+          if (/咖啡|coffee|星巴克|瑞幸|manner|m stand|arabica|café|cafe/.test(name)) return "dessert";
+        }
+        return Object.hasOwn(CATEGORY_LABELS, category) ? category : "local";
+      }
+
       function completeCheckIn() {
         if (!selectedRestaurant) return;
         const shouldRemove = confirm("打卡完成！是否将该餐厅从待打卡库中移除？");
@@ -1223,11 +1477,85 @@
               <time>${new Intl.DateTimeFormat("zh-CN", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }).format(new Date(record.checkedInAt))}</time>
             </div>
             <div class="row-actions">
+              <button class="ghost-action favorite-action ${isFavorite(record.restaurantId) ? "is-favorite" : ""}" data-action="toggle-favorite" data-id="${record.id}" type="button">${isFavorite(record.restaurantId) ? "已收藏" : "收藏"}</button>
               <button class="ghost-action" data-action="edit-review" data-id="${record.id}" type="button">${hasReview(record) ? "修改评价" : "评价"}</button>
-            <button class="danger-action" data-action="delete-history" data-id="${record.id}" type="button">删除</button>
+              <button class="danger-action" data-action="delete-history" data-id="${record.id}" type="button">删除</button>
             </div>
           </article>
         `).join("");
+      }
+
+      function isFavorite(restaurantId) {
+        return favorites.some((favorite) => favorite.restaurantId === restaurantId);
+      }
+
+      function createFavoriteFromRecord(record) {
+        return {
+          id: createId("favorite"),
+          restaurantId: record.restaurantId,
+          restaurantName: record.restaurantName,
+          address: record.address,
+          category: record.category,
+          district: record.district,
+          businessArea: record.businessArea,
+          source: record.source,
+          rank: record.rank,
+          rating: record.rating,
+          location: record.location,
+          note: record.note,
+          favoritedAt: new Date().toISOString(),
+        };
+      }
+
+      function toggleFavorite(record) {
+        if (isFavorite(record.restaurantId)) {
+          favorites = favorites.filter((favorite) => favorite.restaurantId !== record.restaurantId);
+          showMessage("已取消收藏。");
+        } else {
+          favorites = [createFavoriteFromRecord(record), ...favorites];
+          showMessage("已加入我的收藏。");
+        }
+        render();
+      }
+
+      function renderFavorites() {
+        elements.favoritesCount.textContent = `${favorites.length} 家收藏`;
+        if (favorites.length === 0) {
+          elements.favoritesList.innerHTML = '<div class="empty-state">还没有收藏餐厅，完成打卡后可以在历史记录中收藏。</div>';
+          return;
+        }
+        elements.favoritesList.innerHTML = favorites.map((favorite) => `
+          <article class="list-card">
+            <div>
+              <h3>${escapeHtml(favorite.restaurantName)}</h3>
+              <p>${escapeHtml(formatLocation(favorite.address, favorite))}</p>
+              <div class="tag-line">
+                <span class="mini-tag">${escapeHtml(getCategoryLabel(favorite.category || inferCategory({ name: favorite.restaurantName, note: favorite.note, address: favorite.address })))}</span>
+                ${favorite.rating ? `<span class="mini-tag">高德 ${escapeHtml(favorite.rating)} 分</span>` : ""}
+              </div>
+              ${favorite.note ? `<p class="muted">${escapeHtml(getRecommendationText(favorite.note))}</p>` : ""}
+              <time>收藏于 ${new Intl.DateTimeFormat("zh-CN", { year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(favorite.favoritedAt))}</time>
+            </div>
+            <div class="row-actions">
+              <button class="map-action" data-action="open-map" data-id="${favorite.id}" type="button">打开地图</button>
+              <button class="danger-action" data-action="remove-favorite" data-id="${favorite.id}" type="button">取消收藏</button>
+            </div>
+          </article>
+        `).join("");
+      }
+
+      function handleFavoritesClick(event) {
+        const button = event.target.closest("button");
+        if (!button) return;
+        if (button.dataset.action === "open-map") {
+          const favorite = favorites.find((item) => item.id === button.dataset.id);
+          if (favorite) openMapPicker({ ...favorite, name: favorite.restaurantName });
+          return;
+        }
+        if (button.dataset.action !== "remove-favorite") return;
+        favorites = favorites.filter((favorite) => favorite.id !== button.dataset.id);
+        showMessage("已取消收藏。");
+        render();
       }
 
       function getReview(record) {
@@ -1354,7 +1682,7 @@
               ${restaurant.note ? `<p class="muted">${escapeHtml(restaurant.note)}</p>` : ""}
             </div>
             <div class="row-actions">
-              <a class="map-action" href="${getMapUrl(restaurant)}" target="_blank" rel="noreferrer">地图</a>
+              <button class="map-action" data-action="open-map" data-id="${restaurant.id}" type="button">打开地图</button>
               <button class="ghost-action" data-action="edit" data-id="${restaurant.id}" type="button">编辑</button>
               <button class="danger-action" data-action="delete" data-id="${restaurant.id}" type="button">删除</button>
             </div>
@@ -1400,6 +1728,10 @@
         if (!button) return;
         const restaurant = restaurants.find((item) => item.id === button.dataset.id);
         if (!restaurant) return;
+        if (button.dataset.action === "open-map") {
+          openMapPicker(restaurant);
+          return;
+        }
         if (button.dataset.action === "edit") {
           editingRestaurantId = restaurant.id;
           elements.nameInput.value = restaurant.name;
@@ -1427,6 +1759,11 @@
         }
         const button = event.target.closest("button");
         if (!button) return;
+        if (button.dataset.action === "toggle-favorite") {
+          const record = checkIns.find((item) => item.id === button.dataset.id);
+          if (record) toggleFavorite(record);
+          return;
+        }
         if (button.dataset.action === "edit-review") {
           const record = checkIns.find((item) => item.id === button.dataset.id);
           if (!record) return;
