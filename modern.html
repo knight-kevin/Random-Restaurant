@@ -36,7 +36,7 @@
       h1 { margin-top: 4px; font-size: clamp(2rem, 4.8vw, 4rem); line-height: 1.02; }
       .eyebrow { margin: 0; color: #7d5544; font-size: 0.78rem; font-weight: 800; letter-spacing: 0; }
       .top-actions { display: flex; gap: 8px; padding: 6px; border: 1px solid rgba(255, 91, 91, 0.18); border-radius: 999px; background: rgba(255,255,255,.78); box-shadow: 0 18px 42px rgba(45,54,60,.08); }
-      .nav-action { min-height: 42px; border-radius: 999px; padding: 0 16px; background: transparent; color: #33423a; font-weight: 800; }
+      .nav-action { min-height: 42px; border-radius: 999px; padding: 0 14px; background: transparent; color: #33423a; font-weight: 800; white-space: nowrap; }
       .nav-action.is-active { background: linear-gradient(135deg, #ff5b6e, #ff8a3d); color: #fff; }
       .favorite-action.is-favorite { border-color: #ffc3cf; background: #fff0f4; color: #d92f58; }
 
@@ -257,7 +257,7 @@
         .filter-dropdown { position: fixed; top: var(--mobile-filter-top, 300px); right: 11px; bottom: max(8px, env(safe-area-inset-bottom)); left: 11px; max-height: none; }
         .topbar { display: grid; padding-inline: 0; }
         .top-actions { width: 100%; }
-        .nav-action { flex: 1; padding-inline: 10px; }
+        .nav-action { flex: 1 1 25%; min-width: 0; padding-inline: 8px; }
         .home-grid { display: grid; }
         .reel-window { height: 390px; }
         .reel-card { width: 112px; height: 140px; }
@@ -279,7 +279,8 @@
         .category-tabs { gap: 21px; margin-inline: -4px; }
         .filter-entry-row { gap: 6px; }
         .filter-entry { min-height: 38px; padding: 5px 6px; font-size: .82rem; }
-        .nav-action { min-height: 40px; padding-inline: 7px; font-size: .82rem; }
+        .top-actions { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 3px; padding: 4px; }
+        .nav-action { width: 100%; min-height: 38px; padding-inline: 3px; font-size: .72rem; }
         .filter-dropdown-inner { max-height: none; padding: 14px; }
         .choice-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
         .choice-button { min-height: 34px; padding: 3px 5px; border-radius: 6px; font-size: .76rem; }
@@ -303,6 +304,7 @@
         </div>
         <nav class="top-actions" aria-label="页面导航">
           <button class="nav-action is-active" id="home-tab" type="button">抽餐厅</button>
+          <button class="nav-action" id="history-tab" type="button">打卡记录</button>
           <button class="nav-action" id="favorites-tab" type="button">我的收藏</button>
           <button class="nav-action" id="manage-tab" type="button">管理餐厅</button>
         </nav>
@@ -343,17 +345,21 @@
           <div id="result-area" class="quiet-hint">还没有抽取餐厅。</div>
         </section>
 
-        <section class="panel">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">足迹</p>
-              <h2>打卡历史</h2>
-            </div>
-            <button class="danger-action" id="clear-history-button" type="button">清空全部记录</button>
-          </div>
-          <div class="history-list" id="history-list"></div>
-        </section>
       </div>
+
+      <section class="panel manage-panel" id="history-view" hidden>
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow" id="history-count">0 条记录</p>
+            <h2>打卡历史</h2>
+          </div>
+          <div class="row-actions">
+            <button class="danger-action" id="clear-history-button" type="button">清空全部记录</button>
+            <button class="ghost-action" id="history-back-button" type="button">返回抽取</button>
+          </div>
+        </div>
+        <div class="history-list" id="history-list"></div>
+      </section>
 
       <section class="panel manage-panel" id="manage-view" hidden>
         <div class="section-heading">
@@ -414,17 +420,17 @@
         inferRestaurantCategory,
         inferSubcategory,
         matchesFoodSelection,
-      } from "./scripts/categories.js?v=20260625-v24";
+      } from "./scripts/categories.js?v=20260625-v28";
       import {
         formatDistance,
         getRestaurantDistance,
         parseAverageCost,
         requestCurrentPosition,
-      } from "./scripts/location-fixed.js?v=20260625-v24";
+      } from "./scripts/location-fixed.js?v=20260625-v28";
 
       const RESTAURANTS_KEY = "random-restaurant-checkin:restaurants";
       const RESTAURANTS_VERSION_KEY = "random-restaurant-checkin:restaurants-version";
-      const CURRENT_DATASET_VERSION = "amap-hangzhou-1300-2026-06-25-v24";
+      const CURRENT_DATASET_VERSION = "amap-hangzhou-1300-2026-06-25-v27";
       const CHECK_INS_KEY = "random-restaurant-checkin:check-ins";
       const FAVORITES_KEY = "random-restaurant-checkin:favorites";
       const REDUCED_MOTION = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -461,6 +467,9 @@
       let restaurants = [];
       let checkIns = readJson(CHECK_INS_KEY, []);
       let favorites = readJson(FAVORITES_KEY, []);
+      let restaurantsDirty = false;
+      let checkInsDirty = false;
+      let favoritesDirty = false;
       let selectedRestaurant = null;
       let pendingRestaurant = null;
       let editingRestaurantId = null;
@@ -491,11 +500,15 @@
 
       const elements = {
         homeTab: document.querySelector("#home-tab"),
+        historyTab: document.querySelector("#history-tab"),
         favoritesTab: document.querySelector("#favorites-tab"),
         manageTab: document.querySelector("#manage-tab"),
         homeView: document.querySelector("#home-view"),
+        historyView: document.querySelector("#history-view"),
         favoritesView: document.querySelector("#favorites-view"),
         manageView: document.querySelector("#manage-view"),
+        historyBackButton: document.querySelector("#history-back-button"),
+        historyCount: document.querySelector("#history-count"),
         favoritesBackButton: document.querySelector("#favorites-back-button"),
         favoritesCount: document.querySelector("#favorites-count"),
         favoritesList: document.querySelector("#favorites-list"),
@@ -539,18 +552,33 @@
       bootstrap();
 
       async function bootstrap() {
-        initialRestaurants = await fetch(`restaurants.json?v=${CURRENT_DATASET_VERSION}`, { cache: "no-store" }).then((response) => response.json());
-        restaurants = readRestaurants();
         bindEvents();
-        render();
-        renderReel(buildRollingReel(), false);
-        sphereFrame = requestAnimationFrame(animateSphere);
+        try {
+          const response = await fetch(`restaurants.json?v=${CURRENT_DATASET_VERSION}`, { cache: "no-store" });
+          if (!response.ok) throw new Error(`餐厅数据加载失败（${response.status}）`);
+          const data = await response.json();
+          if (!Array.isArray(data) || data.length === 0) throw new Error("餐厅数据格式无效");
+          initialRestaurants = data;
+          restaurants = readRestaurants();
+          render();
+          renderReel(buildRollingReel(), false);
+        } catch (error) {
+          restaurants = [];
+          render();
+          renderReel([], false);
+          showMessage(`${error.message || "餐厅数据加载失败"}，请刷新页面重试`);
+          console.error("餐厅数据初始化失败", error);
+        } finally {
+          sphereFrame = requestAnimationFrame(animateSphere);
+        }
       }
 
       function bindEvents() {
         elements.homeTab.addEventListener("click", () => { closeFilterPanel(); switchView("home"); });
+        elements.historyTab.addEventListener("click", () => { closeFilterPanel(); switchView("history"); });
         elements.favoritesTab.addEventListener("click", () => { closeFilterPanel(); switchView("favorites"); });
         elements.manageTab.addEventListener("click", () => { closeFilterPanel(); switchView("manage"); });
+        elements.historyBackButton.addEventListener("click", () => switchView("home"));
         elements.backHomeButton.addEventListener("click", () => { closeFilterPanel(); switchView("home"); });
         elements.favoritesBackButton.addEventListener("click", () => switchView("home"));
         elements.categoryTabs.addEventListener("click", handleCategoryTabClick);
@@ -645,6 +673,7 @@
             toggleSetValue(selectedLocations, value);
           } else {
             selectedLocations.clear();
+            activeAreaDistrict = "";
           }
           selectedBusinessAreas.clear();
         }
@@ -710,18 +739,23 @@
       }
 
       function readRestaurants() {
-        const storedVersion = localStorage.getItem(RESTAURANTS_VERSION_KEY);
-        if (storedVersion !== CURRENT_DATASET_VERSION) {
-          localStorage.setItem(RESTAURANTS_VERSION_KEY, CURRENT_DATASET_VERSION);
-          localStorage.setItem(RESTAURANTS_KEY, JSON.stringify(initialRestaurants));
+        try {
+          const storedVersion = localStorage.getItem(RESTAURANTS_VERSION_KEY);
+          if (storedVersion !== CURRENT_DATASET_VERSION) {
+            localStorage.removeItem(RESTAURANTS_KEY);
+            safeSetItem(RESTAURANTS_VERSION_KEY, CURRENT_DATASET_VERSION);
+            return initialRestaurants;
+          }
+          const stored = readJson(RESTAURANTS_KEY, initialRestaurants);
+          if (!Array.isArray(stored)) {
+            localStorage.removeItem(RESTAURANTS_KEY);
+            return initialRestaurants;
+          }
+          return isPlaceholderRestaurantList(stored) ? initialRestaurants : stored;
+        } catch (error) {
+          console.warn("读取本地餐厅数据失败，已使用内置餐厅库", error);
           return initialRestaurants;
         }
-        const stored = readJson(RESTAURANTS_KEY, initialRestaurants);
-        if (!Array.isArray(stored)) {
-          localStorage.setItem(RESTAURANTS_KEY, JSON.stringify(initialRestaurants));
-          return initialRestaurants;
-        }
-        return isPlaceholderRestaurantList(stored) ? initialRestaurants : stored;
       }
 
       function isPlaceholderRestaurantList(items) {
@@ -729,10 +763,23 @@
       }
 
       function saveAll() {
-        localStorage.setItem(RESTAURANTS_KEY, JSON.stringify(restaurants));
-        localStorage.setItem(RESTAURANTS_VERSION_KEY, CURRENT_DATASET_VERSION);
-        localStorage.setItem(CHECK_INS_KEY, JSON.stringify(checkIns));
-        localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+        if (restaurantsDirty && safeSetItem(RESTAURANTS_KEY, JSON.stringify(restaurants))) {
+          safeSetItem(RESTAURANTS_VERSION_KEY, CURRENT_DATASET_VERSION);
+          restaurantsDirty = false;
+        }
+        if (checkInsDirty && safeSetItem(CHECK_INS_KEY, JSON.stringify(checkIns))) checkInsDirty = false;
+        if (favoritesDirty && safeSetItem(FAVORITES_KEY, JSON.stringify(favorites))) favoritesDirty = false;
+      }
+
+      function safeSetItem(key, value) {
+        try {
+          localStorage.setItem(key, value);
+          return true;
+        } catch (error) {
+          console.warn(`本地存储写入失败：${key}`, error);
+          showMessage("本地存储空间不足，请删除部分打卡图片后重试");
+          return false;
+        }
       }
 
       function getRestaurantText(restaurant) {
@@ -944,8 +991,11 @@
 
       function renderNearbyPanel() {
         const districts = getLocations();
-        if (!activeAreaDistrict || !districts.includes(activeAreaDistrict)) {
-          activeAreaDistrict = [...selectedLocations][0] || districts[0] || "";
+        if (activeAreaDistrict && !districts.includes(activeAreaDistrict)) {
+          activeAreaDistrict = "";
+        }
+        if (!activeAreaDistrict && selectedLocations.size) {
+          activeAreaDistrict = [...selectedLocations][0] || "";
         }
         const businessAreas = [...new Set(restaurants
           .filter((restaurant) => !activeAreaDistrict || getDistrict(restaurant.address, restaurant) === activeAreaDistrict)
@@ -972,7 +1022,7 @@
             <div class="area-level">
               <button class="area-option ${selectedLocations.size === 0 ? "is-selected" : ""}" data-area-level="district" data-district="" type="button">不限</button>
               ${districts.map((district) => `
-                <button class="area-option ${activeAreaDistrict === district ? "is-selected" : ""}" data-area-level="district" data-district="${escapeHtml(district)}" type="button">${escapeHtml(district)}</button>
+                <button class="area-option ${selectedLocations.has(district) ? "is-selected" : ""}" data-area-level="district" data-district="${escapeHtml(district)}" type="button">${escapeHtml(district)}</button>
               `).join("")}
             </div>
             <div class="area-level">
@@ -1031,7 +1081,7 @@
 
       function getSelectedFoodLabel() {
         if (!selectedFoodValues.size) return "全部美食";
-        const allOptions = FOOD_GROUPS.flatMap((group) => group.options);
+        const allOptions = FOOD_GROUPS.reduce((options, group) => options.concat(group.options), []);
         const labels = [...selectedFoodValues].map((value) =>
           allOptions.find((option) => option.value === value)?.label || getCategoryLabel(value)
         );
@@ -1045,11 +1095,11 @@
 
       function escapeHtml(value) {
         return String(value ?? "")
-          .replaceAll("&", "&amp;")
-          .replaceAll("<", "&lt;")
-          .replaceAll(">", "&gt;")
-          .replaceAll('"', "&quot;")
-          .replaceAll("'", "&#039;");
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
       }
 
       function createId(prefix) {
@@ -1065,9 +1115,11 @@
 
       function switchView(view) {
         elements.homeView.hidden = view !== "home";
+        elements.historyView.hidden = view !== "history";
         elements.manageView.hidden = view !== "manage";
         elements.favoritesView.hidden = view !== "favorites";
         elements.homeTab.classList.toggle("is-active", view === "home");
+        elements.historyTab.classList.toggle("is-active", view === "history");
         elements.manageTab.classList.toggle("is-active", view === "manage");
         elements.favoritesTab.classList.toggle("is-active", view === "favorites");
         if (view === "home" && !isRolling && !selectedRestaurant) {
@@ -1086,6 +1138,7 @@
         elements.pickButton.disabled = isRolling;
         elements.pickButton.textContent = isRolling ? "正在抽取..." : "随机抽一家餐厅";
         elements.clearHistoryButton.disabled = checkIns.length === 0;
+        elements.historyCount.textContent = `${checkIns.length} 条记录`;
         renderResult();
         renderHistory();
         renderFavorites();
@@ -1215,7 +1268,7 @@
           .filter((part) => part && !/^人均\s*[：:]/.test(part))
           .join("；")
           .replace(/^标签\s*[：:]\s*/, "")
-          .replaceAll(",", "、")
+          .replace(/,/g, "、")
           .trim();
         return cleaned || "暂无推荐菜";
       }
@@ -1428,13 +1481,13 @@
           const name = String(restaurant.name || "").toLowerCase();
           if (/咖啡|coffee|星巴克|瑞幸|manner|m stand|arabica|café|cafe/.test(name)) return "dessert";
         }
-        return Object.hasOwn(CATEGORY_LABELS, category) ? category : "local";
+        return Object.prototype.hasOwnProperty.call(CATEGORY_LABELS, category) ? category : "local";
       }
 
       function completeCheckIn() {
         if (!selectedRestaurant) return;
         const shouldRemove = confirm("打卡完成！是否将该餐厅从待打卡库中移除？");
-        checkIns = [{
+        const newCheckIn = {
           id: createId("check-in"),
           restaurantId: selectedRestaurant.id,
           restaurantName: selectedRestaurant.name,
@@ -1449,12 +1502,20 @@
           locationVerified: selectedRestaurant.locationVerified,
           note: selectedRestaurant.note,
           checkedInAt: new Date().toISOString(),
-        }, ...checkIns];
-        if (shouldRemove) restaurants = restaurants.filter((restaurant) => restaurant.id !== selectedRestaurant.id);
+        };
+        checkIns = [newCheckIn, ...checkIns];
+        checkInsDirty = true;
+        if (shouldRemove) {
+          restaurants = restaurants.filter((restaurant) => restaurant.id !== selectedRestaurant.id);
+          restaurantsDirty = true;
+        }
         selectedRestaurant = null;
-        showMessage(shouldRemove ? "打卡成功，餐厅已从待打卡库移除。" : "打卡成功，餐厅已保留。");
+        editingReviewId = newCheckIn.id;
         render();
         renderReel(buildRollingReel(), false);
+        switchView("history");
+        elements.historyList.scrollTop = 0;
+        showMessage(shouldRemove ? "打卡成功，餐厅已移除，可以评价或收藏。" : "打卡成功，可以评价或收藏。");
       }
 
       function renderHistory() {
@@ -1515,6 +1576,7 @@
           favorites = [createFavoriteFromRecord(record), ...favorites];
           showMessage("已加入我的收藏。");
         }
+        favoritesDirty = true;
         render();
       }
 
@@ -1554,6 +1616,7 @@
         }
         if (button.dataset.action !== "remove-favorite") return;
         favorites = favorites.filter((favorite) => favorite.id !== button.dataset.id);
+        favoritesDirty = true;
         showMessage("已取消收藏。");
         render();
       }
@@ -1712,6 +1775,7 @@
           resetForm();
           showMessage("新餐厅已添加。");
         }
+        restaurantsDirty = true;
         render();
       }
 
@@ -1744,6 +1808,7 @@
         if (button.dataset.action === "delete") {
           if (!confirm(`确定删除「${restaurant.name}」吗？`)) return;
           restaurants = restaurants.filter((item) => item.id !== restaurant.id);
+          restaurantsDirty = true;
           if (editingRestaurantId === restaurant.id) resetForm();
           if (selectedRestaurant?.id === restaurant.id) selectedRestaurant = null;
           showMessage("餐厅已删除。");
@@ -1778,6 +1843,7 @@
         }
         if (button.dataset.action === "delete-history") {
           checkIns = checkIns.filter((record) => record.id !== button.dataset.id);
+          checkInsDirty = true;
           if (editingReviewId === button.dataset.id) editingReviewId = null;
           showMessage("打卡记录已删除。");
           render();
@@ -1805,6 +1871,7 @@
         checkIns = checkIns.map((record) =>
           record.id === id ? { ...record, review, thought: review.comment } : record,
         );
+        checkInsDirty = true;
         editingReviewId = null;
         showMessage(hasAnyReviewValue(review) ? "评价已保存。" : "评价已清空。");
         render();
@@ -1845,6 +1912,7 @@
         if (checkIns.length === 0) return;
         if (!confirm("确定清空全部打卡记录吗？此操作不可撤销。")) return;
         checkIns = [];
+        checkInsDirty = true;
         editingReviewId = null;
         showMessage("打卡历史已清空。");
         render();
