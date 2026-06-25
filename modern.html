@@ -420,19 +420,21 @@
         inferRestaurantCategory,
         inferSubcategory,
         matchesFoodSelection,
-      } from "./scripts/categories.js?v=20260625-v28";
+      } from "./scripts/categories.js?v=20260626-v29";
       import {
         formatDistance,
         getRestaurantDistance,
         parseAverageCost,
         requestCurrentPosition,
-      } from "./scripts/location-fixed.js?v=20260625-v28";
+      } from "./scripts/location-fixed.js?v=20260626-v29";
 
       const RESTAURANTS_KEY = "random-restaurant-checkin:restaurants";
       const RESTAURANTS_VERSION_KEY = "random-restaurant-checkin:restaurants-version";
-      const CURRENT_DATASET_VERSION = "amap-hangzhou-1300-2026-06-25-v27";
+      const RESTAURANT_CHANGES_KEY = "random-restaurant-checkin:restaurant-changes-v1";
+      const CURRENT_DATASET_VERSION = "amap-hangzhou-3300-2026-06-26-v29";
       const CHECK_INS_KEY = "random-restaurant-checkin:check-ins";
       const FAVORITES_KEY = "random-restaurant-checkin:favorites";
+      const MANAGE_PAGE_SIZE = 200;
       const REDUCED_MOTION = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const ROLL_DURATION_MS = REDUCED_MOTION ? 1600 : 3000;
       const REEL_LENGTH = REDUCED_MOTION ? 28 : 42;
@@ -464,6 +466,7 @@
       ];
 
       let initialRestaurants = [];
+      let coreRestaurants = [];
       let restaurants = [];
       let checkIns = readJson(CHECK_INS_KEY, []);
       let favorites = readJson(FAVORITES_KEY, []);
@@ -474,6 +477,7 @@
       let pendingRestaurant = null;
       let editingRestaurantId = null;
       let editingReviewId = null;
+      let manageRenderLimit = MANAGE_PAGE_SIZE;
       let activeCategoryTab = "recommend";
       let selectedFoodValues = new Set();
       let selectedLocations = new Set();
@@ -554,11 +558,17 @@
       async function bootstrap() {
         bindEvents();
         try {
-          const response = await fetch(`restaurants.json?v=${CURRENT_DATASET_VERSION}`, { cache: "no-store" });
-          if (!response.ok) throw new Error(`餐厅数据加载失败（${response.status}）`);
-          const data = await response.json();
-          if (!Array.isArray(data) || data.length === 0) throw new Error("餐厅数据格式无效");
-          initialRestaurants = data;
+          const [coreResponse, additionsResponse] = await Promise.all([
+            fetch(`restaurants.json?v=${CURRENT_DATASET_VERSION}`, { cache: "no-store" }),
+            fetch(`restaurants-quality-additions.json?v=${CURRENT_DATASET_VERSION}`, { cache: "no-store" }),
+          ]);
+          if (!coreResponse.ok) throw new Error(`基础餐厅数据加载失败（${coreResponse.status}）`);
+          if (!additionsResponse.ok) throw new Error(`优质餐厅数据加载失败（${additionsResponse.status}）`);
+          const [coreData, additionsData] = await Promise.all([coreResponse.json(), additionsResponse.json()]);
+          if (!Array.isArray(coreData) || coreData.length !== 1300) throw new Error("基础餐厅数据格式无效");
+          if (!Array.isArray(additionsData) || additionsData.length === 0) throw new Error("优质餐厅数据格式无效");
+          coreRestaurants = coreData;
+          initialRestaurants = [...coreData, ...additionsData];
           restaurants = readRestaurants();
           render();
           renderReel(buildRollingReel(), false);
@@ -740,22 +750,83 @@
 
       function readRestaurants() {
         try {
-          const storedVersion = localStorage.getItem(RESTAURANTS_VERSION_KEY);
-          if (storedVersion !== CURRENT_DATASET_VERSION) {
+          let changes = readJson(RESTAURANT_CHANGES_KEY, null);
+          if (!isRestaurantChanges(changes)) {
+            changes = migrateLegacyRestaurants();
+            safeSetItem(RESTAURANT_CHANGES_KEY, JSON.stringify(changes));
             localStorage.removeItem(RESTAURANTS_KEY);
-            safeSetItem(RESTAURANTS_VERSION_KEY, CURRENT_DATASET_VERSION);
-            return initialRestaurants;
           }
-          const stored = readJson(RESTAURANTS_KEY, initialRestaurants);
-          if (!Array.isArray(stored)) {
-            localStorage.removeItem(RESTAURANTS_KEY);
-            return initialRestaurants;
-          }
-          return isPlaceholderRestaurantList(stored) ? initialRestaurants : stored;
+          safeSetItem(RESTAURANTS_VERSION_KEY, CURRENT_DATASET_VERSION);
+          return applyRestaurantChanges(initialRestaurants, changes);
         } catch (error) {
           console.warn("读取本地餐厅数据失败，已使用内置餐厅库", error);
           return initialRestaurants;
         }
+      }
+
+      function migrateLegacyRestaurants() {
+        const stored = readJson(RESTAURANTS_KEY, null);
+        if (!Array.isArray(stored) || isPlaceholderRestaurantList(stored)) return emptyRestaurantChanges();
+        const coreMap = new Map(coreRestaurants.map((restaurant) => [restaurant.id, restaurant]));
+        const storedMap = new Map(stored.map((restaurant) => [restaurant.id, restaurant]));
+        const deletedIds = coreRestaurants
+          .filter((restaurant) => !storedMap.has(restaurant.id))
+          .map((restaurant) => restaurant.id);
+        const added = stored.filter((restaurant) => !coreMap.has(restaurant.id));
+        const overrides = {};
+        stored.forEach((restaurant) => {
+          const original = coreMap.get(restaurant.id);
+          if (original && hasEditableChanges(original, restaurant)) overrides[restaurant.id] = pickEditableFields(restaurant);
+        });
+        return { added, overrides, deletedIds };
+      }
+
+      function emptyRestaurantChanges() {
+        return { added: [], overrides: {}, deletedIds: [] };
+      }
+
+      function isRestaurantChanges(value) {
+        return Boolean(value && Array.isArray(value.added) && value.overrides && Array.isArray(value.deletedIds));
+      }
+
+      function applyRestaurantChanges(baseRestaurants, changes) {
+        const deleted = new Set(changes.deletedIds);
+        const base = baseRestaurants
+          .filter((restaurant) => !deleted.has(restaurant.id))
+          .map((restaurant) => changes.overrides[restaurant.id]
+            ? { ...restaurant, ...changes.overrides[restaurant.id] }
+            : restaurant);
+        return [...changes.added, ...base];
+      }
+
+      function buildRestaurantChanges(currentRestaurants) {
+        const initialMap = new Map(initialRestaurants.map((restaurant) => [restaurant.id, restaurant]));
+        const currentMap = new Map(currentRestaurants.map((restaurant) => [restaurant.id, restaurant]));
+        const deletedIds = initialRestaurants
+          .filter((restaurant) => !currentMap.has(restaurant.id))
+          .map((restaurant) => restaurant.id);
+        const added = currentRestaurants.filter((restaurant) => !initialMap.has(restaurant.id));
+        const overrides = {};
+        currentRestaurants.forEach((restaurant) => {
+          const original = initialMap.get(restaurant.id);
+          if (original && hasEditableChanges(original, restaurant)) overrides[restaurant.id] = pickEditableFields(restaurant);
+        });
+        return { added, overrides, deletedIds };
+      }
+
+      function hasEditableChanges(original, current) {
+        return ["name", "address", "note", "category"].some((field) =>
+          String(original[field] ?? "") !== String(current[field] ?? "")
+        );
+      }
+
+      function pickEditableFields(restaurant) {
+        return {
+          name: restaurant.name || "",
+          address: restaurant.address || "",
+          note: restaurant.note || "",
+          category: restaurant.category || inferCategory(restaurant),
+        };
       }
 
       function isPlaceholderRestaurantList(items) {
@@ -763,8 +834,9 @@
       }
 
       function saveAll() {
-        if (restaurantsDirty && safeSetItem(RESTAURANTS_KEY, JSON.stringify(restaurants))) {
+        if (restaurantsDirty && safeSetItem(RESTAURANT_CHANGES_KEY, JSON.stringify(buildRestaurantChanges(restaurants)))) {
           safeSetItem(RESTAURANTS_VERSION_KEY, CURRENT_DATASET_VERSION);
+          localStorage.removeItem(RESTAURANTS_KEY);
           restaurantsDirty = false;
         }
         if (checkInsDirty && safeSetItem(CHECK_INS_KEY, JSON.stringify(checkIns))) checkInsDirty = false;
@@ -1122,6 +1194,11 @@
         elements.historyTab.classList.toggle("is-active", view === "history");
         elements.manageTab.classList.toggle("is-active", view === "manage");
         elements.favoritesTab.classList.toggle("is-active", view === "favorites");
+        if (view === "manage") {
+          manageRenderLimit = MANAGE_PAGE_SIZE;
+          renderRestaurantForm();
+          renderRestaurants();
+        }
         if (view === "home" && !isRolling && !selectedRestaurant) {
           renderReel(buildRollingReel(), false);
         }
@@ -1142,8 +1219,10 @@
         renderResult();
         renderHistory();
         renderFavorites();
-        renderRestaurantForm();
-        renderRestaurants();
+        if (!elements.manageView.hidden) {
+          renderRestaurantForm();
+          renderRestaurants();
+        }
         saveAll();
       }
 
@@ -1733,7 +1812,8 @@
           elements.restaurantList.innerHTML = '<div class="empty-state">当前没有可抽取的餐厅，请先添加餐厅。</div>';
           return;
         }
-        elements.restaurantList.innerHTML = restaurants.map((restaurant) => `
+        const visibleRestaurants = restaurants.slice(0, manageRenderLimit);
+        elements.restaurantList.innerHTML = visibleRestaurants.map((restaurant) => `
           <article class="list-card ${editingRestaurantId === restaurant.id ? "is-editing" : ""}">
             <div>
               <h3>${escapeHtml(restaurant.name)}</h3>
@@ -1750,7 +1830,11 @@
               <button class="danger-action" data-action="delete" data-id="${restaurant.id}" type="button">删除</button>
             </div>
           </article>
-        `).join("");
+        `).join("") + (visibleRestaurants.length < restaurants.length ? `
+          <button class="secondary-action" data-action="load-more-restaurants" type="button">
+            加载更多（已显示 ${visibleRestaurants.length} / ${restaurants.length}）
+          </button>
+        ` : "");
       }
 
       function submitRestaurant(event) {
@@ -1790,6 +1874,11 @@
       function handleRestaurantListClick(event) {
         const button = event.target.closest("button");
         if (!button) return;
+        if (button.dataset.action === "load-more-restaurants") {
+          manageRenderLimit += MANAGE_PAGE_SIZE;
+          renderRestaurants();
+          return;
+        }
         const restaurant = restaurants.find((item) => item.id === button.dataset.id);
         if (!restaurant) return;
         if (button.dataset.action === "open-map") {

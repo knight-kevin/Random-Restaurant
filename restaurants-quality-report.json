@@ -1,0 +1,67 @@
+{
+  "generatedAt": "2026-06-25T18:17:31.694Z",
+  "coreCount": 1300,
+  "candidateCount": 5655,
+  "eligibleBeforeBrandLimits": 3441,
+  "selectedCount": 2000,
+  "combinedCount": 3300,
+  "targetMax": 2000,
+  "minimumRating": 4,
+  "selectedMinimumRating": 4.4,
+  "selectedAverageRating": 4.525,
+  "ratingDistribution": {
+    "4.4": 324,
+    "4.5": 931,
+    "4.6": 682,
+    "4.7": 55,
+    "4.8": 8
+  },
+  "districtDistribution": {
+    "滨江区": 215,
+    "淳安县": 13,
+    "富阳区": 104,
+    "拱墅区": 263,
+    "建德市": 15,
+    "临安区": 55,
+    "临平区": 137,
+    "钱塘区": 175,
+    "上城区": 237,
+    "桐庐县": 65,
+    "西湖区": 250,
+    "萧山区": 251,
+    "余杭区": 220
+  },
+  "categoryDistribution": {
+    "asian": 102,
+    "bbq": 177,
+    "buffet": 139,
+    "dessert": 129,
+    "hotpot": 183,
+    "local": 771,
+    "noodle": 229,
+    "seafood": 89,
+    "snack": 39,
+    "western": 142
+  },
+  "dataCompleteness": {
+    "withBusinessArea": 1642,
+    "withAverageCost": 1990,
+    "withTags": 1777,
+    "withPhoto": 1998,
+    "verifiedLocations": 2000
+  },
+  "rejected": {
+    "missingNameOrAddress": 6,
+    "notDiningPoi": 234,
+    "closedOrUnavailable": 13,
+    "nonRestaurantName": 6,
+    "invalidLocation": 0,
+    "belowRating": 730,
+    "missingCategory": 0,
+    "alreadyInCoreById": 1221,
+    "alreadyInCoreComposite": 0,
+    "duplicateCandidate": 4,
+    "brandGlobalLimit": 121,
+    "brandDistrictLimit": 6
+  }
+}

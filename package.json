@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "data:quality:fetch": "node scripts/fetch-amap-quality-candidates.cjs",
+    "data:quality": "node scripts/build-quality-additions.cjs",
+    "data:validate": "node scripts/validate-expanded-restaurants.cjs"
   },
   "dependencies": {
     "react": "latest",
