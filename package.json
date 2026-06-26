@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "data:quality:fetch": "node scripts/fetch-amap-quality-candidates.cjs",
     "data:quality": "node scripts/build-quality-additions.cjs",
+    "data:index": "node scripts/build-restaurant-index.cjs",
     "data:validate": "node scripts/validate-expanded-restaurants.cjs"
   },
   "dependencies": {

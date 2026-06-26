@@ -53,16 +53,20 @@ npm.cmd run dev
 
 - `restaurants.json`：原有 1300 家基础餐厅
 - `restaurants-quality-additions.json`：2000 家好评优先增量餐厅，评分最低 4.4
+- `restaurants-index.json`：首屏加载用轻量索引，优先保证手机端快速进入
+- `restaurants-details.json`：完整餐厅详情，抽中结果、地图、管理页按需加载
 - `restaurants-quality-report.json`：新增餐厅评分、区域、分类、完整度和淘汰原因报告
 - `scripts/categories.js`：餐厅分类与筛选规则
 - `scripts/location-fixed.js`：定位、距离计算和人均解析
 - `scripts/build-quality-additions.cjs`：从本地高德 POI 缓存筛选好评增量餐厅
+- `scripts/build-restaurant-index.cjs`：由完整餐厅数据生成轻量索引与详情文件
 - `scripts/validate-expanded-restaurants.cjs`：合并数据的评分、坐标、分类和重复校验
 
 运行数据校验：
 
 ```bash
 node scripts/validate-expanded-restaurants.cjs
+node scripts/build-restaurant-index.cjs
 ```
 
 重新生成好评增量库时，默认评分门槛为 4.0、最多选取 2000 家：
@@ -81,6 +85,9 @@ node scripts/build-quality-additions.cjs
 - `index.html`
 - `modern.html`
 - `restaurants.json`
+- `restaurants-index.json`
+- `restaurants-details.json`
+- `restaurants-quality-additions.json`
 - `manifest.webmanifest`
 - `scripts/`
 

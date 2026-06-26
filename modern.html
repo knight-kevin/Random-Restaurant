@@ -164,11 +164,11 @@
         .random-button { transition: none; }
       }
 
-      .random-controls { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; margin-top: 22px; }
-      .count-pill { display: grid; min-width: 98px; min-height: 98px; place-items: center; padding: 12px; border-radius: 50%; background: #fff2f5; color: #f04462; box-shadow: inset 0 0 0 1px rgba(240,68,98,.12), 0 14px 30px rgba(240,68,98,.12); }
-      .count-pill strong { font-size: 2rem; line-height: 1; }
+      .random-controls { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: center; margin-top: 14px; }
+      .count-pill { display: grid; min-width: 86px; min-height: 62px; place-items: center; padding: 9px 12px; border-radius: 18px; background: #fff2f5; color: #f04462; box-shadow: inset 0 0 0 1px rgba(240,68,98,.12), 0 12px 24px rgba(240,68,98,.1); }
+      .count-pill strong { font-size: 1.72rem; line-height: 1; }
       .count-pill span { font-size: .82rem; font-weight: 800; }
-      .random-button { min-height: clamp(108px, 15vw, 160px); border-radius: 999px; background: radial-gradient(circle at 34% 18%, rgba(255,255,255,.38), transparent 30%), linear-gradient(135deg, #ff5b6e, #ff8a3d 50%, #8b5cf6); color: #fff; font-size: clamp(1.45rem, 4vw, 2.65rem); font-weight: 900; box-shadow: 0 22px 44px rgba(255,91,110,.28), inset 0 -10px 24px rgba(88,30,110,.18); transition: transform .18s ease, filter .18s ease; }
+      .random-button { min-height: clamp(64px, 10vw, 110px); border-radius: 999px; background: radial-gradient(circle at 34% 18%, rgba(255,255,255,.38), transparent 30%), linear-gradient(135deg, #ff5b6e, #ff8a3d 50%, #8b5cf6); color: #fff; font-size: clamp(1.2rem, 3vw, 2.15rem); font-weight: 900; box-shadow: 0 18px 36px rgba(255,91,110,.24), inset 0 -10px 24px rgba(88,30,110,.18); transition: transform .18s ease, filter .18s ease; }
       .random-button:hover { transform: translateY(-2px) scale(1.01); }
       .random-button:active { transform: translateY(1px) scale(.99); }
 
@@ -189,6 +189,18 @@
       .danger-action { border: 1px solid #efc4ba; background: #fff5f2; color: #9b341c; }
       .map-action { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; background: #fff4d4; color: #8a421f; border: 1px solid rgba(138,66,31,.16); }
       .result-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+      .result-modal { position: fixed; z-index: 68; inset: 0; display: grid; align-items: center; justify-items: center; padding: max(18px, env(safe-area-inset-top)) 16px max(18px, env(safe-area-inset-bottom)); background: rgba(18,23,31,.42); backdrop-filter: blur(5px); }
+      .result-modal[hidden] { display: none; }
+      .result-modal-sheet { display: grid; width: min(560px, 100%); max-height: min(82vh, 720px); overflow: hidden; border: 1px solid rgba(255,142,110,.22); border-radius: 18px; background: linear-gradient(145deg, rgba(255,255,255,.98), rgba(255,247,241,.98)); box-shadow: 0 30px 90px rgba(20,24,30,.26); }
+      .result-modal-content { min-height: 0; overflow: auto; padding: 22px 20px 14px; -webkit-overflow-scrolling: touch; }
+      .result-modal-heading { display: flex; align-items: start; justify-content: space-between; gap: 14px; margin-bottom: 14px; }
+      .result-modal-heading h3 { margin-top: 4px; font-size: clamp(1.7rem, 7vw, 2.5rem); line-height: 1.1; overflow-wrap: anywhere; }
+      .result-modal-close { display: grid; flex: 0 0 auto; width: 38px; height: 38px; place-items: center; border-radius: 50%; background: #f5f2ef; color: #4a5056; font-size: 1.45rem; line-height: 1; }
+      .result-modal dl { display: grid; gap: 12px; margin: 0; }
+      .result-modal dt { color: #7d5544; font-size: .82rem; font-weight: 900; }
+      .result-modal dd { margin: 4px 0 0; color: #25313a; line-height: 1.58; overflow-wrap: anywhere; }
+      .detail-loading { margin: 12px 0 0; padding: 10px 12px; border-radius: 10px; background: #fff7e8; color: #8a421f; font-size: .9rem; font-weight: 800; }
+      .result-modal-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px 20px calc(14px + env(safe-area-inset-bottom)); border-top: 1px solid rgba(138,66,31,.12); background: rgba(255,255,255,.9); }
 
       .restaurant-form { display: grid; gap: 14px; padding-bottom: 18px; border-bottom: 1px solid #e4e8df; }
       .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
@@ -234,7 +246,7 @@
       .map-provider[data-map-provider="baidu"]::before { background: #356ff6; }
       .map-provider[data-map-provider="tencent"]::before { background: #00a870; }
       .map-provider[data-map-provider="apple"]::before { background: #202124; }
-      body.is-map-picker-open { overflow: hidden; }
+      body.is-map-picker-open, body.is-result-modal-open { overflow: hidden; }
       .history-list .list-card { grid-template-columns: minmax(0, 1fr); align-items: start; }
       .history-list .list-card > div { min-width: 0; }
       .history-list .row-actions { justify-content: flex-end; }
@@ -259,7 +271,7 @@
         .top-actions { width: 100%; }
         .nav-action { flex: 1 1 25%; min-width: 0; padding-inline: 8px; }
         .home-grid { display: grid; }
-        .reel-window { height: 390px; }
+        .reel-window { height: 360px; }
         .reel-card { width: 112px; height: 140px; }
         .reel-card.is-final { width: min(238px, calc(100vw - 104px)); height: 270px; }
         .food-photo { height: 86px; }
@@ -269,9 +281,17 @@
       @media (max-width: 560px) {
         .hero-stage, .panel { padding: 16px; }
         .section-heading { display: grid; }
-        .random-controls { grid-template-columns: 1fr; }
-        .count-pill { width: 92px; height: 92px; justify-self: center; }
-        .random-button { min-height: 128px; }
+        .random-controls { grid-template-columns: 82px 1fr; gap: 9px; }
+        .count-pill { min-width: 82px; min-height: 56px; padding: 8px; justify-self: stretch; border-radius: 16px; }
+        .count-pill strong { font-size: 1.38rem; }
+        .count-pill span { font-size: .68rem; }
+        .random-button { min-height: 58px; font-size: 1.12rem; }
+        .reel-shell { margin-top: 16px; padding: 12px; }
+        .reel-window { height: min(340px, 86vw); }
+        .result-modal { align-items: end; padding-inline: 0; padding-bottom: 0; }
+        .result-modal-sheet { width: 100%; max-height: 78vh; border-radius: 18px 18px 0 0; }
+        .result-modal-content { padding: 18px 18px 12px; }
+        .result-modal-actions { grid-template-columns: 1fr 1fr; padding-inline: 18px; }
         .list-card { grid-template-columns: 1fr; }
         .rating-grid, .review-score-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .form-actions, .row-actions { display: grid; grid-template-columns: 1fr 1fr; }
@@ -332,15 +352,15 @@
             </div>
             <div class="active-filter-summary" id="filter-summary">当前可抽 0 家</div>
           </div>
+          <div class="random-controls">
+            <div class="count-pill"><strong id="restaurant-count">0</strong><span>家待打卡</span></div>
+            <button class="random-button" id="pick-button" type="button">随机抽一家餐厅</button>
+          </div>
           <div class="reel-shell">
             <div class="reel-window">
               <div id="reel-area" class="reel-track"></div>
               <div class="reel-focus" aria-hidden="true"></div>
             </div>
-          </div>
-          <div class="random-controls">
-            <div class="count-pill"><strong id="restaurant-count">0</strong><span>家待打卡</span></div>
-            <button class="random-button" id="pick-button" type="button">随机抽一家餐厅</button>
           </div>
           <div id="result-area" class="quiet-hint">还没有抽取餐厅。</div>
         </section>
@@ -409,6 +429,17 @@
         <div class="map-picker-options" id="map-picker-options"></div>
       </div>
     </div>
+    <div class="result-modal" id="result-modal" role="dialog" aria-modal="true" aria-label="抽中餐厅详情" hidden>
+      <div class="result-modal-sheet">
+        <div class="result-modal-content" id="result-modal-content"></div>
+        <div class="result-modal-actions">
+          <button class="map-action" id="result-map-button" type="button">打开地图</button>
+          <button class="success-action" id="result-complete-button" type="button">完成打卡</button>
+          <button class="ghost-action" id="result-repick-button" type="button">再抽一次</button>
+          <button class="ghost-action" id="result-close-button" type="button">关闭</button>
+        </div>
+      </div>
+    </div>
     <div class="toast" id="toast" hidden></div>
 
     <script type="module">
@@ -420,18 +451,18 @@
         inferRestaurantCategory,
         inferSubcategory,
         matchesFoodSelection,
-      } from "./scripts/categories.js?v=20260626-v29";
+      } from "./scripts/categories.js?v=20260626-v30";
       import {
         formatDistance,
         getRestaurantDistance,
         parseAverageCost,
         requestCurrentPosition,
-      } from "./scripts/location-fixed.js?v=20260626-v29";
+      } from "./scripts/location-fixed.js?v=20260626-v30";
 
       const RESTAURANTS_KEY = "random-restaurant-checkin:restaurants";
       const RESTAURANTS_VERSION_KEY = "random-restaurant-checkin:restaurants-version";
       const RESTAURANT_CHANGES_KEY = "random-restaurant-checkin:restaurant-changes-v1";
-      const CURRENT_DATASET_VERSION = "amap-hangzhou-3300-2026-06-26-v29";
+      const CURRENT_DATASET_VERSION = "amap-hangzhou-3300-2026-06-26-v30";
       const CHECK_INS_KEY = "random-restaurant-checkin:check-ins";
       const FAVORITES_KEY = "random-restaurant-checkin:favorites";
       const MANAGE_PAGE_SIZE = 200;
@@ -470,6 +501,9 @@
       let restaurants = [];
       let checkIns = readJson(CHECK_INS_KEY, []);
       let favorites = readJson(FAVORITES_KEY, []);
+      let restaurantDetailsMap = null;
+      let restaurantDetailsPromise = null;
+      let restaurantDetailsFailed = false;
       let restaurantsDirty = false;
       let checkInsDirty = false;
       let favoritesDirty = false;
@@ -540,6 +574,12 @@
         reelShell: document.querySelector(".reel-shell"),
         reelArea: document.querySelector("#reel-area"),
         resultArea: document.querySelector("#result-area"),
+        resultModal: document.querySelector("#result-modal"),
+        resultModalContent: document.querySelector("#result-modal-content"),
+        resultMapButton: document.querySelector("#result-map-button"),
+        resultCompleteButton: document.querySelector("#result-complete-button"),
+        resultRepickButton: document.querySelector("#result-repick-button"),
+        resultCloseButton: document.querySelector("#result-close-button"),
         clearHistoryButton: document.querySelector("#clear-history-button"),
         historyList: document.querySelector("#history-list"),
         form: document.querySelector("#restaurant-form"),
@@ -558,20 +598,16 @@
       async function bootstrap() {
         bindEvents();
         try {
-          const [coreResponse, additionsResponse] = await Promise.all([
-            fetch(`restaurants.json?v=${CURRENT_DATASET_VERSION}`, { cache: "no-store" }),
-            fetch(`restaurants-quality-additions.json?v=${CURRENT_DATASET_VERSION}`, { cache: "no-store" }),
-          ]);
-          if (!coreResponse.ok) throw new Error(`基础餐厅数据加载失败（${coreResponse.status}）`);
-          if (!additionsResponse.ok) throw new Error(`优质餐厅数据加载失败（${additionsResponse.status}）`);
-          const [coreData, additionsData] = await Promise.all([coreResponse.json(), additionsResponse.json()]);
-          if (!Array.isArray(coreData) || coreData.length !== 1300) throw new Error("基础餐厅数据格式无效");
-          if (!Array.isArray(additionsData) || additionsData.length === 0) throw new Error("优质餐厅数据格式无效");
-          coreRestaurants = coreData;
-          initialRestaurants = [...coreData, ...additionsData];
+          const indexResponse = await fetch(`restaurants-index.json?v=${CURRENT_DATASET_VERSION}`);
+          if (!indexResponse.ok) throw new Error(`餐厅索引加载失败（${indexResponse.status}）`);
+          const indexData = await indexResponse.json();
+          if (!Array.isArray(indexData) || indexData.length === 0) throw new Error("餐厅索引数据格式无效");
+          coreRestaurants = indexData;
+          initialRestaurants = indexData;
           restaurants = readRestaurants();
           render();
           renderReel(buildRollingReel(), false);
+          warmRestaurantDetails();
         } catch (error) {
           restaurants = [];
           render();
@@ -580,6 +616,55 @@
           console.error("餐厅数据初始化失败", error);
         } finally {
           sphereFrame = requestAnimationFrame(animateSphere);
+        }
+      }
+
+      function warmRestaurantDetails() {
+        const run = () => loadRestaurantDetails().catch(() => {});
+        if ("requestIdleCallback" in window) window.requestIdleCallback(run, { timeout: 4500 });
+        else window.setTimeout(run, 900);
+      }
+
+      async function loadRestaurantDetails() {
+        if (restaurantDetailsMap) return restaurantDetailsMap;
+        if (restaurantDetailsPromise) return restaurantDetailsPromise;
+        restaurantDetailsPromise = fetch(`restaurants-details.json?v=${CURRENT_DATASET_VERSION}`)
+          .then((response) => {
+            if (!response.ok) throw new Error(`餐厅详情加载失败（${response.status}）`);
+            return response.json();
+          })
+          .then((data) => {
+            if (!data || typeof data !== "object" || Array.isArray(data)) throw new Error("餐厅详情数据格式无效");
+            restaurantDetailsMap = data;
+            restaurantDetailsFailed = false;
+            return restaurantDetailsMap;
+          })
+          .catch((error) => {
+            restaurantDetailsFailed = true;
+            restaurantDetailsPromise = null;
+            console.warn("餐厅详情数据加载失败", error);
+            throw error;
+          });
+        return restaurantDetailsPromise;
+      }
+
+      function mergeRestaurantDetail(restaurant, detail) {
+        return detail ? { ...detail, ...restaurant } : restaurant;
+      }
+
+      function hydrateRestaurantSync(restaurant) {
+        if (!restaurant) return restaurant;
+        return mergeRestaurantDetail(restaurant, restaurantDetailsMap?.[restaurant.id]);
+      }
+
+      async function hydrateRestaurant(restaurant) {
+        if (!restaurant) return restaurant;
+        if (restaurantDetailsMap) return hydrateRestaurantSync(restaurant);
+        try {
+          const details = await loadRestaurantDetails();
+          return mergeRestaurantDetail(restaurant, details[restaurant.id]);
+        } catch {
+          return restaurant;
         }
       }
 
@@ -609,9 +694,22 @@
         });
         elements.mapPickerClose.addEventListener("click", closeMapPicker);
         elements.mapPickerOptions.addEventListener("click", handleMapProviderClick);
+        elements.resultModal.addEventListener("click", (event) => {
+          if (event.target === elements.resultModal) closeResultModal();
+        });
+        elements.resultCloseButton.addEventListener("click", closeResultModal);
+        elements.resultMapButton.addEventListener("click", () => {
+          if (selectedRestaurant) openMapPicker(hydrateRestaurantSync(selectedRestaurant));
+        });
+        elements.resultCompleteButton.addEventListener("click", completeCheckIn);
+        elements.resultRepickButton.addEventListener("click", () => {
+          closeResultModal();
+          pickRestaurant();
+        });
         document.addEventListener("keydown", (event) => {
           if (event.key === "Escape" && !elements.imagePreview.hidden) closeImagePreview();
           if (event.key === "Escape" && !elements.mapPicker.hidden) closeMapPicker();
+          if (event.key === "Escape" && !elements.resultModal.hidden) closeResultModal();
         });
         elements.filterResetButton.addEventListener("click", resetActiveFilterPanel);
         elements.filterConfirmButton.addEventListener("click", closeFilterPanel);
@@ -1186,6 +1284,7 @@
       }
 
       function switchView(view) {
+        if (view !== "home") closeResultModal();
         elements.homeView.hidden = view !== "home";
         elements.historyView.hidden = view !== "history";
         elements.manageView.hidden = view !== "manage";
@@ -1195,6 +1294,9 @@
         elements.manageTab.classList.toggle("is-active", view === "manage");
         elements.favoritesTab.classList.toggle("is-active", view === "favorites");
         if (view === "manage") {
+          loadRestaurantDetails().then(() => {
+            if (!elements.manageView.hidden) renderRestaurants();
+          }).catch(() => {});
           manageRenderLimit = MANAGE_PAGE_SIZE;
           renderRestaurantForm();
           renderRestaurants();
@@ -1314,30 +1416,59 @@
 
       function renderResult() {
         if (selectedRestaurant) {
-          elements.resultArea.className = "result-card";
-          elements.resultArea.innerHTML = `
-            <div><p class="eyebrow">锁定目的地</p><h3>${escapeHtml(selectedRestaurant.name)}</h3></div>
-            <dl>
-              <div><dt>位置</dt><dd>${escapeHtml(formatLocation(selectedRestaurant.address, selectedRestaurant))}</dd></div>
-              <div><dt>分类</dt><dd>${escapeHtml(getCategoryLabel(selectedRestaurant.category || inferCategory(selectedRestaurant)))}</dd></div>
-              ${selectedRestaurant.rating ? `<div><dt>高德评分</dt><dd>${escapeHtml(selectedRestaurant.rating)} 分</dd></div>` : ""}
-              ${getDistanceForRestaurant(selectedRestaurant) !== null ? `<div><dt>距离</dt><dd>距你约 ${escapeHtml(formatDistance(getDistanceForRestaurant(selectedRestaurant)))}</dd></div>` : ""}
-              ${parseAverageCost(selectedRestaurant) ? `<div><dt>人均</dt><dd>约 ¥${escapeHtml(parseAverageCost(selectedRestaurant))}</dd></div>` : ""}
-              ${selectedRestaurant.businessArea ? `<div><dt>商圈</dt><dd>${escapeHtml(selectedRestaurant.businessArea)}</dd></div>` : ""}
-              ${selectedRestaurant.source ? `<div><dt>来源</dt><dd>${escapeHtml(selectedRestaurant.source)}${selectedRestaurant.rank ? ` · 第 ${escapeHtml(String(selectedRestaurant.rank))} 名` : ""}</dd></div>` : ""}
-              <div><dt>推荐菜</dt><dd>${escapeHtml(getRecommendationText(selectedRestaurant.note))}</dd></div>
-            </dl>
-            <div class="result-actions">
-              <button class="map-action" id="map-button" type="button">打开地图</button>
-              <button class="success-action" id="complete-button" type="button">完成打卡</button>
-            </div>
-          `;
-          document.querySelector("#complete-button").addEventListener("click", completeCheckIn);
-          document.querySelector("#map-button").addEventListener("click", () => openMapPicker(selectedRestaurant));
+          elements.resultArea.className = "quiet-hint";
+          elements.resultArea.textContent = "已锁定餐厅，详情可在弹窗中查看。";
+          renderResultModal();
           return;
         }
+        closeResultModal();
         elements.resultArea.className = "quiet-hint";
         elements.resultArea.textContent = isRolling ? "餐厅正在飞速路过，马上揭晓。" : "还没有抽取餐厅。";
+      }
+
+      function renderResultModal() {
+        if (!selectedRestaurant) return;
+        const restaurant = hydrateRestaurantSync(selectedRestaurant);
+        const distance = getDistanceForRestaurant(restaurant);
+        const averageCost = parseAverageCost(restaurant);
+        elements.resultModalContent.innerHTML = `
+          <div class="result-modal-heading">
+            <div><p class="eyebrow">锁定目的地</p><h3>${escapeHtml(restaurant.name)}</h3></div>
+            <button class="result-modal-close" id="result-modal-x" type="button" aria-label="关闭结果">×</button>
+          </div>
+          <dl>
+            <div><dt>位置</dt><dd>${escapeHtml(formatLocation(restaurant.address, restaurant))}</dd></div>
+            <div><dt>分类</dt><dd>${escapeHtml(getCategoryLabel(restaurant.category || inferCategory(restaurant)))}</dd></div>
+            ${restaurant.rating ? `<div><dt>高德评分</dt><dd>${escapeHtml(restaurant.rating)} 分</dd></div>` : ""}
+            ${distance !== null ? `<div><dt>距离</dt><dd>距你约 ${escapeHtml(formatDistance(distance))}</dd></div>` : ""}
+            ${averageCost ? `<div><dt>人均</dt><dd>约 ¥${escapeHtml(averageCost)}</dd></div>` : ""}
+            ${restaurant.businessArea ? `<div><dt>商圈</dt><dd>${escapeHtml(restaurant.businessArea)}</dd></div>` : ""}
+            ${restaurant.source ? `<div><dt>来源</dt><dd>${escapeHtml(restaurant.source)}${restaurant.rank ? ` · 第 ${escapeHtml(String(restaurant.rank))} 名` : ""}</dd></div>` : ""}
+            <div><dt>推荐菜</dt><dd>${escapeHtml(getRecommendationText(restaurant.note))}</dd></div>
+          </dl>
+          ${!restaurantDetailsMap && !restaurantDetailsFailed ? '<div class="detail-loading">正在加载更完整的餐厅信息...</div>' : ""}
+          ${restaurantDetailsFailed ? '<div class="detail-loading">部分详情暂不可用，可先打开地图或完成打卡。</div>' : ""}
+        `;
+        const closeButton = elements.resultModalContent.querySelector("#result-modal-x");
+        closeButton?.addEventListener("click", closeResultModal);
+      }
+
+      function openResultModal() {
+        if (!selectedRestaurant) return;
+        renderResultModal();
+        elements.resultModal.hidden = false;
+        document.body.classList.add("is-result-modal-open");
+        hydrateRestaurant(selectedRestaurant).then((hydrated) => {
+          if (!selectedRestaurant || selectedRestaurant.id !== hydrated.id) return;
+          selectedRestaurant = hydrated;
+          renderResultModal();
+        });
+      }
+
+      function closeResultModal() {
+        if (elements.resultModal.hidden) return;
+        elements.resultModal.hidden = true;
+        document.body.classList.remove("is-result-modal-open");
       }
 
       function getRecommendationText(note) {
@@ -1354,6 +1485,7 @@
 
       function pickRestaurant() {
         if (isRolling) return;
+        closeResultModal();
         if (restaurants.length === 0) {
           alert("当前没有可抽取的餐厅，请先添加餐厅");
           return;
@@ -1383,6 +1515,7 @@
         showMessage("已锁定本次打卡餐厅。");
         render();
         renderReel(buildFinalReel(selectedRestaurant), false, true);
+        openResultModal();
       }
 
       function getSphereStyle(index, total, revealed = false) {
@@ -1563,8 +1696,9 @@
         return Object.prototype.hasOwnProperty.call(CATEGORY_LABELS, category) ? category : "local";
       }
 
-      function completeCheckIn() {
+      async function completeCheckIn() {
         if (!selectedRestaurant) return;
+        selectedRestaurant = await hydrateRestaurant(selectedRestaurant);
         const shouldRemove = confirm("打卡完成！是否将该餐厅从待打卡库中移除？");
         const newCheckIn = {
           id: createId("check-in"),
@@ -1589,6 +1723,7 @@
           restaurantsDirty = true;
         }
         selectedRestaurant = null;
+        closeResultModal();
         editingReviewId = newCheckIn.id;
         render();
         renderReel(buildRollingReel(), false);
@@ -1812,7 +1947,7 @@
           elements.restaurantList.innerHTML = '<div class="empty-state">当前没有可抽取的餐厅，请先添加餐厅。</div>';
           return;
         }
-        const visibleRestaurants = restaurants.slice(0, manageRenderLimit);
+        const visibleRestaurants = restaurants.slice(0, manageRenderLimit).map(hydrateRestaurantSync);
         elements.restaurantList.innerHTML = visibleRestaurants.map((restaurant) => `
           <article class="list-card ${editingRestaurantId === restaurant.id ? "is-editing" : ""}">
             <div>
@@ -1879,7 +2014,7 @@
           renderRestaurants();
           return;
         }
-        const restaurant = restaurants.find((item) => item.id === button.dataset.id);
+        const restaurant = hydrateRestaurantSync(restaurants.find((item) => item.id === button.dataset.id));
         if (!restaurant) return;
         if (button.dataset.action === "open-map") {
           openMapPicker(restaurant);
