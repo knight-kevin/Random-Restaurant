@@ -191,16 +191,19 @@
       .result-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
       .result-modal { position: fixed; z-index: 68; inset: 0; display: grid; align-items: center; justify-items: center; padding: max(18px, env(safe-area-inset-top)) 16px max(18px, env(safe-area-inset-bottom)); background: rgba(18,23,31,.42); backdrop-filter: blur(5px); }
       .result-modal[hidden] { display: none; }
-      .result-modal-sheet { display: grid; width: min(560px, 100%); max-height: min(82vh, 720px); overflow: hidden; border: 1px solid rgba(255,142,110,.22); border-radius: 18px; background: linear-gradient(145deg, rgba(255,255,255,.98), rgba(255,247,241,.98)); box-shadow: 0 30px 90px rgba(20,24,30,.26); }
-      .result-modal-content { min-height: 0; overflow: auto; padding: 22px 20px 14px; -webkit-overflow-scrolling: touch; }
-      .result-modal-heading { display: flex; align-items: start; justify-content: space-between; gap: 14px; margin-bottom: 14px; }
-      .result-modal-heading h3 { margin-top: 4px; font-size: clamp(1.7rem, 7vw, 2.5rem); line-height: 1.1; overflow-wrap: anywhere; }
+      .result-modal-sheet { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; width: min(560px, 100%); max-height: min(82dvh, 720px); overflow: hidden; border: 1px solid rgba(255,142,110,.22); border-radius: 18px; background: linear-gradient(145deg, rgba(255,255,255,.98), rgba(255,247,241,.98)); box-shadow: 0 30px 90px rgba(20,24,30,.26); }
+      .result-modal-content { min-height: 0; overflow-y: auto; padding: 0 20px 16px; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+      .result-modal-heading { display: flex; align-items: start; justify-content: space-between; gap: 14px; padding: 22px 20px 12px; }
+      .result-modal-heading h3 { margin-top: 4px; font-size: clamp(1.55rem, 6vw, 2.25rem); line-height: 1.1; overflow-wrap: anywhere; }
       .result-modal-close { display: grid; flex: 0 0 auto; width: 38px; height: 38px; place-items: center; border-radius: 50%; background: #f5f2ef; color: #4a5056; font-size: 1.45rem; line-height: 1; }
       .result-modal dl { display: grid; gap: 12px; margin: 0; }
       .result-modal dt { color: #7d5544; font-size: .82rem; font-weight: 900; }
       .result-modal dd { margin: 4px 0 0; color: #25313a; line-height: 1.58; overflow-wrap: anywhere; }
+      .result-note-text { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 5; }
+      .result-note-text.is-expanded { display: block; overflow: visible; -webkit-line-clamp: unset; }
+      .result-note-toggle { margin-top: 7px; padding: 4px 0; background: transparent; color: #ff5b37; font-size: .86rem; font-weight: 900; }
       .detail-loading { margin: 12px 0 0; padding: 10px 12px; border-radius: 10px; background: #fff7e8; color: #8a421f; font-size: .9rem; font-weight: 800; }
-      .result-modal-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px 20px calc(14px + env(safe-area-inset-bottom)); border-top: 1px solid rgba(138,66,31,.12); background: rgba(255,255,255,.9); }
+      .result-modal-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px 20px calc(14px + env(safe-area-inset-bottom)); border-top: 1px solid rgba(138,66,31,.12); background: rgba(255,255,255,.96); box-shadow: 0 -10px 24px rgba(31,41,51,.06); }
 
       .restaurant-form { display: grid; gap: 14px; padding-bottom: 18px; border-bottom: 1px solid #e4e8df; }
       .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
@@ -289,9 +292,12 @@
         .reel-shell { margin-top: 16px; padding: 12px; }
         .reel-window { height: min(340px, 86vw); }
         .result-modal { align-items: end; padding-inline: 0; padding-bottom: 0; }
-        .result-modal-sheet { width: 100%; max-height: 78vh; border-radius: 18px 18px 0 0; }
-        .result-modal-content { padding: 18px 18px 12px; }
-        .result-modal-actions { grid-template-columns: 1fr 1fr; padding-inline: 18px; }
+        .result-modal-sheet { width: 100%; height: min(82dvh, calc(100dvh - env(safe-area-inset-top) - 8px)); max-height: none; border-radius: 18px 18px 0 0; }
+        .result-modal-heading { padding: 18px 18px 10px; }
+        .result-modal-heading h3 { font-size: clamp(1.45rem, 7vw, 2rem); }
+        .result-modal-content { padding: 0 18px 12px; }
+        .result-modal-actions { grid-template-columns: 1fr 1fr; gap: 8px; padding: 10px 18px calc(12px + env(safe-area-inset-bottom)); }
+        .result-modal-actions button { min-height: 40px; padding: 8px 10px; font-size: .9rem; }
         .list-card { grid-template-columns: 1fr; }
         .rating-grid, .review-score-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .form-actions, .row-actions { display: grid; grid-template-columns: 1fr 1fr; }
@@ -431,6 +437,7 @@
     </div>
     <div class="result-modal" id="result-modal" role="dialog" aria-modal="true" aria-label="抽中餐厅详情" hidden>
       <div class="result-modal-sheet">
+        <div class="result-modal-heading" id="result-modal-heading"></div>
         <div class="result-modal-content" id="result-modal-content"></div>
         <div class="result-modal-actions">
           <button class="map-action" id="result-map-button" type="button">打开地图</button>
@@ -451,18 +458,18 @@
         inferRestaurantCategory,
         inferSubcategory,
         matchesFoodSelection,
-      } from "./scripts/categories.js?v=20260626-v30";
+      } from "./scripts/categories.js?v=20260626-v31";
       import {
         formatDistance,
         getRestaurantDistance,
         parseAverageCost,
         requestCurrentPosition,
-      } from "./scripts/location-fixed.js?v=20260626-v30";
+      } from "./scripts/location-fixed.js?v=20260626-v31";
 
       const RESTAURANTS_KEY = "random-restaurant-checkin:restaurants";
       const RESTAURANTS_VERSION_KEY = "random-restaurant-checkin:restaurants-version";
       const RESTAURANT_CHANGES_KEY = "random-restaurant-checkin:restaurant-changes-v1";
-      const CURRENT_DATASET_VERSION = "amap-hangzhou-3300-2026-06-26-v30";
+      const CURRENT_DATASET_VERSION = "amap-hangzhou-3300-2026-06-26-v31";
       const CHECK_INS_KEY = "random-restaurant-checkin:check-ins";
       const FAVORITES_KEY = "random-restaurant-checkin:favorites";
       const MANAGE_PAGE_SIZE = 200;
@@ -531,6 +538,7 @@
       let toastTimer = 0;
       let audioContext = null;
       let pendingMapRestaurant = null;
+      let resultRecommendationExpanded = false;
       let sphereFrame = 0;
       let sphereLastTime = performance.now();
       let sphereRotationY = 0;
@@ -575,6 +583,7 @@
         reelArea: document.querySelector("#reel-area"),
         resultArea: document.querySelector("#result-area"),
         resultModal: document.querySelector("#result-modal"),
+        resultModalHeading: document.querySelector("#result-modal-heading"),
         resultModalContent: document.querySelector("#result-modal-content"),
         resultMapButton: document.querySelector("#result-map-button"),
         resultCompleteButton: document.querySelector("#result-complete-button"),
@@ -1431,11 +1440,13 @@
         const restaurant = hydrateRestaurantSync(selectedRestaurant);
         const distance = getDistanceForRestaurant(restaurant);
         const averageCost = parseAverageCost(restaurant);
+        const recommendation = getRecommendationText(restaurant.note);
+        const canToggleRecommendation = recommendation.length > 90;
+        elements.resultModalHeading.innerHTML = `
+          <div><p class="eyebrow">锁定目的地</p><h3>${escapeHtml(restaurant.name)}</h3></div>
+          <button class="result-modal-close" id="result-modal-x" type="button" aria-label="关闭结果">×</button>
+        `;
         elements.resultModalContent.innerHTML = `
-          <div class="result-modal-heading">
-            <div><p class="eyebrow">锁定目的地</p><h3>${escapeHtml(restaurant.name)}</h3></div>
-            <button class="result-modal-close" id="result-modal-x" type="button" aria-label="关闭结果">×</button>
-          </div>
           <dl>
             <div><dt>位置</dt><dd>${escapeHtml(formatLocation(restaurant.address, restaurant))}</dd></div>
             <div><dt>分类</dt><dd>${escapeHtml(getCategoryLabel(restaurant.category || inferCategory(restaurant)))}</dd></div>
@@ -1444,17 +1455,29 @@
             ${averageCost ? `<div><dt>人均</dt><dd>约 ¥${escapeHtml(averageCost)}</dd></div>` : ""}
             ${restaurant.businessArea ? `<div><dt>商圈</dt><dd>${escapeHtml(restaurant.businessArea)}</dd></div>` : ""}
             ${restaurant.source ? `<div><dt>来源</dt><dd>${escapeHtml(restaurant.source)}${restaurant.rank ? ` · 第 ${escapeHtml(String(restaurant.rank))} 名` : ""}</dd></div>` : ""}
-            <div><dt>推荐菜</dt><dd>${escapeHtml(getRecommendationText(restaurant.note))}</dd></div>
+            <div>
+              <dt>推荐菜</dt>
+              <dd>
+                <div class="result-note-text ${resultRecommendationExpanded ? "is-expanded" : ""}">${escapeHtml(recommendation)}</div>
+                ${canToggleRecommendation ? `<button class="result-note-toggle" data-action="toggle-result-note" type="button">${resultRecommendationExpanded ? "收起推荐菜" : "展开全部推荐菜"}</button>` : ""}
+              </dd>
+            </div>
           </dl>
           ${!restaurantDetailsMap && !restaurantDetailsFailed ? '<div class="detail-loading">正在加载更完整的餐厅信息...</div>' : ""}
           ${restaurantDetailsFailed ? '<div class="detail-loading">部分详情暂不可用，可先打开地图或完成打卡。</div>' : ""}
         `;
-        const closeButton = elements.resultModalContent.querySelector("#result-modal-x");
+        const closeButton = elements.resultModalHeading.querySelector("#result-modal-x");
         closeButton?.addEventListener("click", closeResultModal);
+        const toggleButton = elements.resultModalContent.querySelector("[data-action='toggle-result-note']");
+        toggleButton?.addEventListener("click", () => {
+          resultRecommendationExpanded = !resultRecommendationExpanded;
+          renderResultModal();
+        });
       }
 
       function openResultModal() {
         if (!selectedRestaurant) return;
+        resultRecommendationExpanded = false;
         renderResultModal();
         elements.resultModal.hidden = false;
         document.body.classList.add("is-result-modal-open");
