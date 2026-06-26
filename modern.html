@@ -458,18 +458,19 @@
         inferRestaurantCategory,
         inferSubcategory,
         matchesFoodSelection,
-      } from "./scripts/categories.js?v=20260626-v31";
+      } from "./scripts/categories.js?v=20260626-v32";
       import {
         formatDistance,
         getRestaurantDistance,
         parseAverageCost,
         requestCurrentPosition,
-      } from "./scripts/location-fixed.js?v=20260626-v31";
+      } from "./scripts/location-fixed.js?v=20260626-v32";
 
       const RESTAURANTS_KEY = "random-restaurant-checkin:restaurants";
       const RESTAURANTS_VERSION_KEY = "random-restaurant-checkin:restaurants-version";
       const RESTAURANT_CHANGES_KEY = "random-restaurant-checkin:restaurant-changes-v1";
-      const CURRENT_DATASET_VERSION = "amap-hangzhou-3300-2026-06-26-v31";
+      const CURRENT_DATASET_VERSION = "amap-hangzhou-3300-2026-06-26-v32";
+      const LEGACY_CORE_RESTAURANT_COUNT = 1300;
       const CHECK_INS_KEY = "random-restaurant-checkin:check-ins";
       const FAVORITES_KEY = "random-restaurant-checkin:favorites";
       const MANAGE_PAGE_SIZE = 200;
@@ -862,6 +863,9 @@
             changes = migrateLegacyRestaurants();
             safeSetItem(RESTAURANT_CHANGES_KEY, JSON.stringify(changes));
             localStorage.removeItem(RESTAURANTS_KEY);
+          } else {
+            changes = repairRestaurantChanges(changes);
+            safeSetItem(RESTAURANT_CHANGES_KEY, JSON.stringify(changes));
           }
           safeSetItem(RESTAURANTS_VERSION_KEY, CURRENT_DATASET_VERSION);
           return applyRestaurantChanges(initialRestaurants, changes);
@@ -876,7 +880,10 @@
         if (!Array.isArray(stored) || isPlaceholderRestaurantList(stored)) return emptyRestaurantChanges();
         const coreMap = new Map(coreRestaurants.map((restaurant) => [restaurant.id, restaurant]));
         const storedMap = new Map(stored.map((restaurant) => [restaurant.id, restaurant]));
-        const deletedIds = coreRestaurants
+        const comparableCore = stored.length < coreRestaurants.length
+          ? coreRestaurants.slice(0, Math.min(LEGACY_CORE_RESTAURANT_COUNT, coreRestaurants.length))
+          : coreRestaurants;
+        const deletedIds = comparableCore
           .filter((restaurant) => !storedMap.has(restaurant.id))
           .map((restaurant) => restaurant.id);
         const added = stored.filter((restaurant) => !coreMap.has(restaurant.id));
@@ -886,6 +893,19 @@
           if (original && hasEditableChanges(original, restaurant)) overrides[restaurant.id] = pickEditableFields(restaurant);
         });
         return { added, overrides, deletedIds };
+      }
+
+      function repairRestaurantChanges(changes) {
+        if (coreRestaurants.length <= LEGACY_CORE_RESTAURANT_COUNT) return changes;
+        const legacyCoreIds = new Set(
+          coreRestaurants.slice(0, LEGACY_CORE_RESTAURANT_COUNT).map((restaurant) => restaurant.id),
+        );
+        const nonLegacyDeletedIds = changes.deletedIds.filter((id) => !legacyCoreIds.has(id));
+        if (nonLegacyDeletedIds.length < 500) return changes;
+        return {
+          ...changes,
+          deletedIds: changes.deletedIds.filter((id) => legacyCoreIds.has(id)),
+        };
       }
 
       function emptyRestaurantChanges() {
