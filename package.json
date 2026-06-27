@@ -10,7 +10,11 @@
     "data:quality:fetch": "node scripts/fetch-amap-quality-candidates.cjs",
     "data:quality": "node scripts/build-quality-additions.cjs",
     "data:index": "node scripts/build-restaurant-index.cjs",
-    "data:validate": "node scripts/validate-expanded-restaurants.cjs"
+    "data:validate": "node scripts/validate-expanded-restaurants.cjs",
+    "data:image-report": "node scripts/report-image-matches.cjs",
+    "docs:encoding": "node scripts/check-doc-encoding.cjs",
+    "test:data": "npm run data:validate && npm run data:image-report && npm run docs:encoding",
+    "test:e2e": "node tests/mobile-smoke.mjs"
   },
   "dependencies": {
     "react": "latest",
@@ -19,6 +23,7 @@
   "devDependencies": {
     "@vitejs/plugin-react": "latest",
     "vite": "latest",
-    "typescript": "latest"
+    "typescript": "latest",
+    "playwright": "latest"
   }
 }
