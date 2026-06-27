@@ -38,7 +38,7 @@
       .top-actions { display: flex; gap: 8px; padding: 6px; border: 1px solid rgba(255, 91, 91, 0.18); border-radius: 999px; background: rgba(255,255,255,.78); box-shadow: 0 18px 42px rgba(45,54,60,.08); }
       .nav-action { min-height: 42px; border-radius: 999px; padding: 0 14px; background: transparent; color: #33423a; font-weight: 800; white-space: nowrap; }
       .nav-action.is-active { background: linear-gradient(135deg, #ff5b6e, #ff8a3d); color: #fff; }
-      .favorite-action.is-favorite { border-color: #ffc3cf; background: #fff0f4; color: #d92f58; }
+      .favorite-action.is-favorite, .wish-toggle.is-favorite { border-color: #ffc3cf; background: #fff0f4; color: #d92f58; }
 
       .home-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(320px, .65fr); gap: 18px; align-items: start; }
       .home-grid > * { min-width: 0; }
@@ -109,6 +109,16 @@
       .filter-confirm { flex: 1; max-width: 280px; background: linear-gradient(135deg, #ff704d, #ff4d32); color: #fff; }
       .active-filter-summary { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; margin: 12px 2px 0; color: #53655a; font-size: .86rem; font-weight: 800; }
       .filter-token { padding: 4px 8px; border-radius: 999px; background: #fff1eb; color: #ff5b37; }
+      .scene-strip { display: flex; gap: 8px; overflow-x: auto; margin: 12px -2px 0; padding: 2px 2px 8px; scrollbar-width: none; }
+      .scene-strip::-webkit-scrollbar { display: none; }
+      .scene-chip { flex: 0 0 auto; min-height: 36px; border: 1px solid #eee4dd; border-radius: 999px; padding: 7px 12px; background: rgba(255,255,255,.86); color: #30353a; font-size: .84rem; font-weight: 900; white-space: nowrap; }
+      .scene-chip.is-selected { border-color: #ff9f7c; background: #fff1eb; color: #ff5b37; box-shadow: 0 7px 18px rgba(255,91,55,.08); }
+      .pick-preferences { display: grid; grid-template-columns: auto 1fr; gap: 9px; align-items: center; margin-top: 10px; }
+      .pick-type-toggle { display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: #f5f5f3; border: 1px solid #ece8e3; }
+      .pick-type-option { min-height: 34px; border-radius: 999px; padding: 6px 12px; background: transparent; color: #39424a; font-size: .82rem; font-weight: 900; white-space: nowrap; }
+      .pick-type-option.is-selected { background: linear-gradient(135deg, #ff5b6e, #ff8a3d); color: #fff; box-shadow: 0 8px 18px rgba(255,91,91,.16); }
+      .wish-priority { justify-self: start; min-height: 38px; border: 1px solid #f3d6c5; border-radius: 999px; padding: 7px 13px; background: #fffaf7; color: #8a421f; font-size: .84rem; font-weight: 900; }
+      .wish-priority.is-selected { border-color: #ff9f7c; background: #fff1eb; color: #ff5b37; }
 
       .reel-shell { position: relative; margin-top: 24px; padding: 18px; overflow: hidden; border-radius: 8px; background: radial-gradient(circle at 28% 20%, rgba(255,132,105,.28), transparent 31%), radial-gradient(circle at 76% 18%, rgba(94,194,255,.2), transparent 34%), linear-gradient(155deg, #202957, #101725 72%); box-shadow: inset 0 0 0 1px rgba(255,255,255,.12), 0 18px 46px rgba(35,45,85,.18); }
       .reel-window { position: relative; height: 430px; overflow: hidden; border-radius: 8px; perspective: 1250px; }
@@ -210,6 +220,20 @@
       .reason-list li::before { position: absolute; left: 0; top: .62em; width: 6px; height: 6px; border-radius: 50%; background: #ff6b4a; content: ""; }
       .decision-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
       .decision-actions button { min-height: 36px; border-radius: 8px; background: #fff; color: #8a421f; font-size: .82rem; font-weight: 900; border: 1px solid rgba(138,66,31,.14); }
+      .wish-box { display: flex; gap: 10px; align-items: center; justify-content: space-between; margin-top: 14px; padding: 12px; border: 1px solid rgba(240,68,98,.15); border-radius: 12px; background: #fff7fb; color: #53655a; }
+      .wish-box strong { display: block; color: #7d5544; font-size: .86rem; }
+      .wish-box button { min-height: 36px; border-radius: 999px; padding: 7px 12px; background: #fff; color: #d92f58; border: 1px solid rgba(217,47,88,.18); font-size: .82rem; font-weight: 900; white-space: nowrap; }
+      .choice-grid { display: grid; gap: 10px; }
+      .choice-card { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 12px; align-items: center; padding: 10px; border: 1px solid rgba(255,142,110,.2); border-radius: 14px; background: rgba(255,255,255,.78); }
+      .choice-card .food-photo { height: 84px; border-radius: 12px; overflow: hidden; }
+      .choice-card h4 { margin: 0 0 4px; color: #1f2933; font-size: 1rem; line-height: 1.25; overflow-wrap: anywhere; }
+      .choice-card p { margin: 0; color: #53655a; font-size: .82rem; line-height: 1.45; }
+      .choice-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+      .choice-actions button { min-height: 34px; border-radius: 999px; padding: 6px 11px; font-size: .8rem; font-weight: 900; }
+      .choice-actions .choose-action { background: #1f5d4a; color: #fff; }
+      .choice-actions .wish-choice-action { border: 1px solid rgba(217,47,88,.18); background: #fff7fb; color: #d92f58; }
+      .result-modal.is-choice-mode #result-map-button,
+      .result-modal.is-choice-mode #result-complete-button { display: none; }
       .result-modal-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px 20px calc(14px + env(safe-area-inset-bottom)); border-top: 1px solid rgba(138,66,31,.12); background: rgba(255,255,255,.96); box-shadow: 0 -10px 24px rgba(31,41,51,.06); }
 
       .restaurant-form { display: grid; gap: 14px; padding-bottom: 18px; border-bottom: 1px solid #e4e8df; }
@@ -322,6 +346,10 @@
         .result-modal-actions { grid-template-columns: 1fr 1fr; gap: 8px; padding: 10px 18px calc(12px + env(safe-area-inset-bottom)); }
         .result-modal-actions button { min-height: 40px; padding: 8px 10px; font-size: .9rem; }
         .decision-actions { grid-template-columns: 1fr; }
+        .pick-preferences { grid-template-columns: 1fr; }
+        .wish-priority { justify-self: stretch; }
+        .choice-card { grid-template-columns: 72px minmax(0, 1fr); }
+        .choice-card .food-photo { height: 72px; }
         .list-card { grid-template-columns: 1fr; }
         .diagnostic-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .diary-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -383,6 +411,11 @@
               </div>
             </div>
             <div class="active-filter-summary" id="filter-summary">当前可抽 0 家</div>
+          </div>
+          <div class="scene-strip" id="scene-modes" aria-label="情境模式"></div>
+          <div class="pick-preferences">
+            <div class="pick-type-toggle" id="pick-type-toggle" aria-label="抽取模式"></div>
+            <button class="wish-priority" id="wish-priority-button" type="button">优先最近想吃</button>
           </div>
           <div class="random-controls">
             <div class="count-pill"><strong id="restaurant-count">0</strong><span>家待打卡</span></div>
@@ -491,30 +524,30 @@
         inferRestaurantCategory,
         inferSubcategory,
         matchesFoodSelection,
-      } from "./scripts/categories.js?v=20260627-v34";
+      } from "./scripts/categories.js?v=20260627-v35";
       import {
         formatDistance,
         getRestaurantDistance,
         parseAverageCost,
         requestCurrentPosition,
-      } from "./scripts/location-fixed.js?v=20260627-v34";
+      } from "./scripts/location-fixed.js?v=20260627-v35";
       import {
         readJson as storageReadJson,
         safeSetItem as storageSafeSetItem,
-      } from "./scripts/app/storage.js?v=20260627-v34";
+      } from "./scripts/app/storage.js?v=20260627-v35";
       import {
         buildRestaurantChanges as buildRestaurantChangesFromStore,
         getRestaurantHealthReport,
         readRestaurantState,
-      } from "./scripts/app/restaurant-store.js?v=20260627-v34";
+      } from "./scripts/app/restaurant-store.js?v=20260627-v35";
       import {
         getCategoryRestaurantImage as getMappedRestaurantImage,
         getImageMatchReport,
         getRestaurantImageCategory as getMappedRestaurantImageCategory,
-      } from "./scripts/app/restaurant-images.js?v=20260627-v34";
+      } from "./scripts/app/restaurant-images.js?v=20260627-v35";
       import {
         createRestaurantFilterEngine,
-      } from "./scripts/app/restaurant-filter.js?v=20260627-v34";
+      } from "./scripts/app/restaurant-filter.js?v=20260627-v35";
       import {
         deferRestaurant,
         filterAvailableRestaurants,
@@ -525,28 +558,45 @@
         rankAvailablePool,
         restoreHiddenRestaurants,
         skipForToday,
-      } from "./scripts/app/restaurant-availability.js?v=20260627-v34";
+      } from "./scripts/app/restaurant-availability.js?v=20260627-v35";
       import {
         getPickReasons,
-      } from "./scripts/app/random-reasons.js?v=20260627-v34";
+      } from "./scripts/app/random-reasons.js?v=20260627-v35";
       import {
         filterDiaryRecords,
         getDiaryStats,
-      } from "./scripts/app/food-diary.js?v=20260627-v34";
+      } from "./scripts/app/food-diary.js?v=20260627-v35";
       import {
         getCopyAddressText,
         getMapProviders,
         getMapUrl as buildMapUrl,
-      } from "./scripts/app/map-links.js?v=20260627-v34";
+      } from "./scripts/app/map-links.js?v=20260627-v35";
+      import {
+        PICK_SCENES,
+        buildPickPool,
+        getPickModeLabel,
+        getPickScene,
+        normalizePickState,
+      } from "./scripts/app/pick-modes.js?v=20260627-v35";
+      import {
+        clearWishList,
+        getWishIds,
+        isWishListed as restaurantIsWishListed,
+        normalizeWishList,
+        serializeWishList,
+        toggleWishList,
+      } from "./scripts/app/wish-list.js?v=20260627-v35";
 
       const RESTAURANTS_KEY = "random-restaurant-checkin:restaurants";
       const RESTAURANTS_VERSION_KEY = "random-restaurant-checkin:restaurants-version";
       const RESTAURANT_CHANGES_KEY = "random-restaurant-checkin:restaurant-changes-v1";
-      const CURRENT_DATASET_VERSION = "amap-hangzhou-3300-2026-06-27-v34";
+      const CURRENT_DATASET_VERSION = "amap-hangzhou-3300-2026-06-27-v35";
       const LEGACY_CORE_RESTAURANT_COUNT = 1300;
       const CHECK_INS_KEY = "random-restaurant-checkin:check-ins";
       const FAVORITES_KEY = "random-restaurant-checkin:favorites";
       const AVAILABILITY_KEY = "random-restaurant-checkin:restaurant-availability-v1";
+      const PICK_STATE_KEY = "random-restaurant-checkin:pick-mode-v1";
+      const WISH_LIST_KEY = "random-restaurant-checkin:wish-list-v1";
       const MANAGE_PAGE_SIZE = 200;
       const REDUCED_MOTION = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const ROLL_DURATION_MS = REDUCED_MOTION ? 1600 : 3000;
@@ -584,6 +634,8 @@
       let checkIns = readJson(CHECK_INS_KEY, []);
       let favorites = readJson(FAVORITES_KEY, []);
       let availability = normalizeAvailability(readJson(AVAILABILITY_KEY, null));
+      let pickState = normalizePickState(readJson(PICK_STATE_KEY, null));
+      let wishList = normalizeWishList(readJson(WISH_LIST_KEY, null));
       let restaurantDetailsMap = null;
       let restaurantDetailsPromise = null;
       let restaurantDetailsFailed = false;
@@ -591,9 +643,13 @@
       let checkInsDirty = false;
       let favoritesDirty = false;
       let availabilityDirty = false;
+      let pickStateDirty = false;
+      let wishListDirty = false;
       let selectedRestaurant = null;
       let pendingRestaurant = null;
+      let pendingChoiceCandidates = [];
       let selectedPickReasons = [];
+      let choiceCandidates = [];
       let editingRestaurantId = null;
       let editingReviewId = null;
       let manageRenderLimit = MANAGE_PAGE_SIZE;
@@ -653,6 +709,9 @@
         filterBackdrop: document.querySelector("#filter-backdrop"),
         filterResetButton: document.querySelector("#filter-reset-button"),
         filterConfirmButton: document.querySelector("#filter-confirm-button"),
+        sceneModes: document.querySelector("#scene-modes"),
+        pickTypeToggle: document.querySelector("#pick-type-toggle"),
+        wishPriorityButton: document.querySelector("#wish-priority-button"),
         imagePreview: document.querySelector("#image-preview"),
         imagePreviewClose: document.querySelector("#image-preview-close"),
         imagePreviewContent: document.querySelector("#image-preview-content"),
@@ -779,6 +838,9 @@
         elements.backHomeButton.addEventListener("click", () => { closeFilterPanel(); switchView("home"); });
         elements.favoritesBackButton.addEventListener("click", () => switchView("home"));
         elements.categoryTabs.addEventListener("click", handleCategoryTabClick);
+        elements.sceneModes.addEventListener("click", handleSceneModeClick);
+        elements.pickTypeToggle.addEventListener("click", handlePickTypeClick);
+        elements.wishPriorityButton.addEventListener("click", toggleWishPriority);
         document.querySelectorAll("[data-filter-panel]").forEach((button) => {
           button.addEventListener("click", (event) => {
             event.stopPropagation();
@@ -808,6 +870,10 @@
         elements.resultCompleteButton.addEventListener("click", completeCheckIn);
         elements.resultRepickButton.addEventListener("click", () => {
           closeResultModal();
+          choiceCandidates = [];
+          pendingChoiceCandidates = [];
+          selectedRestaurant = null;
+          selectedPickReasons = [];
           pickRestaurant();
         });
         document.addEventListener("keydown", (event) => {
@@ -835,7 +901,9 @@
       function resetSelectionAfterFilterChange() {
         selectedRestaurant = null;
         pendingRestaurant = null;
+        pendingChoiceCandidates = [];
         selectedPickReasons = [];
+        choiceCandidates = [];
         invalidateFilterCache();
         render();
         renderReel(buildRollingReel(), false);
@@ -850,6 +918,32 @@
         if (!button) return;
         closeFilterPanel();
         activeCategoryTab = button.dataset.categoryTab;
+        resetSelectionAfterFilterChange();
+      }
+
+      function handleSceneModeClick(event) {
+        const button = event.target.closest("[data-pick-scene]");
+        if (!button) return;
+        pickState = { ...pickState, scene: button.dataset.pickScene };
+        pickStateDirty = true;
+        resetSelectionAfterFilterChange();
+      }
+
+      function handlePickTypeClick(event) {
+        const button = event.target.closest("[data-pick-type]");
+        if (!button) return;
+        pickState = { ...pickState, pickType: button.dataset.pickType === "triple" ? "triple" : "single" };
+        pickStateDirty = true;
+        selectedRestaurant = null;
+        selectedPickReasons = [];
+        choiceCandidates = [];
+        pendingChoiceCandidates = [];
+        render();
+      }
+
+      function toggleWishPriority() {
+        pickState = { ...pickState, prioritizeWishList: !pickState.prioritizeWishList };
+        pickStateDirty = true;
         resetSelectionAfterFilterChange();
       }
 
@@ -1001,6 +1095,8 @@
         if (checkInsDirty && safeSetItem(CHECK_INS_KEY, JSON.stringify(checkIns))) checkInsDirty = false;
         if (favoritesDirty && safeSetItem(FAVORITES_KEY, JSON.stringify(favorites))) favoritesDirty = false;
         if (availabilityDirty && safeSetItem(AVAILABILITY_KEY, JSON.stringify(availability))) availabilityDirty = false;
+        if (pickStateDirty && safeSetItem(PICK_STATE_KEY, JSON.stringify(pickState))) pickStateDirty = false;
+        if (wishListDirty && safeSetItem(WISH_LIST_KEY, serializeWishList(wishList))) wishListDirty = false;
       }
 
       function safeSetItem(key, value) {
@@ -1046,6 +1142,10 @@
       }
 
       function getFilteredRestaurants() {
+        return getPickPool(getBaseAvailableRestaurants()).pool;
+      }
+
+      function getBaseAvailableRestaurants() {
         const filtered = restaurantFilterEngine?.getFilteredRestaurants(restaurants, {
           activeCategoryTab,
           selectedFoodValues,
@@ -1056,6 +1156,17 @@
           userPosition,
         }) || [];
         return rankAvailablePool(filterAvailableRestaurants(filtered, availability), availability);
+      }
+
+      function getPickPool(basePool, stateOverrides = {}) {
+        return buildPickPool(basePool, { ...pickState, ...stateOverrides }, {
+          inferCategory,
+          parseAverageCost,
+          getDistanceForRestaurant,
+        }, {
+          wishIds: getWishIds(wishList),
+          minSceneCandidates: 8,
+        });
       }
 
       function getDistanceForRestaurant(restaurant) {
@@ -1127,10 +1238,26 @@
         if (selectedBusinessAreas.size) tokens.push(...[...selectedBusinessAreas].slice(0, 2));
         if (selectedFoodValues.size) tokens.push(getSelectedFoodLabel());
         if (selectedSort !== "recommended") tokens.push(getSortLabel());
+        if (pickState.scene !== "daily") tokens.push(getPickScene(pickState.scene).label);
+        if (pickState.prioritizeWishList) tokens.push("优先最近想吃");
+        if (pickState.pickType === "triple") tokens.push("三选一");
         elements.filterSummary.innerHTML = `
           <span>当前可抽 ${filteredRestaurants.length} / ${restaurants.length} 家</span>
           ${tokens.filter(Boolean).map((token) => `<span class="filter-token">${escapeHtml(token)}</span>`).join("")}
         `;
+      }
+
+      function renderPickControls() {
+        elements.sceneModes.innerHTML = PICK_SCENES.map((scene) => `
+          <button class="scene-chip ${pickState.scene === scene.value ? "is-selected" : ""}" data-pick-scene="${scene.value}" type="button" title="${escapeHtml(scene.description)}">${escapeHtml(scene.label)}</button>
+        `).join("");
+        elements.pickTypeToggle.innerHTML = ["single", "triple"].map((type) => `
+          <button class="pick-type-option ${pickState.pickType === type ? "is-selected" : ""}" data-pick-type="${type}" type="button">${escapeHtml(getPickModeLabel(type))}</button>
+        `).join("");
+        elements.wishPriorityButton.classList.toggle("is-selected", pickState.prioritizeWishList);
+        elements.wishPriorityButton.textContent = pickState.prioritizeWishList
+          ? `优先最近想吃（${wishList.length}）`
+          : `优先最近想吃（${wishList.length}）`;
       }
 
       function renderFilterControls() {
@@ -1321,6 +1448,7 @@
         }
         const filteredRestaurants = getFilteredRestaurants();
         renderFilters(filteredRestaurants);
+        renderPickControls();
         elements.count.textContent = filteredRestaurants.length;
         elements.manageCount.textContent = `${restaurants.length} 家待打卡`;
         elements.pickButton.disabled = isRolling;
@@ -1366,7 +1494,7 @@
       function animateSphere(timestamp) {
         const delta = Math.min(34, Math.max(0, timestamp - sphereLastTime));
         sphereLastTime = timestamp;
-        if (selectedRestaurant && !isRolling) {
+        if ((selectedRestaurant || choiceCandidates.length) && !isRolling) {
           elements.reelArea.style.transform = "rotateX(0deg) rotateY(0deg) rotateZ(0deg)";
         } else {
           let speed = 0.014;
@@ -1412,6 +1540,22 @@
         return [...items].sort(() => Math.random() - 0.5);
       }
 
+      function selectUniqueCandidates(primaryPool, fallbackPool, count) {
+        const selected = [];
+        const seen = new Set();
+        const addFrom = (pool) => {
+          for (const restaurant of shuffleRestaurants(pool)) {
+            if (selected.length >= count) return;
+            if (seen.has(restaurant.id)) continue;
+            seen.add(restaurant.id);
+            selected.push(restaurant);
+          }
+        };
+        addFrom(primaryPool);
+        if (selected.length < count) addFrom(fallbackPool);
+        return selected;
+      }
+
       function buildRollingReel() {
         const pool = getFilteredRestaurants();
         return shuffleRestaurants(pool).slice(0, Math.min(REEL_LENGTH, pool.length));
@@ -1428,7 +1572,7 @@
       function buildPickReasons(restaurant, wasRecentPick = false) {
         const activeTab = CATEGORY_TABS.find((tab) => tab.value === activeCategoryTab);
         const distance = getDistanceForRestaurant(restaurant);
-        return getPickReasons({
+        const reasons = getPickReasons({
           restaurant,
           activeCategoryLabel: activeCategoryTab === "recommend" ? "全部" : activeTab?.label,
           selectedLocations: [...selectedLocations],
@@ -1441,9 +1585,22 @@
           wasRecentPick,
           categoryLabel: getCategoryLabel(restaurant.category || inferCategory(restaurant)),
         });
+        const extraReasons = [];
+        if (isWishListed(restaurant.id)) extraReasons.push("它在你的最近想吃清单里");
+        if (pickState.scene !== "daily") {
+          const scene = getPickScene(pickState.scene);
+          extraReasons.push(`当前情境是「${scene.label}」，它更贴近这次的吃饭状态`);
+        }
+        return [...new Set([...extraReasons, ...reasons].filter(Boolean))].slice(0, 4);
       }
 
       function renderResult() {
+        if (choiceCandidates.length) {
+          elements.resultArea.className = "quiet-hint";
+          elements.resultArea.textContent = "已生成三家候选，详情可在弹窗中选择。";
+          renderChoiceModal();
+          return;
+        }
         if (selectedRestaurant) {
           elements.resultArea.className = "quiet-hint";
           elements.resultArea.textContent = "已锁定餐厅，详情可在弹窗中查看。";
@@ -1457,6 +1614,7 @@
 
       function renderResultModal() {
         if (!selectedRestaurant) return;
+        elements.resultModal.classList.remove("is-choice-mode");
         const restaurant = hydrateRestaurantSync(selectedRestaurant);
         const distance = getDistanceForRestaurant(restaurant);
         const averageCost = parseAverageCost(restaurant);
@@ -1490,6 +1648,10 @@
               ${reasons.map((reason) => `<li>${escapeHtml(reason)}</li>`).join("")}
             </ul>
           </div>
+          <div class="wish-box">
+            <div><strong>最近想吃</strong><span>${isWishListed(restaurant.id) ? "已经在清单里，想吃的时候优先抽它。" : "先存起来，下次可以优先从清单里抽。"}</span></div>
+            <button data-action="toggle-wish" data-id="${escapeHtml(restaurant.id)}" data-wish-source="result" type="button">${isWishListed(restaurant.id) ? "移出最近想吃" : "加入最近想吃"}</button>
+          </div>
           <div class="decision-box">
             <strong>这次不合胃口？</strong>
             <div class="decision-actions">
@@ -1508,6 +1670,55 @@
           resultRecommendationExpanded = !resultRecommendationExpanded;
           renderResultModal();
         });
+      }
+
+      function renderChoiceModal() {
+        if (!choiceCandidates.length) return;
+        elements.resultModal.classList.add("is-choice-mode");
+        elements.resultModalHeading.innerHTML = `
+          <div><p class="eyebrow">三选一</p><h3>这三家里挑一家</h3></div>
+          <button class="result-modal-close" id="result-modal-x" type="button" aria-label="关闭结果">×</button>
+        `;
+        elements.resultModalContent.innerHTML = `
+          <div class="choice-grid">
+            ${choiceCandidates.map((restaurant) => renderChoiceCard(hydrateRestaurantSync(restaurant))).join("")}
+          </div>
+          <div class="detail-loading">三家都符合当前筛选和情境偏好，点“选这家”后再打开地图或完成打卡。</div>
+        `;
+        elements.resultModalHeading.querySelector("#result-modal-x")?.addEventListener("click", closeResultModal);
+      }
+
+      function renderChoiceCard(restaurant) {
+        const averageCost = parseAverageCost(restaurant);
+        return `
+          <article class="choice-card">
+            <div class="food-photo" data-image-category="${getRestaurantImageCategory(restaurant)}" style="--food-image: url('${getCategoryRestaurantImage(restaurant)}')"><span>${escapeHtml(restaurant.name.slice(0, 2))}</span></div>
+            <div>
+              <h4>${escapeHtml(restaurant.name)}</h4>
+              <p>${escapeHtml(formatLocation(restaurant.address, restaurant))}</p>
+              <div class="tag-line">
+                <span class="mini-tag">${escapeHtml(getCategoryLabel(restaurant.category || inferCategory(restaurant)))}</span>
+                ${restaurant.rating ? `<span class="mini-tag">${escapeHtml(restaurant.rating)} 分</span>` : ""}
+                ${averageCost ? `<span class="mini-tag">约 ¥${escapeHtml(averageCost)}</span>` : ""}
+              </div>
+              <p class="muted">${escapeHtml(getRecommendationText(restaurant.note)).slice(0, 56)}</p>
+              <div class="choice-actions">
+                <button class="choose-action" data-choice-select="${escapeHtml(restaurant.id)}" type="button">选这家</button>
+                <button class="wish-choice-action ${isWishListed(restaurant.id) ? "is-favorite" : ""}" data-action="toggle-wish" data-id="${escapeHtml(restaurant.id)}" data-wish-source="choice" type="button">${isWishListed(restaurant.id) ? "已想吃" : "最近想吃"}</button>
+              </div>
+            </div>
+          </article>
+        `;
+      }
+
+      function openChoiceModal() {
+        if (!choiceCandidates.length) return;
+        renderChoiceModal();
+        elements.resultModal.hidden = false;
+        document.body.classList.add("is-result-modal-open");
+        loadRestaurantDetails().then(() => {
+          if (choiceCandidates.length) renderChoiceModal();
+        }).catch(() => {});
       }
 
       function openResultModal() {
@@ -1530,6 +1741,17 @@
       }
 
       function handleResultDecisionClick(event) {
+        const choiceButton = event.target.closest("[data-choice-select]");
+        if (choiceButton) {
+          selectChoiceCandidate(choiceButton.dataset.choiceSelect);
+          return;
+        }
+        const wishButton = event.target.closest("[data-action='toggle-wish']");
+        if (wishButton) {
+          const restaurant = selectedRestaurant || choiceCandidates.find((candidate) => candidate.id === wishButton.dataset.id);
+          if (restaurant) toggleWishForRestaurant(restaurant, wishButton.dataset.wishSource || "result");
+          return;
+        }
         const button = event.target.closest("[data-result-decision]");
         if (!button || !selectedRestaurant) return;
         const restaurant = selectedRestaurant;
@@ -1553,6 +1775,19 @@
         invalidateFilterCache();
         render();
         renderReel(buildRollingReel(), false);
+      }
+
+      async function selectChoiceCandidate(restaurantId) {
+        const candidate = choiceCandidates.find((restaurant) => restaurant.id === restaurantId);
+        if (!candidate) return;
+        choiceCandidates = [];
+        selectedRestaurant = await hydrateRestaurant(candidate);
+        selectedPickReasons = buildPickReasons(selectedRestaurant, false);
+        availability = markPicked(availability, selectedRestaurant.id);
+        availabilityDirty = true;
+        render();
+        renderReel(buildFinalReel(selectedRestaurant), false, true);
+        openResultModal();
       }
 
       function getRecommendationText(note) {
@@ -1579,13 +1814,21 @@
           alert("当前筛选条件下没有可抽取的餐厅，请调整筛选条件");
           return;
         }
+        const fallbackPool = pickState.pickType === "triple" && pool.length < 3
+          ? getPickPool(getBaseAvailableRestaurants(), { prioritizeWishList: false }).pool
+          : pool;
         const lowerPriorityIds = new Set([...availability.deferredIds, ...availability.recentPickIds]);
         const preferredPool = pool.filter((restaurant) => !lowerPriorityIds.has(restaurant.id));
         const drawPool = preferredPool.length ? preferredPool : pool;
-        const finalRestaurant = drawPool[Math.floor(Math.random() * drawPool.length)];
+        const tripleCandidates = pickState.pickType === "triple"
+          ? selectUniqueCandidates(drawPool, fallbackPool, 3)
+          : [];
+        const finalRestaurant = tripleCandidates[0] || drawPool[Math.floor(Math.random() * drawPool.length)];
         const sequence = buildRollingReel();
         selectedRestaurant = null;
         selectedPickReasons = [];
+        choiceCandidates = [];
+        pendingChoiceCandidates = tripleCandidates;
         pendingRestaurant = finalRestaurant;
         isRolling = true;
         rollStartedAt = performance.now();
@@ -1596,11 +1839,30 @@
 
       function finishPick() {
         if (!isRolling || !pendingRestaurant) return;
+        if (pickState.pickType === "triple" && pendingChoiceCandidates.length) {
+          choiceCandidates = pendingChoiceCandidates;
+          pendingChoiceCandidates = [];
+          choiceCandidates.forEach((restaurant) => {
+            availability = markPicked(availability, restaurant.id);
+          });
+          availabilityDirty = true;
+          selectedRestaurant = null;
+          selectedPickReasons = [];
+          pendingRestaurant = null;
+          isRolling = false;
+          playLockSound();
+          showMessage("宸茬敓鎴愪笁瀹跺€欓€夛紝鎸戜竴瀹跺嚭鍙戙€?");
+          render();
+          renderReel(buildFinalReel(choiceCandidates[0]), false, true);
+          openChoiceModal();
+          return;
+        }
         selectedRestaurant = pendingRestaurant;
         selectedPickReasons = buildPickReasons(selectedRestaurant, availability.recentPickIds.includes(selectedRestaurant.id));
         availability = markPicked(availability, selectedRestaurant.id);
         availabilityDirty = true;
         pendingRestaurant = null;
+        pendingChoiceCandidates = [];
         isRolling = false;
         playLockSound();
         showMessage("已锁定本次打卡餐厅。");
@@ -1825,6 +2087,7 @@
             </div>
             <div class="row-actions">
               <button class="ghost-action favorite-action ${isFavorite(record.restaurantId) ? "is-favorite" : ""}" data-action="toggle-favorite" data-id="${record.id}" type="button">${isFavorite(record.restaurantId) ? "已收藏" : "收藏"}</button>
+              ${renderWishButton(record.restaurantId, "history")}
               <button class="ghost-action" data-action="edit-review" data-id="${record.id}" type="button">${hasReview(record) ? "修改评价" : "评价"}</button>
               <button class="danger-action" data-action="delete-history" data-id="${record.id}" type="button">删除</button>
             </div>
@@ -1852,6 +2115,24 @@
           note: record.note,
           favoritedAt: new Date().toISOString(),
         };
+      }
+
+      function isWishListed(restaurantId) {
+        return restaurantIsWishListed(wishList, restaurantId);
+      }
+
+      function toggleWishForRestaurant(restaurant, source = "manual") {
+        const id = restaurant.id || restaurant.restaurantId;
+        if (!id) return;
+        const wasListed = isWishListed(id);
+        wishList = toggleWishList(wishList, id, source);
+        wishListDirty = true;
+        showMessage(wasListed ? "已移出最近想吃。" : "已加入最近想吃。");
+        render();
+      }
+
+      function renderWishButton(restaurantId, source = "manual") {
+        return `<button class="ghost-action wish-toggle ${isWishListed(restaurantId) ? "is-favorite" : ""}" data-action="toggle-wish" data-id="${escapeHtml(restaurantId)}" data-wish-source="${escapeHtml(source)}" type="button">${isWishListed(restaurantId) ? "已想吃" : "最近想吃"}</button>`;
       }
 
       function toggleFavorite(record) {
@@ -1938,6 +2219,7 @@
             </div>
             <div class="row-actions">
               <button class="map-action" data-action="open-map" data-id="${favorite.id}" type="button">打开地图</button>
+              ${renderWishButton(favorite.restaurantId, "favorite")}
               <button class="danger-action" data-action="remove-favorite" data-id="${favorite.id}" type="button">取消收藏</button>
             </div>
           </article>
@@ -1950,6 +2232,11 @@
         if (button.dataset.action === "open-map") {
           const favorite = favorites.find((item) => item.id === button.dataset.id);
           if (favorite) openMapPicker({ ...favorite, name: favorite.restaurantName });
+          return;
+        }
+        if (button.dataset.action === "toggle-wish") {
+          const favorite = favorites.find((item) => item.restaurantId === button.dataset.id);
+          if (favorite) toggleWishForRestaurant({ ...favorite, id: favorite.restaurantId, name: favorite.restaurantName }, button.dataset.wishSource || "favorite");
           return;
         }
         if (button.dataset.action !== "remove-favorite") return;
@@ -2084,6 +2371,7 @@
             </div>
             <div class="row-actions">
               <button class="ghost-action" data-action="restore-hidden" type="button">恢复不再推荐</button>
+              <button class="ghost-action" data-action="clear-wish-list" type="button">清空最近想吃</button>
               <button class="ghost-action" data-action="repair-data" type="button">修复餐厅库</button>
             </div>
           </div>
@@ -2097,6 +2385,7 @@
             ${renderDiagnosticChip("今日跳过", availabilitySummary.todaySkippedCount)}
             ${renderDiagnosticChip("稍后再说", availabilitySummary.deferredCount)}
             ${renderDiagnosticChip("不再推荐", availabilitySummary.hiddenCount, availabilitySummary.hiddenCount > 0)}
+            ${renderDiagnosticChip("最近想吃", wishList.length)}
           </div>
           <div class="diagnostic-status">
             ${restaurantHealth.healthy ? "状态正常。版本：" : "检测到可能的旧缓存异常，可点击修复。版本："}${escapeHtml(restaurantHealth.version)}
@@ -2116,6 +2405,14 @@
           availabilityDirty = true;
           invalidateFilterCache();
           showMessage("不再推荐列表已恢复。");
+          render();
+          return;
+        }
+        if (button.dataset.action === "clear-wish-list") {
+          wishList = clearWishList();
+          wishListDirty = true;
+          invalidateFilterCache();
+          showMessage("最近想吃清单已清空。");
           render();
           return;
         }
@@ -2153,6 +2450,7 @@
             </div>
             <div class="row-actions">
               <button class="map-action" data-action="open-map" data-id="${restaurant.id}" type="button">打开地图</button>
+              ${renderWishButton(restaurant.id, "manage")}
               <button class="ghost-action" data-action="edit" data-id="${restaurant.id}" type="button">编辑</button>
               <button class="danger-action" data-action="delete" data-id="${restaurant.id}" type="button">删除</button>
             </div>
@@ -2213,6 +2511,10 @@
           openMapPicker(restaurant);
           return;
         }
+        if (button.dataset.action === "toggle-wish") {
+          toggleWishForRestaurant(restaurant, button.dataset.wishSource || "manage");
+          return;
+        }
         if (button.dataset.action === "edit") {
           editingRestaurantId = restaurant.id;
           elements.nameInput.value = restaurant.name;
@@ -2245,6 +2547,11 @@
         if (button.dataset.action === "toggle-favorite") {
           const record = checkIns.find((item) => item.id === button.dataset.id);
           if (record) toggleFavorite(record);
+          return;
+        }
+        if (button.dataset.action === "toggle-wish") {
+          const record = checkIns.find((item) => item.restaurantId === button.dataset.id);
+          if (record) toggleWishForRestaurant({ ...record, id: record.restaurantId, name: record.restaurantName }, button.dataset.wishSource || "history");
           return;
         }
         if (button.dataset.action === "edit-review") {

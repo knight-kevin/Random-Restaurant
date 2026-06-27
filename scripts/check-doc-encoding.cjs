@@ -4,7 +4,6 @@ const path = require("node:path");
 const root = path.resolve(__dirname, "..");
 const files = [
   "README.md",
-  "modern.html",
   "index.html",
   "manifest.webmanifest",
   "scripts/categories.js",
@@ -14,6 +13,8 @@ const files = [
   "scripts/app/restaurant-images.js",
   "scripts/app/restaurant-availability.js",
   "scripts/app/random-reasons.js",
+  "scripts/app/pick-modes.js",
+  "scripts/app/wish-list.js",
   "scripts/app/food-diary.js",
   "scripts/app/map-links.js",
 ];

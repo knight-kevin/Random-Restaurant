@@ -32,6 +32,7 @@ try {
   await runBadDeletionRepairTest(browser);
   await runResultModalVisibilityTest(browser);
   await runExplainablePickAndAvailabilityTest(browser);
+  await runPickModeWishListTest(browser);
 
   await browser.close();
   console.log("mobile smoke tests passed");
@@ -130,6 +131,44 @@ async function runExplainablePickAndAvailabilityTest(browser) {
   await page.evaluate(() => {
     if (window.__originalConfirm) window.confirm = window.__originalConfirm;
   });
+  await page.close();
+}
+
+async function runPickModeWishListTest(browser) {
+  const page = await browser.newPage({ viewport: { width: 375, height: 812 }, isMobile: true });
+  await page.goto(`${baseUrl}/modern.html?v=pick-mode-test`, { waitUntil: "domcontentloaded" });
+  await page.waitForFunction(() => document.querySelector("#restaurant-count")?.textContent === "3300", null, { timeout: 15000 });
+
+  const sceneCount = await page.locator("#scene-modes [data-pick-scene]").count();
+  if (sceneCount < 7) throw new Error(`情境模式数量不足：${sceneCount}`);
+  await page.click("[data-pick-scene='budget']");
+  await page.waitForFunction(() => document.querySelector(".scene-chip.is-selected")?.textContent?.includes("想省钱"), null, { timeout: 5000 });
+
+  await page.click("#pick-button");
+  await page.waitForSelector(".reason-box", { state: "visible", timeout: 7000 });
+  await page.click("[data-action='toggle-wish'][data-wish-source='result']");
+  await page.waitForFunction(() => {
+    const raw = localStorage.getItem("random-restaurant-checkin:wish-list-v1");
+    return raw && JSON.parse(raw).items?.length === 1;
+  }, null, { timeout: 5000 });
+
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await page.waitForFunction(() => {
+    const text = document.querySelector("#restaurant-count")?.textContent || "";
+    return Number(text.replace(/\D/g, "")) > 0;
+  }, null, { timeout: 15000 });
+  await page.waitForFunction(() => document.querySelector("#wish-priority-button")?.textContent?.includes("1"), null, { timeout: 5000 });
+  await page.click("#wish-priority-button");
+  await page.click("[data-pick-type='triple']");
+  await page.click("#pick-button");
+  await page.waitForSelector(".choice-card", { state: "visible", timeout: 7000 });
+  const choiceCount = await page.locator(".choice-card").count();
+  if (choiceCount < 3) throw new Error(`三选一候选不足：${choiceCount}`);
+  const uniqueChoiceIds = await page.$$eval("[data-choice-select]", (buttons) => new Set(buttons.map((button) => button.dataset.choiceSelect)).size);
+  if (uniqueChoiceIds !== choiceCount) throw new Error("三选一候选存在重复餐厅");
+  await page.locator("[data-choice-select]").first().click();
+  await page.waitForSelector("#result-complete-button", { state: "visible", timeout: 5000 });
+  await page.waitForSelector(".reason-box", { state: "visible", timeout: 5000 });
   await page.close();
 }
 
