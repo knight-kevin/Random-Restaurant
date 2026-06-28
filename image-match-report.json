@@ -1,0 +1,722 @@
+{
+  "local": [
+    {
+      "id": "amap-B0KDVLS4SV",
+      "name": "杨记肴.精致浙菜(丰收时代店)",
+      "category": "local",
+      "imageCategory": "local",
+      "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0K6H69PDU",
+      "name": "赵府私厨·老杭帮菜(河坊街店)",
+      "category": "local",
+      "imageCategory": "local",
+      "image": "https://images.unsplash.com/photo-1543353071-873f17a7a088?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0KR0UN1M0",
+      "name": "赵府私厨·老杭帮菜(西湖老店)",
+      "category": "local",
+      "imageCategory": "local",
+      "image": "https://images.unsplash.com/photo-1543353071-873f17a7a088?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0G37C7HJS",
+      "name": "百家鸡味馆(清泰店)",
+      "category": "local",
+      "imageCategory": "local",
+      "image": "https://images.unsplash.com/photo-1543353071-873f17a7a088?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B023B1AI0Q",
+      "name": "碧桃小馆(西湖大道店)",
+      "category": "local",
+      "imageCategory": "local",
+      "image": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0FFMD2HGF",
+      "name": "达美乐比萨(鸿泰路店)",
+      "category": "local",
+      "imageCategory": "local",
+      "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B023B1AXAO",
+      "name": "德明饭店",
+      "category": "local",
+      "imageCategory": "local",
+      "image": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0FFL3B9WC",
+      "name": "杭州酒家(庆春路店)",
+      "category": "local",
+      "imageCategory": "local",
+      "image": "https://images.unsplash.com/photo-1543353071-873f17a7a088?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0JK2HTEUB",
+      "name": "荷韵西子·老底子杭帮菜(西湖音乐喷泉店)",
+      "category": "local",
+      "imageCategory": "local",
+      "image": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0FFLBNKNS",
+      "name": "金仲帮中餐厅",
+      "category": "local",
+      "imageCategory": "local",
+      "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=520&q=82"
+    }
+  ],
+  "hotpot": [
+    {
+      "id": "amap-B0KURS8590",
+      "name": "巴奴毛肚火锅(杭州湖滨in77店)",
+      "category": "hotpot",
+      "imageCategory": "hotpot",
+      "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0I35RN72Z",
+      "name": "蔡记九米羊肉炉",
+      "category": "hotpot",
+      "imageCategory": "hotpot",
+      "image": "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0HB4N6LYY",
+      "name": "海底捞火锅(杭州东城购物中心店)",
+      "category": "hotpot",
+      "imageCategory": "hotpot",
+      "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0HRFX2Y7H",
+      "name": "海底捞火锅(杭州工联cc店)",
+      "category": "hotpot",
+      "imageCategory": "hotpot",
+      "image": "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0FFLBF8NK",
+      "name": "海底捞火锅(杭州湖滨in77D区店)",
+      "category": "hotpot",
+      "imageCategory": "hotpot",
+      "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0H2PZN5BA",
+      "name": "罗氏京東盛·老北京铜锅涮肉·烤串(西湖总店)",
+      "category": "buffet",
+      "imageCategory": "hotpot",
+      "image": "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0I3YSKH0F",
+      "name": "鼎库港味海鲜火锅",
+      "category": "hotpot",
+      "imageCategory": "hotpot",
+      "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0JU1UXNR7",
+      "name": "二火锅(杭州店)",
+      "category": "hotpot",
+      "imageCategory": "hotpot",
+      "image": "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0KR24KSW8",
+      "name": "贵五爷·黄牛肉火锅(杭州总店)",
+      "category": "hotpot",
+      "imageCategory": "hotpot",
+      "image": "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0L2RRN9BQ",
+      "name": "马厂老火锅(杭州东站店)",
+      "category": "hotpot",
+      "imageCategory": "hotpot",
+      "image": "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=520&q=82"
+    }
+  ],
+  "seafood": [
+    {
+      "id": "amap-B0I3L7YDY2",
+      "name": "海鲨岛海鲜豆捞餐厅",
+      "category": "hotpot",
+      "imageCategory": "seafood",
+      "image": "https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0J17NCRR3",
+      "name": "德悦悦品海鲜姿造(凤起东路店)",
+      "category": "seafood",
+      "imageCategory": "seafood",
+      "image": "https://images.unsplash.com/photo-1559737558-2f5a35f4523b?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0HGKUGX7Y",
+      "name": "黄龙海鲜大排档(庆春店)",
+      "category": "seafood",
+      "imageCategory": "seafood",
+      "image": "https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0JAMAIPA4",
+      "name": "三两好友深夜食堂·焗海鲜·烤乳猪(杭州首店)",
+      "category": "seafood",
+      "imageCategory": "seafood",
+      "image": "https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0H1G5UP7N",
+      "name": "巴芬港海鲜姿造(来福士店)",
+      "category": "seafood",
+      "imageCategory": "seafood",
+      "image": "https://images.unsplash.com/photo-1559737558-2f5a35f4523b?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B023B13L10",
+      "name": "藏鲜工坊(庆春店)",
+      "category": "seafood",
+      "imageCategory": "seafood",
+      "image": "https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0HG291XJP",
+      "name": "德悦海鲜(钱江新城店)",
+      "category": "seafood",
+      "imageCategory": "seafood",
+      "image": "https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0J0JAKDGN",
+      "name": "何记潮汕鱼生大排档",
+      "category": "seafood",
+      "imageCategory": "seafood",
+      "image": "https://images.unsplash.com/photo-1559737558-2f5a35f4523b?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0FFHC5N3I",
+      "name": "活蹦乱跳海鲜餐厅(丁桥店)",
+      "category": "seafood",
+      "imageCategory": "seafood",
+      "image": "https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0HB2UXE74",
+      "name": "闻炉",
+      "category": "seafood",
+      "imageCategory": "seafood",
+      "image": "https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=520&q=82"
+    }
+  ],
+  "bbq": [
+    {
+      "id": "amap-B0KA45FVPP",
+      "name": "民谣集烧烤酒馆(杭州芳塘店)",
+      "category": "bbq",
+      "imageCategory": "bbq",
+      "image": "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0I07DLSY0",
+      "name": "很久以前羊肉串(杭州来福士店)",
+      "category": "bbq",
+      "imageCategory": "bbq",
+      "image": "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0FFG777AX",
+      "name": "凯旋烧烤(凯旋路)",
+      "category": "bbq",
+      "imageCategory": "bbq",
+      "image": "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0FFJV1W68",
+      "name": "御牛道日式烤肉料理(杭州万象城店)",
+      "category": "bbq",
+      "imageCategory": "bbq",
+      "image": "https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0JAS587Z9",
+      "name": "313羊庄(钱江国际时代广场-地下广场店)",
+      "category": "bbq",
+      "imageCategory": "bbq",
+      "image": "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0K0NMGDMO",
+      "name": "东北杨光•碳烤鲜牛肉(天虹店)",
+      "category": "bbq",
+      "imageCategory": "bbq",
+      "image": "https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0JKC5MSDL",
+      "name": "蚂蚁洞(杭州中心店)",
+      "category": "bbq",
+      "imageCategory": "bbq",
+      "image": "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0FFHDZ27X",
+      "name": "御牛道日式烤肉料理(国大城市广场店)",
+      "category": "bbq",
+      "imageCategory": "bbq",
+      "image": "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0L0UZVQ6S",
+      "name": "凹凸铁北海道烧肉(中山北路店)",
+      "category": "bbq",
+      "imageCategory": "bbq",
+      "image": "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0KGU7W0NO",
+      "name": "潮庭·大连海鲜·炭火烧烤·扇贝王(杭州店)",
+      "category": "bbq",
+      "imageCategory": "bbq",
+      "image": "https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=520&q=82"
+    }
+  ],
+  "snack": [
+    {
+      "id": "amap-B0FFKMLR4R",
+      "name": "庆春食堂(国有资本投资大厦店)",
+      "category": "snack",
+      "imageCategory": "snack",
+      "image": "https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0L16LSURY",
+      "name": "蔡林记·湖北小馆(杭州来福士中心店)",
+      "category": "snack",
+      "imageCategory": "snack",
+      "image": "https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0HRHG0QWC",
+      "name": "马记永·兰州牛肉面(杭州来福士中心店)",
+      "category": "snack",
+      "imageCategory": "snack",
+      "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0L1RHC11V",
+      "name": "鸟鸟私房面(来福士臻选店)",
+      "category": "snack",
+      "imageCategory": "snack",
+      "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0LRVSK6FH",
+      "name": "O!bap 紫菜卷 轻料理",
+      "category": "snack",
+      "imageCategory": "snack",
+      "image": "https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B023B1D56Y",
+      "name": "蕙心小吃店",
+      "category": "snack",
+      "imageCategory": "snack",
+      "image": "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0L23L5EEC",
+      "name": "条泰台州卤煮小馆",
+      "category": "snack",
+      "imageCategory": "snack",
+      "image": "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B023B09JKV",
+      "name": "必胜客(建国北路滨河汇店)",
+      "category": "snack",
+      "imageCategory": "snack",
+      "image": "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0LRHL9A0A",
+      "name": "宫友记老友粉",
+      "category": "snack",
+      "imageCategory": "snack",
+      "image": "https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0K3R4X1G5",
+      "name": "小饮与食·盖饭小吃·中华料理(杭州建国店)",
+      "category": "snack",
+      "imageCategory": "snack",
+      "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=520&q=82"
+    }
+  ],
+  "noodle": [
+    {
+      "id": "amap-B0LRCDF78K",
+      "name": "椿芽·鲜牛肉杭州拌川(杭州万象城店)",
+      "category": "snack",
+      "imageCategory": "noodle",
+      "image": "https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0FFIPE4M6",
+      "name": "方老大",
+      "category": "noodle",
+      "imageCategory": "noodle",
+      "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0FFF4SFOW",
+      "name": "老倪头面馆(联合新苑店)",
+      "category": "noodle",
+      "imageCategory": "noodle",
+      "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0FFJCR27X",
+      "name": "泮芳春煎饺·米其林餐厅(中山南路店)",
+      "category": "noodle",
+      "imageCategory": "noodle",
+      "image": "https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0L6OCG3CF",
+      "name": "王繁星面馆(杭州湖滨in77店)",
+      "category": "noodle",
+      "imageCategory": "noodle",
+      "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0FFF3N8BJ",
+      "name": "阿军面馆(双菱路店)",
+      "category": "noodle",
+      "imageCategory": "noodle",
+      "image": "https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0FFKM7WSA",
+      "name": "阿生青江三鲜面(东雁荡)",
+      "category": "noodle",
+      "imageCategory": "noodle",
+      "image": "https://images.unsplash.com/photo-1555126634-323283e090fa?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0LKTSV0RA",
+      "name": "椿芽·鲜牛肉杭州拌川(杭州东站万象汇店)",
+      "category": "noodle",
+      "imageCategory": "noodle",
+      "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0FFFDX1CH",
+      "name": "大姨娘面馆(复兴南苑店)",
+      "category": "noodle",
+      "imageCategory": "noodle",
+      "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0JKZYLFBI",
+      "name": "大渔面馆(湖滨邮电路店)",
+      "category": "noodle",
+      "imageCategory": "noodle",
+      "image": "https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?auto=format&fit=crop&w=520&q=82"
+    }
+  ],
+  "western": [
+    {
+      "id": "amap-B0L2CSHQ91",
+      "name": "博多天一天婦羅牛排飯(杭州首店)",
+      "category": "western",
+      "imageCategory": "western",
+      "image": "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0IB9Z5P4O",
+      "name": "达美乐比萨(惠兴路店)",
+      "category": "western",
+      "imageCategory": "western",
+      "image": "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0H1F5E24W",
+      "name": "达美乐比萨(普大福地店)",
+      "category": "western",
+      "imageCategory": "western",
+      "image": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0I23SV1LD",
+      "name": "牛排家(杭州万象城店)",
+      "category": "western",
+      "imageCategory": "western",
+      "image": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0H1DLNSEY",
+      "name": "萨莉亚意式餐厅(杭州湖滨in77D区店)",
+      "category": "western",
+      "imageCategory": "western",
+      "image": "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0KKMUJXHB",
+      "name": "王品牛排(杭州平安悦坊店)",
+      "category": "western",
+      "imageCategory": "western",
+      "image": "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0FFJOX278",
+      "name": "意坊(西湖大道店)",
+      "category": "western",
+      "imageCategory": "western",
+      "image": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0J30NYWRY",
+      "name": "COMMUNE幻师(杭州湖滨in77店)",
+      "category": "western",
+      "imageCategory": "western",
+      "image": "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0K1JMF89B",
+      "name": "Funloop芳麓·湖畔南欧餐厅(西湖天地店)",
+      "category": "western",
+      "imageCategory": "western",
+      "image": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0I2CAA3ZB",
+      "name": "gaga(杭州万象城店)",
+      "category": "western",
+      "imageCategory": "western",
+      "image": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=520&q=82"
+    }
+  ],
+  "asian": [
+    {
+      "id": "amap-B0J2PRDBTW",
+      "name": "極上萬膳·日料放题(来福士中心店)",
+      "category": "asian",
+      "imageCategory": "asian",
+      "image": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0IG5AIQYQ",
+      "name": "觅隐·千寻",
+      "category": "asian",
+      "imageCategory": "asian",
+      "image": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B023B14KL5",
+      "name": "大渔臻选·棠膳(杭州万象城店)",
+      "category": "asian",
+      "imageCategory": "asian",
+      "image": "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0HK9S2DKD",
+      "name": "老乾杯(杭州万象城店)",
+      "category": "asian",
+      "imageCategory": "asian",
+      "image": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0G12MIMP9",
+      "name": "鸟上烧鸟居酒屋(新塘路店)",
+      "category": "asian",
+      "imageCategory": "asian",
+      "image": "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0KUTHBUDZ",
+      "name": "肉肉大米(杭州万象城店)",
+      "category": "asian",
+      "imageCategory": "asian",
+      "image": "https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0FFM33PR5",
+      "name": "苍蝇酒肉馆(国都公寓店)",
+      "category": "asian",
+      "imageCategory": "asian",
+      "image": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0FFKYLNOW",
+      "name": "满丼肉剧场",
+      "category": "asian",
+      "imageCategory": "asian",
+      "image": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0HD37PN0Y",
+      "name": "鸟剑居酒屋(中山北路店)",
+      "category": "asian",
+      "imageCategory": "asian",
+      "image": "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0HAUCUOLE",
+      "name": "酉串·食聚屋炭火烧鸟酒场(杭州本店)",
+      "category": "asian",
+      "imageCategory": "asian",
+      "image": "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=520&q=82"
+    }
+  ],
+  "dessert": [
+    {
+      "id": "amap-B0FFG3TDK7",
+      "name": "星巴克(杭州UDC店)",
+      "category": "dessert",
+      "imageCategory": "dessert",
+      "image": "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0GUJ1S8C8",
+      "name": "% Arabica阿拉比卡咖啡(万象城店)",
+      "category": "dessert",
+      "imageCategory": "dessert",
+      "image": "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0FFK6GUOC",
+      "name": "杭州久泰饭店·遇见咖啡厅",
+      "category": "dessert",
+      "imageCategory": "dessert",
+      "image": "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0LUH7IO9M",
+      "name": "蓝瓶咖啡(杭州万象城店)",
+      "category": "dessert",
+      "imageCategory": "dessert",
+      "image": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0FFJCB8NB",
+      "name": "瑞幸咖啡(迪凯国际店)",
+      "category": "dessert",
+      "imageCategory": "dessert",
+      "image": "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0FFG77TKN",
+      "name": "星巴克(滨江城市之星店)",
+      "category": "dessert",
+      "imageCategory": "dessert",
+      "image": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0JGRK05J7",
+      "name": "杭州君悦酒店·咖啡厅自助餐",
+      "category": "buffet",
+      "imageCategory": "dessert",
+      "image": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0K0XUV333",
+      "name": "岱·coffee&taproom(每周三店休)",
+      "category": "dessert",
+      "imageCategory": "dessert",
+      "image": "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0LUNC7B1N",
+      "name": "感光度COFFEE(潮鸣苑北区店)",
+      "category": "dessert",
+      "imageCategory": "dessert",
+      "image": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0L3N5E1JW",
+      "name": "胡安咖啡Any.Shell Coffee(刀茅巷店)",
+      "category": "dessert",
+      "imageCategory": "dessert",
+      "image": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=520&q=82"
+    }
+  ],
+  "buffet": [
+    {
+      "id": "amap-B0JR5KFE5I",
+      "name": "牛New寿喜烧(东站万象汇店)",
+      "category": "buffet",
+      "imageCategory": "buffet",
+      "image": "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0I1ODBA7N",
+      "name": "牛New寿喜烧(来福士店)",
+      "category": "buffet",
+      "imageCategory": "buffet",
+      "image": "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0HG5ZAD6I",
+      "name": "一家素·蔬食料理(西湖湖滨店)",
+      "category": "buffet",
+      "imageCategory": "buffet",
+      "image": "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0LU1GFGEV",
+      "name": "雍容荟活波龙自助餐(杭州万象城黑金店)",
+      "category": "buffet",
+      "imageCategory": "buffet",
+      "image": "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0HAVA9Q62",
+      "name": "汉巴味德(杭州大悦城店)",
+      "category": "buffet",
+      "imageCategory": "buffet",
+      "image": "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0KRJLESOH",
+      "name": "牛New寿喜烧(城西银泰百货店)",
+      "category": "buffet",
+      "imageCategory": "buffet",
+      "image": "https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0LATU7DI6",
+      "name": "牛New寿喜烧(大悦城店)",
+      "category": "buffet",
+      "imageCategory": "buffet",
+      "image": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0JD6H2B7O",
+      "name": "鲲·屋台鱼生料理(塘萍路城西银泰1店)",
+      "category": "buffet",
+      "imageCategory": "buffet",
+      "image": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0J3VM7IBY",
+      "name": "妙醍醐素食自助餐厅",
+      "category": "buffet",
+      "imageCategory": "buffet",
+      "image": "https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=520&q=82"
+    },
+    {
+      "id": "amap-B0KDUN2EC6",
+      "name": "牛New寿喜烧(杭州西投银泰店)",
+      "category": "buffet",
+      "imageCategory": "buffet",
+      "image": "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=520&q=82"
+    }
+  ]
+}
