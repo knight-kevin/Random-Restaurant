@@ -5,6 +5,7 @@ const root = path.resolve(__dirname, "..");
 const files = [
   "README.md",
   "index.html",
+  "modern.html",
   "manifest.webmanifest",
   "scripts/categories.js",
   "scripts/location-fixed.js",
@@ -15,21 +16,26 @@ const files = [
   "scripts/app/random-reasons.js",
   "scripts/app/food-diary.js",
   "scripts/app/map-links.js",
+  "scripts/app/platform-links.js",
+  "scripts/city-definitions.cjs",
+  "scripts/category-rules.cjs",
 ];
+
 const suspiciousPatterns = [
-  /\uFFFD/,
-  /锛|涓|椁|鎵|鍦|璺|閫|鐢|绛|褰|瀹|鏉|蹇|瑙/,
+  { label: "replacement character", regex: /\uFFFD/ },
+  { label: "common mojibake", regex: /(浜洪棿|鎶介|鎵撳崱|椁愬巺|褰撳墠|缇庨|鎺掑簭|閫夋嫨|鍦板浘|鏁版嵁|璁板綍|鏀惰棌|姝ｅ湪|宸插|鏈€|鐐硅瘎|鍒犻櫎|缂栬緫|銆|锛)/ },
 ];
 
 let failed = false;
+
 for (const relativePath of files) {
   const absolutePath = path.join(root, relativePath);
   if (!fs.existsSync(absolutePath)) continue;
   const text = fs.readFileSync(absolutePath, "utf8");
-  const matched = suspiciousPatterns.find((pattern) => pattern.test(text));
+  const matched = suspiciousPatterns.find((pattern) => pattern.regex.test(text));
   if (matched) {
     failed = true;
-    console.error(`encoding check failed: ${relativePath} contains suspicious text (${matched})`);
+    console.error(`encoding check failed: ${relativePath} contains ${matched.label}`);
   }
 }
 

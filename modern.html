@@ -15,19 +15,24 @@
       :root {
         --color-text: #20252b;
         --color-muted: #697279;
-        --color-soft: #f7f7f6;
+        --color-soft: #f8f7f5;
         --color-panel: #ffffff;
-        --color-border: #eee7e1;
+        --color-border: #eee5df;
         --color-primary: #ff5b37;
         --color-primary-dark: #e64626;
         --color-primary-soft: #fff1eb;
         --color-accent: #ff8a3d;
-        --radius-card: 12px;
-        --radius-control: 10px;
-        --shadow-soft: 0 12px 30px rgba(31, 41, 51, .08);
-        --shadow-panel: 0 20px 54px rgba(31, 41, 51, .11);
+        --color-surface-warm: #fffaf7;
+        --radius-card: 14px;
+        --radius-control: 12px;
+        --shadow-soft: 0 10px 28px rgba(31, 41, 51, .06);
+        --shadow-panel: 0 22px 60px rgba(31, 41, 51, .13);
+        --ease-standard: cubic-bezier(.2, .8, .2, 1);
         color: var(--color-text);
-        background: linear-gradient(180deg, #fff7f3 0%, #f8fbff 42%, #ffffff 100%);
+        background:
+          radial-gradient(circle at 12% 0%, rgba(255, 91, 55, .12), transparent 30rem),
+          radial-gradient(circle at 88% 8%, rgba(80, 176, 255, .10), transparent 28rem),
+          linear-gradient(180deg, #fffaf7 0%, #f7fbff 52%, #ffffff 100%);
         font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
       }
 
@@ -39,23 +44,26 @@
       button { border: 0; cursor: pointer; }
       button:disabled { cursor: not-allowed; opacity: 0.7; }
 
-      .app-shell { width: min(1160px, calc(100% - 32px)); margin: 0 auto; padding: 20px 0 44px; }
-      .topbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 16px 18px 14px; }
+      .app-shell { width: min(1120px, calc(100% - 32px)); margin: 0 auto; padding: 18px 0 44px; }
+      .topbar { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding: 14px 6px 18px; }
+      .brand-block { display: grid; gap: 10px; justify-items: start; }
       h1, h2, h3 { margin: 0; letter-spacing: 0; }
-      h1 { margin-top: 4px; font-size: clamp(2rem, 4.8vw, 4rem); line-height: 1.02; }
+      h1 { margin-top: 4px; font-size: clamp(2.2rem, 4.2vw, 3.55rem); line-height: .98; }
       .eyebrow { margin: 0; color: #7d5544; font-size: 0.78rem; font-weight: 800; letter-spacing: 0; }
-      .top-actions { display: flex; gap: 4px; padding: 4px; border: 1px solid var(--color-border); border-radius: 999px; background: rgba(255,255,255,.92); box-shadow: 0 8px 22px rgba(31,41,51,.06); }
-      .nav-action { min-height: 38px; border-radius: 999px; padding: 0 13px; background: transparent; color: #33423a; font-weight: 800; white-space: nowrap; }
-      .nav-action.is-active { background: var(--color-primary); color: #fff; box-shadow: 0 6px 14px rgba(255,91,55,.18); }
+      .top-actions { display: flex; gap: 3px; padding: 3px; border: 1px solid rgba(238,229,223,.95); border-radius: 999px; background: rgba(255,255,255,.86); box-shadow: 0 8px 22px rgba(31,41,51,.05); backdrop-filter: blur(12px); }
+      .nav-action { min-height: 36px; border-radius: 999px; padding: 0 13px; background: transparent; color: #35433d; font-size: .92rem; font-weight: 850; white-space: nowrap; transition: background .18s var(--ease-standard), color .18s var(--ease-standard), box-shadow .18s var(--ease-standard); }
+      .nav-action.is-active { background: var(--color-primary); color: #fff; box-shadow: 0 8px 18px rgba(255,91,55,.18); }
+      .city-select { min-height: 34px; min-width: 112px; border: 1px solid var(--color-border); border-radius: 999px; padding: 0 34px 0 14px; background: rgba(255,255,255,.9); color: #2f3a36; font-size: .88rem; font-weight: 850; outline: none; box-shadow: 0 6px 18px rgba(31,41,51,.04); }
+      .city-select:focus { border-color: #ffc4b5; box-shadow: 0 0 0 3px rgba(255,91,55,.12); }
       .favorite-action.is-favorite { border-color: #ffc3cf; background: #fff0f4; color: #d92f58; }
 
       .home-grid { display: block; }
       .home-grid > * { min-width: 0; }
-      .panel, .hero-stage { border: 1px solid var(--color-border); border-radius: var(--radius-card); background: rgba(255,255,255,.94); box-shadow: var(--shadow-soft); }
-      .hero-stage { width: 100%; min-width: 0; overflow: visible; padding: clamp(18px, 2.5vw, 28px); }
-      .hero-copy { display: grid; gap: 7px; max-width: 720px; }
+      .panel, .hero-stage { border: 1px solid var(--color-border); border-radius: var(--radius-card); background: rgba(255,255,255,.96); box-shadow: var(--shadow-soft); }
+      .hero-stage { width: 100%; min-width: 0; overflow: visible; padding: clamp(18px, 2.35vw, 26px); }
+      .hero-copy { display: grid; gap: 6px; max-width: 720px; }
       .hero-copy .eyebrow { font-size: clamp(.95rem, 1.35vw, 1.08rem); }
-      .hero-copy h2 { font-family: inherit; font-size: clamp(1.85rem, 4.4vw, 4rem); font-weight: 900; line-height: 1.04; }
+      .hero-copy h2 { font-family: inherit; font-size: clamp(1.85rem, 4.15vw, 3.55rem); font-weight: 900; line-height: 1.04; max-width: 820px; }
       .hero-copy p:last-child { max-width: 560px; margin: 0; color: #5d6870; font-size: 1.02rem; line-height: 1.7; }
       .filter-panel { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) auto; gap: 12px; align-items: end; margin-top: 20px; padding: 14px; border: 1px solid rgba(255,91,91,.18); border-radius: 8px; background: rgba(255,255,255,.82); }
       .filter-panel label, .filter-field { display: grid; gap: 7px; color: #39493f; font-weight: 800; min-width: 0; }
@@ -63,7 +71,7 @@
       .filter-panel select { min-height: 42px; border: 1px solid #cbd5c4; border-radius: 8px; padding: 0 12px; background: #fff; color: #1f2933; outline: none; font-weight: 700; }
       .multi-filter { position: relative; min-width: 0; }
       .multi-filter-button { display: flex; width: 100%; min-height: 42px; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid #cbd5c4; border-radius: 8px; padding: 0 12px; background: #fff; color: #1f2933; font-weight: 700; text-align: left; }
-      .multi-filter-button::after { content: "⌄"; color: #687274; font-size: 1rem; transition: transform .18s ease; }
+      .multi-filter-button::after { content: "v"; color: #687274; font-size: 1rem; transition: transform .18s ease; }
       .multi-filter.is-open .multi-filter-button { border-color: #ff725e; box-shadow: 0 0 0 3px rgba(255,114,94,.12); }
       .multi-filter.is-open .multi-filter-button::after { transform: rotate(180deg); }
       .multi-filter-menu { position: absolute; z-index: 12; top: calc(100% + 7px); left: 0; width: max(100%, 220px); max-height: 280px; overflow: auto; padding: 8px; border: 1px solid rgba(255,114,94,.2); border-radius: 8px; background: #fff; box-shadow: 0 18px 42px rgba(42,55,83,.18); }
@@ -72,40 +80,40 @@
       .multi-filter-option input { width: 18px; height: 18px; margin: 0; accent-color: #ff654f; }
       .multi-filter-option span { color: inherit; font-size: .88rem; }
       .filter-summary { margin: 0; color: #53655a; font-size: .9rem; font-weight: 800; white-space: nowrap; }
-      .food-filter { position: relative; z-index: 31; width: 100%; min-width: 0; margin-top: 16px; }
-      .category-tabs { display: flex; width: 100%; min-width: 0; gap: 22px; overflow-x: auto; padding: 0 2px 10px; scrollbar-width: none; }
+      .food-filter { position: relative; z-index: 31; width: 100%; min-width: 0; margin-top: 18px; }
+      .category-tabs { display: flex; width: 100%; min-width: 0; gap: 20px; overflow-x: auto; padding: 0 2px 9px; border-bottom: 1px solid rgba(238,229,223,.8); scrollbar-width: none; }
       .category-tabs::-webkit-scrollbar { display: none; }
-      .category-tab { position: relative; flex: 0 0 auto; padding: 8px 0; background: transparent; color: #20252a; font-weight: 900; white-space: nowrap; }
+      .category-tab { position: relative; flex: 0 0 auto; min-height: 38px; padding: 7px 0; background: transparent; color: #20252a; font-weight: 900; white-space: nowrap; transition: color .18s var(--ease-standard); }
       .category-tab.is-active { color: var(--color-primary); }
-      .category-tab.is-active::after { position: absolute; right: 0; bottom: 0; left: 0; height: 3px; border-radius: 4px; background: var(--color-primary); content: ""; }
+      .category-tab.is-active::after { position: absolute; right: 0; bottom: -1px; left: 0; height: 3px; border-radius: 4px; background: var(--color-primary); content: ""; }
       .filter-entry-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
       .filter-entry-row.is-single { grid-template-columns: 1fr; }
-      .filter-entry { display: flex; min-width: 0; min-height: 42px; align-items: center; justify-content: center; gap: 5px; padding: 6px 9px; border: 1px solid var(--color-border); border-radius: var(--radius-control); background: #fff; color: #25292d; font-size: .9rem; font-weight: 900; line-height: 1; white-space: nowrap; box-shadow: none; }
-      .primary-filter-entry { justify-content: space-between; padding: 8px 13px; text-align: left; }
+      .filter-entry { display: flex; min-width: 0; min-height: 44px; align-items: center; justify-content: center; gap: 5px; padding: 7px 10px; border: 1px solid var(--color-border); border-radius: var(--radius-control); background: #fff; color: #25292d; font-size: .9rem; font-weight: 900; line-height: 1; white-space: nowrap; box-shadow: none; transition: border-color .18s var(--ease-standard), background .18s var(--ease-standard); }
+      .primary-filter-entry { justify-content: space-between; margin-top: 8px; padding: 8px 14px; text-align: left; }
       .primary-filter-entry span { min-width: 0; overflow: hidden; color: #798087; font-size: .76rem; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
-      .filter-entry::after { flex: 0 0 auto; content: "⌄"; color: #596068; font-size: .82rem; line-height: 1; }
+      .filter-entry::after { flex: 0 0 auto; content: "v"; color: #596068; font-size: .82rem; line-height: 1; }
       .filter-entry.is-active { border-color: #ffc4b5; background: var(--color-primary-soft); color: var(--color-primary); }
       .filter-entry.is-active::after { transform: rotate(180deg); }
       .filter-entry small { display: block; max-width: 100%; overflow: hidden; color: #777d82; font-size: .7rem; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
-      .filter-dropdown { position: absolute; top: calc(100% + 10px); right: 0; left: 0; display: flex; max-height: min(75vh, 650px); flex-direction: column; border: 1px solid var(--color-border); border-radius: 12px; background: #fff; box-shadow: var(--shadow-panel); overflow: hidden; }
+      .filter-dropdown { position: absolute; top: calc(100% + 10px); right: 0; left: 0; display: flex; max-height: min(75vh, 650px); flex-direction: column; border: 1px solid var(--color-border); border-radius: 16px; background: #fff; box-shadow: var(--shadow-panel); overflow: hidden; }
       .filter-dropdown-inner { min-height: 0; overflow: auto; overscroll-behavior: contain; padding: 18px; -webkit-overflow-scrolling: touch; }
       .filter-backdrop { position: fixed; z-index: 25; inset: 0; background: rgba(25,29,34,.22); backdrop-filter: blur(1px); }
       .filter-panel-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; font-weight: 900; }
       .location-status { color: #5d6870; font-size: .86rem; font-weight: 700; }
       .location-action { padding: 8px 10px; border-radius: 7px; background: #fff1eb; color: #ff5b37; font-weight: 900; }
       .choice-row { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
-      .choice-button { min-height: 40px; border: 1px solid transparent; border-radius: 9px; background: var(--color-soft); color: #30353a; font-weight: 800; }
+      .choice-button { min-height: 40px; border: 1px solid transparent; border-radius: 10px; background: var(--color-soft); color: #30353a; font-weight: 800; transition: background .18s var(--ease-standard), border-color .18s var(--ease-standard); }
       .choice-button.is-selected { border-color: #ffb39f; background: var(--color-primary-soft); color: var(--color-primary); }
       .area-picker { display: grid; grid-template-columns: 128px minmax(0, .8fr) minmax(0, 1.2fr); min-height: 330px; margin-top: 16px; border-top: 1px solid #f0ece8; }
       .area-level { display: grid; align-content: start; gap: 2px; padding: 10px 0; }
       .area-level + .area-level { border-left: 1px solid #f0ece8; }
       .area-option { min-height: 44px; padding: 8px 14px; background: transparent; color: #30353a; text-align: left; }
       .area-option.is-selected { background: #fff7f4; color: var(--color-primary); font-weight: 900; }
-      .food-picker { display: grid; grid-template-columns: 112px minmax(0, 1fr); min-height: 390px; }
+      .food-picker { display: grid; min-height: 390px; }
       .food-group-nav { display: grid; align-content: start; border-right: 1px solid #f0ece8; background: #fafafa; }
       .food-group-nav-button { min-height: 52px; padding: 8px 12px; background: transparent; color: #30353a; text-align: left; font-weight: 800; }
       .food-group-nav-button.is-selected { background: #fff; color: var(--color-primary); }
-      .food-groups { display: grid; align-content: start; gap: 18px; padding-left: 16px; }
+      .food-groups { display: grid; align-content: start; gap: 18px; padding-left: 0; }
       .food-group { display: grid; gap: 14px; align-items: start; }
       .food-group-title { display: grid; gap: 5px; justify-items: start; color: #25292d; font-weight: 900; }
       .food-group-title span:first-child { display: grid; width: 34px; height: 34px; place-items: center; border-radius: 50%; background: #fff1eb; color: #ff5b37; }
@@ -119,14 +127,21 @@
       .filter-footer button { min-height: 44px; border-radius: 8px; padding: 0 22px; font-weight: 900; }
       .filter-reset { background: #f5f5f4; color: #454b50; }
       .filter-confirm { flex: 1; max-width: 280px; background: var(--color-primary); color: #fff; }
-      .active-filter-summary { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: center; margin: 10px 2px 0; color: #53655a; font-size: .84rem; font-weight: 800; }
+      .active-filter-summary { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: center; margin: 9px 2px 0; color: #53655a; font-size: .84rem; font-weight: 800; }
       .filter-summary-text { min-width: 0; overflow: hidden; color: var(--color-primary); text-align: right; text-overflow: ellipsis; white-space: nowrap; }
       .filter-token { padding: 3px 8px; border-radius: 999px; background: var(--color-primary-soft); color: var(--color-primary); }
       .combined-filter-panel { display: grid; gap: 18px; }
+      .combined-filter-panel.is-tabbed { grid-template-columns: 112px minmax(0, 1fr); gap: 14px; min-height: min(56vh, 500px); }
+      .combined-section-nav { position: sticky; top: 0; align-self: start; display: grid; align-content: start; gap: 6px; max-height: min(62vh, 520px); overflow-y: auto; overscroll-behavior: contain; padding-right: 10px; border-right: 1px solid #f0ece8; background: #fff; }
+      .combined-section-tab { display: grid; min-height: 54px; align-content: center; gap: 3px; padding: 9px 10px; border-radius: 12px; background: transparent; color: #30353a; text-align: left; font-weight: 900; transition: background .18s var(--ease-standard), color .18s var(--ease-standard); }
+      .combined-section-tab small { min-width: 0; overflow: hidden; color: #7b838a; font-size: .68rem; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+      .combined-section-tab.is-selected { background: var(--color-primary-soft); color: var(--color-primary); }
+      .combined-section-tab.is-selected small { color: #b5563d; }
+      .combined-section-body { min-width: 0; min-height: 0; }
       .filter-section { display: grid; gap: 10px; }
       .filter-section + .filter-section { border-top: 1px solid #f0ece8; padding-top: 16px; }
-      .reel-shell { position: relative; margin-top: 18px; padding: 14px; overflow: hidden; border-radius: 12px; background: radial-gradient(circle at 28% 20%, rgba(255,132,105,.18), transparent 31%), radial-gradient(circle at 76% 18%, rgba(94,194,255,.14), transparent 34%), linear-gradient(155deg, #17224d, #0d1422 76%); box-shadow: inset 0 0 0 1px rgba(255,255,255,.11), 0 12px 30px rgba(35,45,85,.14); }
-      .reel-window { position: relative; height: 410px; overflow: hidden; border-radius: 10px; perspective: 1250px; }
+      .reel-shell { position: relative; margin-top: 16px; padding: 12px; overflow: hidden; border-radius: 16px; background: radial-gradient(circle at 28% 20%, rgba(255,132,105,.16), transparent 31%), radial-gradient(circle at 76% 18%, rgba(94,194,255,.12), transparent 34%), linear-gradient(155deg, #17224d, #0c1320 76%); box-shadow: inset 0 0 0 1px rgba(255,255,255,.10), 0 12px 30px rgba(35,45,85,.12); }
+      .reel-window { position: relative; height: clamp(340px, 38vw, 410px); overflow: hidden; border-radius: 12px; perspective: 1250px; }
       .reel-window::before { position: absolute; z-index: 0; inset: 34px 8%; content: ""; border-radius: 50%; background: radial-gradient(circle at 36% 28%, rgba(255,255,255,.18), rgba(255,183,112,.07) 28%, rgba(29,42,78,.15) 56%, rgba(5,10,22,.42) 74%, transparent 76%); box-shadow: inset -34px -18px 62px rgba(3,8,20,.42), inset 20px 12px 42px rgba(255,255,255,.08), 0 0 56px rgba(112,177,255,.12); }
       .reel-window::after { position: absolute; z-index: 5; inset: 31px 7.5%; border: 1px solid rgba(185,218,255,.13); border-radius: 50%; content: ""; box-shadow: inset 18px 0 26px rgba(255,255,255,.05), inset -22px 0 30px rgba(3,8,20,.28); pointer-events: none; }
       .reel-focus { position: absolute; z-index: 7; top: 50%; left: 50%; width: 22px; height: 22px; border: 1px solid rgba(255,226,184,.66); border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 0 5px rgba(255,206,145,.08), 0 0 22px rgba(255,184,103,.2); pointer-events: none; }
@@ -179,12 +194,12 @@
         .random-button { transition: none; }
       }
 
-      .random-controls { display: grid; gap: 8px; align-items: center; margin-top: 14px; }
-      .count-pill { display: flex; width: fit-content; min-width: 0; min-height: 0; align-items: center; gap: 4px; padding: 4px 10px; border: 1px solid #ffd5c9; border-radius: 999px; background: var(--color-primary-soft); color: #7d5544; box-shadow: none; }
+      .random-controls { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: center; margin-top: 14px; }
+      .count-pill { display: flex; width: fit-content; min-width: 0; min-height: 34px; align-items: center; gap: 4px; padding: 3px 10px; border: 1px solid #ffd5c9; border-radius: 999px; background: var(--color-primary-soft); color: #7d5544; box-shadow: none; }
       .count-pill strong { color: var(--color-primary); font-size: .9rem; line-height: 1; }
       .count-pill span { font-size: .82rem; font-weight: 800; }
-      .random-button { min-height: clamp(58px, 8vw, 86px); border-radius: 999px; background: linear-gradient(135deg, var(--color-primary), var(--color-accent)); color: #fff; font-size: clamp(1.15rem, 2.5vw, 1.85rem); font-weight: 900; box-shadow: 0 14px 28px rgba(255,91,55,.22); transition: transform .18s ease, filter .18s ease, box-shadow .18s ease; }
-      .random-button:hover { transform: translateY(-2px) scale(1.01); }
+      .random-button { min-height: clamp(58px, 7vw, 74px); border-radius: 999px; background: var(--color-primary); color: #fff; font-size: clamp(1.12rem, 2.25vw, 1.58rem); font-weight: 900; box-shadow: 0 12px 26px rgba(255,91,55,.22); transition: transform .18s var(--ease-standard), filter .18s var(--ease-standard), box-shadow .18s var(--ease-standard); }
+      .random-button:hover { transform: translateY(-2px); box-shadow: 0 16px 30px rgba(255,91,55,.26); }
       .random-button:active { transform: translateY(1px) scale(.99); }
 
       .result-card { display: grid; gap: 16px; margin-top: 22px; padding: 20px; border: 1px solid rgba(255,91,110,.22); border-radius: 8px; background: linear-gradient(135deg, #fff, #fff1f5 52%, #fff8e8); box-shadow: 0 18px 44px rgba(255,91,110,.12); }
@@ -198,14 +213,16 @@
       .manage-panel { max-width: 980px; margin: 18px auto 0; }
       .section-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
       .section-heading h2 { margin-top: 3px; font-size: 1.45rem; }
-      .success-action, .secondary-action, .ghost-action, .danger-action, .map-action { min-height: 42px; border-radius: var(--radius-control); padding: 10px 14px; font-weight: 800; }
+      .success-action, .secondary-action, .ghost-action, .danger-action, .map-action { min-height: 44px; border-radius: var(--radius-control); padding: 10px 14px; font-weight: 850; transition: background .18s var(--ease-standard), border-color .18s var(--ease-standard), transform .18s var(--ease-standard); }
       .success-action, .secondary-action { background: #1f6b55; color: #fff; }
       .ghost-action { border: 1px solid #c7d0c2; background: #fff; color: #2d4c3a; }
       .danger-action { border: 1px solid #efc4ba; background: #fff5f2; color: #9b341c; }
       .map-action { display: inline-flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none; background: #fff4d4; color: #8a421f; border: 1px solid rgba(138,66,31,.16); }
       .button-icon { width: 16px; height: 16px; flex: 0 0 auto; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; }
       .result-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-      .result-modal { position: fixed; z-index: 68; inset: 0; display: grid; align-items: center; justify-items: center; padding: max(18px, env(safe-area-inset-top)) 16px max(18px, env(safe-area-inset-bottom)); background: rgba(18,23,31,.42); backdrop-filter: blur(5px); }
+      .platform-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+      .platform-action { min-height: 38px; padding: 8px 11px; font-size: .82rem; }
+      .result-modal { position: fixed; z-index: 68; inset: 0; display: grid; align-items: center; justify-items: center; padding: max(18px, env(safe-area-inset-top)) 16px max(18px, env(safe-area-inset-bottom)); background: rgba(18,23,31,.46); backdrop-filter: blur(6px); }
       .result-modal[hidden] { display: none; }
       .result-modal-sheet { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; width: min(560px, 100%); max-height: min(82dvh, 720px); overflow: hidden; border: 1px solid #f0ded4; border-radius: 18px; background: #fff; box-shadow: 0 30px 90px rgba(20,24,30,.22); }
       .result-modal-content { min-height: 0; overflow-y: auto; padding: 0 20px 16px; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
@@ -258,7 +275,7 @@
       .review-form select { min-height: 40px; }
       .diary-stats { display: flex; gap: 8px; margin: 0 0 10px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
       .diary-stats::-webkit-scrollbar { display: none; }
-      .diary-stat { flex: 0 0 auto; min-width: 84px; padding: 7px 9px; border: 1px solid rgba(255,91,55,.12); border-radius: 9px; background: #fffaf7; color: #53655a; font-size: .7rem; font-weight: 800; }
+      .diary-stat { flex: 0 0 auto; min-width: 84px; padding: 7px 9px; border: 1px solid rgba(255,91,55,.12); border-radius: 10px; background: #fffaf7; color: #53655a; font-size: .7rem; font-weight: 800; }
       .diary-stat strong { display: block; margin-top: 2px; color: #1f2933; font-size: .84rem; line-height: 1.2; overflow-wrap: anywhere; }
       .diary-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
       .diary-filter { min-height: 34px; padding: 6px 11px; border-radius: 999px; background: #f7f7f6; color: #3a4248; font-size: .86rem; font-weight: 900; }
@@ -286,7 +303,7 @@
       .map-picker-close { display: grid; width: 36px; height: 36px; place-items: center; border-radius: 50%; background: #f4f4f2; color: #4b5358; font-size: 1.35rem; }
       .map-picker-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
       .map-copy-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-      .map-copy-row button { min-height: 42px; border-radius: 8px; background: #fff7e8; color: #8a421f; font-weight: 900; border: 1px solid rgba(138,66,31,.14); }
+      .map-copy-row button { min-height: 44px; border-radius: 10px; background: #fff7e8; color: #8a421f; font-weight: 900; border: 1px solid rgba(138,66,31,.14); }
       .map-provider { display: flex; min-height: 54px; align-items: center; justify-content: center; gap: 8px; border: 1px solid #ece8e3; border-radius: 8px; background: #fafaf9; color: #25292d; font-weight: 900; }
       .map-provider::before { display: grid; width: 28px; height: 28px; place-items: center; border-radius: 8px; color: #fff; content: attr(data-map-symbol); }
       .map-provider[data-map-provider="amap"]::before { background: #1b73e8; }
@@ -305,8 +322,9 @@
       .timeline-group { position: relative; display: grid; gap: 7px; padding-left: 15px; }
       .timeline-group::before { position: absolute; top: 30px; bottom: 2px; left: 5px; width: 2px; border-radius: 999px; background: #ffe1d6; content: ""; }
       .timeline-date { color: #ff5b37; font-size: .86rem; font-weight: 900; }
-      .timeline-card { position: relative; border: 1px solid #eee8e1; border-radius: 10px; background: #fff; overflow: hidden; }
-      .timeline-summary { display: grid; width: 100%; grid-template-columns: 16px minmax(0, 1fr) auto; gap: 8px; align-items: start; padding: 10px; background: transparent; text-align: left; }
+      .timeline-card { position: relative; border: 1px solid #eee8e1; border-radius: 12px; background: #fff; overflow: hidden; box-shadow: 0 6px 18px rgba(31,41,51,.04); }
+      .timeline-summary { display: grid; width: 100%; grid-template-columns: 16px minmax(0, 1fr) auto; gap: 8px; align-items: start; padding: 10px; background: transparent; text-align: left; transition: background .18s var(--ease-standard); }
+      .timeline-summary:hover { background: #fffaf7; }
       .timeline-dot { width: 9px; height: 9px; margin-top: 5px; border-radius: 50%; background: var(--color-primary); box-shadow: 0 0 0 3px #fff1eb; }
       .timeline-main { display: grid; gap: 2px; min-width: 0; }
       .timeline-main strong { overflow: hidden; color: #1f2933; font-size: .93rem; line-height: 1.22; text-overflow: ellipsis; white-space: nowrap; }
@@ -320,7 +338,7 @@
       .timeline-card.is-expanded { border-color: #ffd0c1; background: #fffdfa; }
       .file-hint { margin: 0; color: #687274; font-size: .82rem; }
       .empty-state { margin-top: 14px; padding: 18px; border: 1px dashed #bdc9b7; border-radius: 8px; background: #fbfcf8; color: #5d6e61; line-height: 1.6; text-align: center; }
-      .toast { position: fixed; z-index: 140; left: 50%; bottom: max(22px, calc(14px + env(safe-area-inset-bottom))); transform: translateX(-50%); max-width: min(520px, calc(100% - 28px)); padding: 12px 16px; border-radius: 8px; background: #1f2933; color: #fff; box-shadow: 0 16px 40px rgba(31,41,51,.22); }
+      .toast { position: fixed; z-index: 140; left: 50%; bottom: max(22px, calc(14px + env(safe-area-inset-bottom))); transform: translateX(-50%); max-width: min(520px, calc(100% - 28px)); padding: 12px 16px; border-radius: 999px; background: #1f2933; color: #fff; box-shadow: 0 16px 40px rgba(31,41,51,.22); font-weight: 800; }
       [hidden] { display: none !important; }
 
       @media (max-width: 900px) {
@@ -331,7 +349,7 @@
         .filter-summary { white-space: normal; }
         .food-filter { margin-top: 16px; }
         .filter-dropdown { position: fixed; top: var(--mobile-filter-top, 300px); right: 11px; bottom: max(8px, env(safe-area-inset-bottom)); left: 11px; max-height: none; }
-        .topbar { display: grid; padding-inline: 0; }
+        .topbar { display: grid; padding-inline: 0; gap: 12px; }
         .top-actions { width: 100%; }
         .nav-action { flex: 1 1 25%; min-width: 0; padding-inline: 8px; }
         .home-grid { display: grid; }
@@ -346,17 +364,17 @@
         .app-shell { width: min(calc(100% - 20px), 720px); }
         .topbar { padding-block: 12px; }
         h1 { font-size: clamp(2rem, 12vw, 3.2rem); }
-        .hero-stage, .panel { padding: 15px; }
+        .hero-stage, .panel { padding: 14px; }
         .hero-copy { gap: 6px; }
-        .hero-copy h2 { font-size: clamp(1.9rem, 10vw, 2.55rem); }
+        .hero-copy h2 { font-size: clamp(1.75rem, 9vw, 2.35rem); }
         .section-heading { display: grid; }
-        .random-controls { gap: 7px; }
+        .random-controls { grid-template-columns: 1fr; gap: 8px; }
         .count-pill { justify-self: start; padding: 3px 9px; }
         .count-pill strong { font-size: .88rem; }
         .count-pill span { font-size: .78rem; }
-        .random-button { min-height: 56px; font-size: 1.08rem; }
+        .random-button { min-height: 54px; font-size: 1.05rem; }
         .reel-shell { margin-top: 14px; padding: 10px; }
-        .reel-window { height: min(326px, 84vw); }
+        .reel-window { height: min(320px, 84vw); }
         .result-modal { align-items: end; padding-inline: 0; padding-bottom: 0; }
         .result-modal-sheet { width: 100%; height: min(82dvh, calc(100dvh - env(safe-area-inset-top) - 8px)); max-height: none; border-radius: 18px 18px 0 0; }
         .result-modal-heading { padding: 18px 18px 10px; }
@@ -371,18 +389,24 @@
         .rating-grid, .review-score-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .form-actions, .row-actions { display: grid; grid-template-columns: 1fr 1fr; }
         .form-actions .secondary-action { grid-column: 1 / -1; }
-        .category-tabs { gap: 19px; margin-inline: -2px; padding-bottom: 8px; }
+        .category-tabs { gap: 18px; margin-inline: -2px; padding-bottom: 8px; }
+        .category-tab { min-height: 36px; font-size: .92rem; }
         .filter-entry-row { gap: 6px; }
         .filter-entry { min-height: 38px; padding: 5px 8px; font-size: .82rem; }
         .top-actions { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 3px; padding: 4px; }
-        .nav-action { width: 100%; min-height: 38px; padding-inline: 3px; font-size: .72rem; }
+        .nav-action { width: 100%; min-height: 36px; padding-inline: 3px; font-size: .72rem; }
         .filter-dropdown-inner { max-height: none; padding: 14px; }
+        .combined-filter-panel.is-tabbed { grid-template-columns: 98px minmax(0, 1fr); gap: 10px; min-height: min(58vh, 480px); }
+        .combined-section-nav { gap: 4px; padding-right: 8px; }
+        .combined-section-tab { min-height: 50px; padding: 8px 7px; font-size: .88rem; }
+        .combined-section-tab small { font-size: .62rem; }
         .choice-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
         .choice-button { min-height: 34px; padding: 3px 5px; border-radius: 8px; font-size: .76rem; }
         .choice-row + .area-picker { margin-top: 11px; }
         .area-picker { grid-template-columns: 92px minmax(0, .9fr) minmax(0, 1.1fr); min-height: 360px; }
         .area-option { padding-inline: 9px; font-size: .86rem; }
-        .food-picker { grid-template-columns: 92px minmax(0, 1fr); margin: -14px; }
+        .food-picker { margin: 0; }
+        .food-group-nav-button { min-height: 46px; padding: 7px 8px; font-size: .84rem; }
         .food-groups { padding: 14px 10px; }
         .food-group-title { display: none; }
         .food-options, .sort-options { grid-template-columns: 1fr 1fr; gap: 7px; }
@@ -393,9 +417,10 @@
   <body>
     <main class="app-shell">
       <header class="topbar">
-        <div>
+        <div class="brand-block">
           <p class="eyebrow">Random Restaurant</p>
           <h1>人间寻味记</h1>
+          <select class="city-select" id="city-select" aria-label="选择城市"></select>
         </div>
         <nav class="top-actions" aria-label="页面导航">
           <button class="nav-action is-active" id="home-tab" type="button">抽餐厅</button>
@@ -487,7 +512,7 @@
           </div>
           <button class="ghost-action" id="favorites-back-button" type="button">返回抽取</button>
         </div>
-        <div class="restaurant-list" id="favorites-list"></div>
+        <div class="history-list favorites-timeline" id="favorites-list"></div>
       </section>
     </main>
     <button class="filter-backdrop" id="filter-backdrop" type="button" aria-label="关闭筛选面板" hidden></button>
@@ -543,30 +568,30 @@
         inferRestaurantCategory,
         inferSubcategory,
         matchesFoodSelection,
-      } from "./scripts/categories.js?v=20260628-v41";
+      } from "./scripts/categories.js?v=20260629-v46";
       import {
         formatDistance,
         getRestaurantDistance,
         parseAverageCost,
         requestCurrentPosition,
-      } from "./scripts/location-fixed.js?v=20260628-v41";
+      } from "./scripts/location-fixed.js?v=20260629-v46";
       import {
         readJson as storageReadJson,
         safeSetItem as storageSafeSetItem,
-      } from "./scripts/app/storage.js?v=20260628-v41";
+      } from "./scripts/app/storage.js?v=20260629-v46";
       import {
         buildRestaurantChanges as buildRestaurantChangesFromStore,
         getRestaurantHealthReport,
         readRestaurantState,
-      } from "./scripts/app/restaurant-store.js?v=20260628-v41";
+      } from "./scripts/app/restaurant-store.js?v=20260629-v46";
       import {
         getCategoryRestaurantImage as getMappedRestaurantImage,
         getImageMatchReport,
         getRestaurantImageCategory as getMappedRestaurantImageCategory,
-      } from "./scripts/app/restaurant-images.js?v=20260628-v41";
+      } from "./scripts/app/restaurant-images.js?v=20260629-v46";
       import {
         createRestaurantFilterEngine,
-      } from "./scripts/app/restaurant-filter.js?v=20260628-v41";
+      } from "./scripts/app/restaurant-filter.js?v=20260629-v46";
       import {
         deferRestaurant,
         filterAvailableRestaurants,
@@ -577,25 +602,29 @@
         rankAvailablePool,
         restoreHiddenRestaurants,
         skipForToday,
-      } from "./scripts/app/restaurant-availability.js?v=20260628-v41";
+      } from "./scripts/app/restaurant-availability.js?v=20260629-v46";
       import {
         getPickReasons,
-      } from "./scripts/app/random-reasons.js?v=20260628-v41";
+      } from "./scripts/app/random-reasons.js?v=20260629-v46";
       import {
         filterDiaryRecords,
         getDiaryStats,
-      } from "./scripts/app/food-diary.js?v=20260628-v41";
+      } from "./scripts/app/food-diary.js?v=20260629-v46";
       import {
         getCopyAddressText,
         getMapProviders,
         getMapUrl as buildMapUrl,
-      } from "./scripts/app/map-links.js?v=20260628-v41";
+      } from "./scripts/app/map-links.js?v=20260629-v46";
+      import {
+        getPlatformSearchLinks,
+      } from "./scripts/app/platform-links.js?v=20260629-v46";
 
       const RESTAURANTS_KEY = "random-restaurant-checkin:restaurants";
       const RESTAURANTS_VERSION_KEY = "random-restaurant-checkin:restaurants-version";
       const RESTAURANT_CHANGES_KEY = "random-restaurant-checkin:restaurant-changes-v1";
-      const CURRENT_DATASET_VERSION = "amap-hangzhou-3300-2026-06-28-v41";
-      const EXPECTED_OFFICIAL_RESTAURANT_COUNT = 3300;
+      const CITY_SELECTION_KEY = "random-restaurant-checkin:selected-city-adcode-v1";
+      const DEFAULT_CITY_ADCODE = "330100";
+      const CURRENT_DATASET_VERSION = "amap-multicity-hangzhou-taizhou-2026-06-29-v46";
       const LEGACY_CORE_RESTAURANT_COUNT = 1300;
       const CHECK_INS_KEY = "random-restaurant-checkin:check-ins";
       const FAVORITES_KEY = "random-restaurant-checkin:favorites";
@@ -619,18 +648,11 @@
         { value: "cost-asc", label: "人均从低到高" },
         { value: "cost-desc", label: "人均从高到低" },
       ];
-      const DISTRICT_RULES = [
-        { district: "西湖区", keywords: ["象山", "小和山", "屏峰", "转塘", "龙坞", "袁浦", "之江", "小和山新苑", "西溪", "留下", "石马", "西联", "西文", "高教园", "首尔印象", "星光荟", "奥莱金街", "象山国际", "象山站", "七贤山居"] },
-        { district: "拱墅区", keywords: ["大关", "上塘", "香积寺", "胜利河", "河东路", "新天地", "海外海", "乐堤港", "中大银泰", "大关大润发", "上塘路", "香积寺路"] },
-        { district: "萧山区", keywords: ["萧山", "西子丁兰"] },
-        { district: "余杭区", keywords: ["良渚", "海创园", "永旺", "永旺梦乐城", "西溪印象城"] },
-        { district: "钱塘区", keywords: ["下沙", "高教园", "金沙湖", "文海南路", "下沙江滨"] },
-        { district: "上城区", keywords: ["景芳", "新塘路", "九堡", "信义坊", "丁兰", "西子丁兰"] },
-        { district: "滨江区", keywords: ["滨江", "西兴", "长河", "浦沿"] },
-        { district: "临平区", keywords: ["临平", "乔司"] },
-        { district: "富阳区", keywords: ["富阳"] },
-      ];
+      const DISTRICT_RULES = [];
 
+      let cities = [];
+      let currentCity = null;
+      let updateManifest = null;
       let initialRestaurants = [];
       let coreRestaurants = [];
       let restaurants = [];
@@ -648,6 +670,7 @@
       let pendingRestaurant = null;
       let selectedPickReasons = [];
       let expandedHistoryIds = new Set();
+      let expandedFavoriteIds = new Set();
       let editingRestaurantId = null;
       let editingReviewId = null;
       let manageRenderLimit = MANAGE_PAGE_SIZE;
@@ -658,6 +681,7 @@
       let selectedDistance = 0;
       let selectedSort = "recommended";
       let activeFilterPanel = "";
+      let activeCombinedSection = "nearby";
       let activeAreaLevel = "district";
       let activeAreaDistrict = "";
       let activeFoodGroup = "popular";
@@ -681,6 +705,7 @@
 
       const elements = {
         homeTab: document.querySelector("#home-tab"),
+        citySelect: document.querySelector("#city-select"),
         historyTab: document.querySelector("#history-tab"),
         favoritesTab: document.querySelector("#favorites-tab"),
         manageTab: document.querySelector("#manage-tab"),
@@ -742,19 +767,12 @@
       async function bootstrap() {
         bindEvents();
         try {
-          const indexData = await loadRestaurantIndex();
-          coreRestaurants = indexData;
-          initialRestaurants = indexData;
-          restaurantFilterEngine = createRestaurantFilterEngine({
-            getCategoryTabs: () => CATEGORY_TABS,
-            inferCategory,
-            matchesFoodSelection,
-            getDistrict,
-            getBusinessArea,
-            getDistanceForRestaurant,
-            parseAverageCost,
-          });
-          restaurants = readRestaurants();
+          const [cityConfig, updateInfo] = await Promise.all([loadCitiesConfig(), loadUpdateManifest()]);
+          cities = cityConfig;
+          updateManifest = updateInfo;
+          currentCity = getInitialCity();
+          renderCitySelect();
+          await loadCurrentCityRestaurants();
           render();
           renderReel(buildRollingReel(), false);
           warmRestaurantDetails();
@@ -769,22 +787,130 @@
         }
       }
 
+      async function loadCitiesConfig() {
+        const response = await fetch(`cities.json?v=${CURRENT_DATASET_VERSION}`);
+        if (!response.ok) throw new Error(`?????????${response.status}`);
+        const data = await response.json();
+        if (!Array.isArray(data) || data.length === 0) throw new Error("城市配置数据格式无效");
+        return data;
+      }
+
+      async function loadUpdateManifest() {
+        try {
+          const response = await fetch(`data/update-manifest.json?v=${CURRENT_DATASET_VERSION}`);
+          if (!response.ok) throw new Error(`update manifest ${response.status}`);
+          const data = await response.json();
+          return data && Array.isArray(data.cities) ? data : null;
+        } catch (error) {
+          console.warn("Data update manifest unavailable", error);
+          return null;
+        }
+      }
+
+      function getInitialCity() {
+        const storedAdcode = localStorage.getItem(CITY_SELECTION_KEY);
+        return cities.find((city) => city.adcode === storedAdcode) ||
+          cities.find((city) => city.adcode === DEFAULT_CITY_ADCODE) ||
+          cities[0];
+      }
+
+      function renderCitySelect() {
+        if (!elements.citySelect) return;
+        elements.citySelect.innerHTML = cities.map((city) =>
+          `<option value="${escapeHtml(city.adcode)}">${escapeHtml(city.shortName || city.name)}</option>`
+        ).join("");
+        elements.citySelect.value = currentCity?.adcode || DEFAULT_CITY_ADCODE;
+      }
+
+      async function loadCurrentCityRestaurants() {
+        const indexData = await loadRestaurantIndex();
+        coreRestaurants = indexData;
+        initialRestaurants = indexData;
+        restaurantFilterEngine = createRestaurantFilterEngine({
+          getCategoryTabs: () => CATEGORY_TABS,
+          inferCategory,
+          matchesFoodSelection,
+          getDistrict,
+          getBusinessArea,
+          getDistanceForRestaurant,
+          parseAverageCost,
+        });
+        restaurants = readRestaurants();
+        invalidateFilterCache();
+      }
+
+      async function changeCity(adcode) {
+        const nextCity = cities.find((city) => city.adcode === adcode);
+        if (!nextCity || nextCity.adcode === currentCity?.adcode) return;
+        currentCity = nextCity;
+        localStorage.setItem(CITY_SELECTION_KEY, currentCity.adcode);
+        resetCityScopedState();
+        renderCitySelect();
+        elements.citySelect.disabled = true;
+        render();
+        renderReel([], false);
+        showMessage(`正在切换到${currentCity.shortName || currentCity.name}...`);
+        try {
+          await loadCurrentCityRestaurants();
+          render();
+          renderReel(buildRollingReel(), false);
+          warmRestaurantDetails();
+          showMessage(`已切换到${currentCity.shortName || currentCity.name}`);
+        } catch (error) {
+          restaurants = [];
+          render();
+          renderReel([], false);
+          showMessage(`${currentCity.name}???????????????`);
+          console.error("城市餐厅数据加载失败", error);
+        } finally {
+          elements.citySelect.disabled = false;
+        }
+      }
+
+      function resetCityScopedState() {
+        closeFilterPanel();
+        closeResultModal();
+        activeCategoryTab = "recommend";
+        selectedFoodValues.clear();
+        selectedLocations.clear();
+        selectedBusinessAreas.clear();
+        selectedDistance = 0;
+        selectedSort = "recommended";
+        activeCombinedSection = "nearby";
+        activeAreaDistrict = "";
+        activeAreaLevel = "district";
+        activeFoodGroup = "popular";
+        selectedRestaurant = null;
+        pendingRestaurant = null;
+        selectedPickReasons = [];
+        restaurantDistances = new Map();
+        restaurantDetailsMap = null;
+        restaurantDetailsPromise = null;
+        restaurantDetailsFailed = false;
+        manageRenderLimit = MANAGE_PAGE_SIZE;
+      }
+
+      function getCityVersionParam() {
+        return `${CURRENT_DATASET_VERSION}-${currentCity?.version || currentCity?.adcode || DEFAULT_CITY_ADCODE}`;
+      }
+
       async function loadRestaurantIndex() {
-        const primaryUrl = `restaurants-index.json?v=${CURRENT_DATASET_VERSION}`;
+        const primaryUrl = `${currentCity.indexPath}?v=${getCityVersionParam()}`;
         let indexData = await fetchRestaurantIndex(primaryUrl);
-        if (indexData.length < EXPECTED_OFFICIAL_RESTAURANT_COUNT) {
-          console.warn(`餐厅索引疑似旧缓存：${indexData.length} / ${EXPECTED_OFFICIAL_RESTAURANT_COUNT}，正在重新拉取。`);
+        const minimumCount = Number(currentCity.minRestaurants || 1);
+        if (indexData.length < minimumCount) {
+          console.warn(`${currentCity.name}??????????${indexData.length} / ${minimumCount}????????`);
           indexData = await fetchRestaurantIndex(`${primaryUrl}&refresh=${Date.now()}`, { cache: "reload" });
         }
-        if (indexData.length < EXPECTED_OFFICIAL_RESTAURANT_COUNT) {
-          throw new Error(`餐厅索引仍不完整（${indexData.length} / ${EXPECTED_OFFICIAL_RESTAURANT_COUNT}）`);
+        if (indexData.length < minimumCount) {
+          throw new Error(`${currentCity.name}?????????${indexData.length} / ${minimumCount}`);
         }
         return indexData;
       }
 
       async function fetchRestaurantIndex(url, options = {}) {
         const response = await fetch(url, options);
-        if (!response.ok) throw new Error(`餐厅索引加载失败（${response.status}）`);
+        if (!response.ok) throw new Error(`?????????${response.status}`);
         const data = await response.json();
         if (!Array.isArray(data) || data.length === 0) throw new Error("餐厅索引数据格式无效");
         return data;
@@ -799,9 +925,9 @@
       async function loadRestaurantDetails() {
         if (restaurantDetailsMap) return restaurantDetailsMap;
         if (restaurantDetailsPromise) return restaurantDetailsPromise;
-        restaurantDetailsPromise = fetch(`restaurants-details.json?v=${CURRENT_DATASET_VERSION}`)
+        restaurantDetailsPromise = fetch(`${currentCity.detailsPath}?v=${getCityVersionParam()}`)
           .then((response) => {
-            if (!response.ok) throw new Error(`餐厅详情加载失败（${response.status}）`);
+            if (!response.ok) throw new Error(`?????????${response.status}`);
             return response.json();
           })
           .then((data) => {
@@ -840,6 +966,7 @@
       }
 
       function bindEvents() {
+        elements.citySelect.addEventListener("change", (event) => changeCity(event.target.value));
         elements.homeTab.addEventListener("click", () => { closeFilterPanel(); switchView("home"); });
         elements.historyTab.addEventListener("click", () => { closeFilterPanel(); switchView("history"); });
         elements.favoritesTab.addEventListener("click", () => { closeFilterPanel(); switchView("favorites"); });
@@ -952,6 +1079,14 @@
       function handleFilterPanelClick(event) {
         const target = event.target.closest("button");
         if (!target) return;
+        if (target.dataset.combinedSection) {
+          activeCombinedSection = target.dataset.combinedSection;
+          if (activeCombinedSection === "food" && target.dataset.combinedFoodGroup) {
+            activeFoodGroup = target.dataset.combinedFoodGroup;
+          }
+          renderFilterControls();
+          return;
+        }
         if (target.dataset.distance !== undefined) {
           selectedDistance = Number(target.dataset.distance);
           if (selectedDistance > 0 && !userPosition) locateUser();
@@ -1027,15 +1162,12 @@
 
       function readRestaurants() {
         try {
+          const storageKeys = getRestaurantStorageKeys();
           const result = readRestaurantState({
             coreRestaurants,
-            legacyCoreRestaurantCount: LEGACY_CORE_RESTAURANT_COUNT,
-            currentDatasetVersion: CURRENT_DATASET_VERSION,
-            keys: {
-              restaurants: RESTAURANTS_KEY,
-              version: RESTAURANTS_VERSION_KEY,
-              changes: RESTAURANT_CHANGES_KEY,
-            },
+            legacyCoreRestaurantCount: getLegacyCoreRestaurantCount(),
+            currentDatasetVersion: getCityVersionParam(),
+            keys: storageKeys,
             inferCategory,
             readJson: storageReadJson,
             safeSetItem,
@@ -1047,6 +1179,25 @@
           restaurantHealth = null;
           return initialRestaurants;
         }
+      }
+
+      function getRestaurantStorageKeys() {
+        if (!currentCity || currentCity.adcode === DEFAULT_CITY_ADCODE) {
+          return {
+            restaurants: RESTAURANTS_KEY,
+            version: RESTAURANTS_VERSION_KEY,
+            changes: RESTAURANT_CHANGES_KEY,
+          };
+        }
+        return {
+          restaurants: `${RESTAURANTS_KEY}:${currentCity.adcode}`,
+          version: `${RESTAURANTS_VERSION_KEY}:${currentCity.adcode}`,
+          changes: `${RESTAURANT_CHANGES_KEY}:${currentCity.adcode}`,
+        };
+      }
+
+      function getLegacyCoreRestaurantCount() {
+        return currentCity?.adcode === DEFAULT_CITY_ADCODE ? LEGACY_CORE_RESTAURANT_COUNT : coreRestaurants.length;
       }
 
       function applyRestaurantChanges(baseRestaurants, changes) {
@@ -1064,9 +1215,10 @@
       }
 
       function saveAll() {
-        if (restaurantsDirty && safeSetItem(RESTAURANT_CHANGES_KEY, JSON.stringify(buildRestaurantChanges(restaurants)))) {
-          safeSetItem(RESTAURANTS_VERSION_KEY, CURRENT_DATASET_VERSION);
-          localStorage.removeItem(RESTAURANTS_KEY);
+        const storageKeys = getRestaurantStorageKeys();
+        if (restaurantsDirty && safeSetItem(storageKeys.changes, JSON.stringify(buildRestaurantChanges(restaurants)))) {
+          safeSetItem(storageKeys.version, getCityVersionParam());
+          localStorage.removeItem(storageKeys.restaurants);
           restaurantsDirty = false;
         }
         if (checkInsDirty && safeSetItem(CHECK_INS_KEY, JSON.stringify(checkIns))) checkInsDirty = false;
@@ -1097,7 +1249,7 @@
         const matched = DISTRICT_RULES.find((rule) =>
           rule.keywords.some((keyword) => address.includes(keyword)),
         );
-        return matched ? matched.district : "其他区域";
+        return matched ? matched.district : "鍏朵粬鍖哄煙";
       }
 
       function getLocations() {
@@ -1144,11 +1296,38 @@
       function formatLocation(address, restaurant = {}) {
         const district = restaurant.district || getDistrict(address, restaurant);
         const area = getBusinessArea(restaurant) ? ` · ${getBusinessArea(restaurant)}` : "";
-        return address ? `杭州市 · ${district}${area} · ${address}` : `杭州市 · ${district}${area} · 位置待补充`;
+        const cityName = restaurant.city || "杭州市";
+        return address ? `${cityName} · ${district}${area} · ${address}` : `${cityName} · ${district}${area} · 位置待补充`;
       }
 
       function getMapUrl(restaurant, provider) {
         return buildMapUrl(restaurant, provider, navigator.userAgent);
+      }
+
+      function getCurrentUpdateInfo() {
+        return updateManifest?.cities?.find((city) => city.adcode === currentCity?.adcode) || null;
+      }
+
+      function formatUpdateTime(value) {
+        if (!value) return "暂无";
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return "暂无";
+        return new Intl.DateTimeFormat("zh-CN", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        }).format(date);
+      }
+
+      function renderPlatformActionLinks(restaurant) {
+        return getPlatformSearchLinks(restaurant).map((link) => `
+          <a class="ghost-action platform-action" href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer" data-platform-search="${escapeHtml(link.value)}">${escapeHtml(link.label)}</a>
+        `).join("");
+      }
+
+      function renderPlatformActions(restaurant) {
+        const links = renderPlatformActionLinks(restaurant);
+        return links ? `<div class="platform-actions">${links}</div>` : "";
       }
 
       function openMapPicker(restaurant) {
@@ -1235,13 +1414,69 @@
       }
 
       function renderActiveFilterPanel() {
+        const [popularGroup, ...restGroups] = FOOD_GROUPS;
+        const sections = [
+          { value: "nearby", section: "nearby", label: "位置", hint: getNearbySectionHint() },
+          popularGroup ? {
+            value: `food:${popularGroup.value}`,
+            section: "food",
+            foodGroup: popularGroup.value,
+            label: popularGroup.label,
+            hint: getFoodGroupHint(popularGroup),
+          } : null,
+          { value: "sort", section: "sort", label: "排序", hint: getSortSectionHint() },
+          ...restGroups.map((group) => ({
+            value: `food:${group.value}`,
+            section: "food",
+            foodGroup: group.value,
+            label: group.label,
+            hint: getFoodGroupHint(group),
+          })),
+        ].filter(Boolean);
+        const activeSectionValue = activeCombinedSection === "food" ? `food:${activeFoodGroup}` : activeCombinedSection;
+        const panelHtml = activeCombinedSection === "food"
+          ? renderFoodPanel()
+          : activeCombinedSection === "sort"
+            ? renderSortPanel()
+            : renderNearbyPanel();
         return `
-          <div class="combined-filter-panel">
-            <section class="filter-section">${renderNearbyPanel()}</section>
-            <section class="filter-section">${renderFoodPanel()}</section>
-            <section class="filter-section">${renderSortPanel()}</section>
+          <div class="combined-filter-panel is-tabbed">
+            <div class="combined-section-nav" aria-label="筛选类型">
+              ${sections.map((section) => `
+                <button class="combined-section-tab ${activeSectionValue === section.value ? "is-selected" : ""}" data-combined-section="${section.section}" ${section.foodGroup ? `data-combined-food-group="${escapeHtml(section.foodGroup)}"` : ""} type="button">
+                  <span>${escapeHtml(section.label)}</span>
+                  <small>${escapeHtml(section.hint)}</small>
+                </button>
+              `).join("")}
+            </div>
+            <section class="combined-section-body filter-section">${panelHtml}</section>
           </div>
         `;
+      }
+
+      function getNearbySectionHint() {
+        const selectedCount = selectedLocations.size + selectedBusinessAreas.size;
+        if (selectedDistance) return DISTANCE_OPTIONS.find((option) => option.value === selectedDistance)?.label || "距离";
+        if (selectedCount === 1) return getNearbyButtonLabel();
+        if (selectedCount > 1) return `已选 ${selectedCount} 项`;
+        return "距离/区域";
+      }
+
+      function getFoodSectionHint() {
+        if (selectedFoodValues.size) return getSelectedFoodLabel();
+        const group = FOOD_GROUPS.find((item) => item.value === activeFoodGroup);
+        return group?.label || "热门";
+      }
+
+      function getFoodGroupHint(group) {
+        const selectedInGroup = group.options.filter((option) => selectedFoodValues.has(option.value));
+        if (selectedInGroup.length === 1) return selectedInGroup[0].label;
+        if (selectedInGroup.length > 1) return `已选 ${selectedInGroup.length} 项`;
+        return group.options.slice(0, 2).map((option) => option.label).join(" / ");
+      }
+
+      function getSortSectionHint() {
+        return selectedSort === "recommended" ? "默认" : getSortLabel();
       }
 
       function renderNearbyPanel() {
@@ -1294,14 +1529,9 @@
         const group = FOOD_GROUPS.find((item) => item.value === activeFoodGroup) || FOOD_GROUPS[0];
         return `
           <div class="food-picker">
-            <div class="food-group-nav">
-              ${FOOD_GROUPS.map((item) => `
-                <button class="food-group-nav-button ${item.value === group.value ? "is-selected" : ""}" data-food-group="${item.value}" type="button">${escapeHtml(item.label)}</button>
-              `).join("")}
-            </div>
             <div class="food-groups">
               <div class="food-group">
-                <div class="food-group-title"><span>●</span><span>${escapeHtml(group.label)}</span></div>
+                <div class="food-group-title"><span>•</span><span>${escapeHtml(group.label)}</span></div>
                 <div class="food-options">
                   ${group.options.map((option) => `
                     <button class="food-option ${selectedFoodValues.has(option.value) ? "is-selected" : ""}" data-food-value="${option.value}" type="button">${escapeHtml(option.label)}</button>
@@ -1319,7 +1549,7 @@
           <div class="sort-options">
             ${SORT_OPTIONS.map((option) => `
               <button class="sort-option ${selectedSort === option.value ? "is-selected" : ""}" data-sort="${option.value}" type="button">
-                <span>${escapeHtml(option.label)}</span><span>${selectedSort === option.value ? "●" : "○"}</span>
+                <span>${escapeHtml(option.label)}</span><span>${selectedSort === option.value ? "✓" : "○"}</span>
               </button>
             `).join("")}
           </div>
@@ -1442,7 +1672,7 @@
           <article class="reel-card ${revealed && index === 0 ? "is-final" : ""}" style="${getSphereStyle(index, sequence.length, revealed)}" key="${restaurant.id}-${index}">
             <div class="food-photo" data-image-category="${getRestaurantImageCategory(restaurant)}" style="--food-image: url('${getCategoryRestaurantImage(restaurant)}')"><span>${escapeHtml(getCategoryLabel(restaurant.category || inferCategory(restaurant)))}</span></div>
             <h3>${escapeHtml(restaurant.name)}</h3>
-            <p>${escapeHtml([getDistrict(restaurant.address, restaurant), getCategoryLabel(restaurant.category || inferCategory(restaurant))].filter(Boolean).join(" · "))}</p>
+            <p>${escapeHtml([getDistrict(restaurant.address, restaurant), getCategoryLabel(restaurant.category || inferCategory(restaurant))].filter(Boolean).join(" 路 "))}</p>
             <div class="tag-line">
               <span class="mini-tag">${escapeHtml(getCategoryLabel(restaurant.category || inferCategory(restaurant)))}</span>
             </div>
@@ -1565,7 +1795,7 @@
         `;
         elements.resultModalContent.innerHTML = `
           <div class="destination-summary">
-            ${summaryChips.map((chip) => `<span class="destination-chip ${chip.primary ? "is-primary" : ""}">${escapeHtml(chip.label)}</span>`).join("")}
+          ${summaryChips.map((chip) => `<span class="destination-chip ${chip.primary ? "is-primary" : ""}">${escapeHtml(chip.label)}</span>`).join("")}
           </div>
           <dl>
             <div><dt>位置</dt><dd>${escapeHtml(formatLocation(restaurant.address, restaurant))}</dd></div>
@@ -1580,6 +1810,7 @@
               </dd>
             </div>
           </dl>
+          ${renderPlatformActions(restaurant)}
           <div class="reason-box">
             <strong>为什么是它</strong>
             <ul class="reason-list">
@@ -1638,7 +1869,7 @@
           showMessage("已放到后面，稍后再考虑。");
         }
         if (button.dataset.resultDecision === "hide") {
-          if (!confirm(`确定以后不再推荐「${restaurant.name}」吗？可在餐厅管理的数据诊断中恢复。`)) return;
+          if (!confirm(`确定不再推荐 ${restaurant.name} 吗？之后可在数据诊断中恢复。`)) return;
           availability = hideRestaurant(availability, restaurant.id);
           showMessage("已加入不再推荐列表。");
         }
@@ -1860,9 +2091,13 @@
           id: createId("check-in"),
           restaurantId: selectedRestaurant.id,
           restaurantName: selectedRestaurant.name,
+          province: selectedRestaurant.province || currentCity?.province,
+          city: selectedRestaurant.city || currentCity?.name,
+          cityAdcode: selectedRestaurant.cityAdcode || currentCity?.adcode,
+          districtAdcode: selectedRestaurant.districtAdcode,
           address: selectedRestaurant.address,
           category: selectedRestaurant.category || inferCategory(selectedRestaurant),
-          district: selectedRestaurant.district || getDistrict(selectedRestaurant.address),
+          district: selectedRestaurant.district || getDistrict(selectedRestaurant.address, selectedRestaurant),
           businessArea: selectedRestaurant.businessArea,
           source: selectedRestaurant.source,
           rank: selectedRestaurant.rank,
@@ -1883,6 +2118,7 @@
         selectedPickReasons = [];
         closeResultModal();
         editingReviewId = newCheckIn.id;
+        expandedHistoryIds.add(newCheckIn.id);
         render();
         renderReel(buildRollingReel(), false);
         switchView("history");
@@ -1952,6 +2188,7 @@
               ${editingReviewId === record.id ? renderReviewForm(record) : ""}
               <div class="row-actions">
                 <button class="map-action" data-action="open-map" data-id="${record.id}" type="button">打开地图</button>
+                ${renderPlatformActionLinks({ ...record, name: record.restaurantName })}
                 <button class="ghost-action favorite-action ${isFavorite(record.restaurantId) ? "is-favorite" : ""}" data-action="toggle-favorite" data-id="${record.id}" type="button">${isFavorite(record.restaurantId) ? "已收藏" : "收藏"}</button>
                 <button class="ghost-action" data-action="edit-review" data-id="${record.id}" type="button">${hasReview(record) ? "修改评价" : "评价"}</button>
                 <button class="danger-action" data-action="delete-history" data-id="${record.id}" type="button">删除</button>
@@ -2053,29 +2290,73 @@
           elements.favoritesList.innerHTML = '<div class="empty-state">还没有收藏餐厅，完成打卡后可以在历史记录中收藏。</div>';
           return;
         }
-        elements.favoritesList.innerHTML = favorites.map((favorite) => `
-          <article class="list-card">
-            <div>
-              <h3>${escapeHtml(favorite.restaurantName)}</h3>
+        const groups = favorites.reduce((bucket, favorite) => {
+          const key = new Intl.DateTimeFormat("zh-CN", { year: "numeric", month: "2-digit", day: "2-digit" })
+            .format(new Date(favorite.favoritedAt || Date.now()));
+          if (!bucket.has(key)) bucket.set(key, []);
+          bucket.get(key).push(favorite);
+          return bucket;
+        }, new Map());
+        elements.favoritesList.innerHTML = [...groups.entries()].map(([date, items]) => `
+          <section class="timeline-group">
+            <div class="timeline-date">${escapeHtml(date)}</div>
+            ${items.map(renderFavoriteTimelineCard).join("")}
+          </section>
+        `).join("");
+      }
+
+      function renderFavoriteTimelineCard(favorite) {
+        const expanded = expandedFavoriteIds.has(favorite.id);
+        const category = getCategoryLabel(favorite.category || inferCategory({
+          name: favorite.restaurantName,
+          note: favorite.note,
+          address: favorite.address,
+        }));
+        const district = favorite.district || getDistrict(favorite.address, favorite);
+        const time = new Intl.DateTimeFormat("zh-CN", { hour: "2-digit", minute: "2-digit" })
+          .format(new Date(favorite.favoritedAt || Date.now()));
+        const recommendation = getRecommendationText(favorite.note || "");
+        return `
+          <article class="timeline-card favorite-timeline-card ${expanded ? "is-expanded" : ""}">
+            <button class="timeline-summary" data-action="toggle-favorite-card" data-id="${favorite.id}" type="button">
+              <span class="timeline-dot"></span>
+              <span class="timeline-main">
+                <strong>${escapeHtml(favorite.restaurantName)}</strong>
+                <small>${escapeHtml([time, district, category].filter(Boolean).join(" · "))}</small>
+                ${recommendation ? `<em>${escapeHtml(recommendation.slice(0, 42))}${recommendation.length > 42 ? "..." : ""}</em>` : ""}
+              </span>
+              <span class="timeline-meta">
+                ${favorite.rating ? `<b>${escapeHtml(favorite.rating)}</b>` : ""}
+                <i>已收藏</i>
+              </span>
+            </button>
+            <div class="timeline-detail" ${expanded ? "" : "hidden"}>
               <p>${escapeHtml(formatLocation(favorite.address, favorite))}</p>
               <div class="tag-line">
-                <span class="mini-tag">${escapeHtml(getCategoryLabel(favorite.category || inferCategory({ name: favorite.restaurantName, note: favorite.note, address: favorite.address })))}</span>
+                <span class="mini-tag">${escapeHtml(category)}</span>
                 ${favorite.rating ? `<span class="mini-tag">高德 ${escapeHtml(favorite.rating)} 分</span>` : ""}
+                ${favorite.source ? `<span class="mini-tag">${escapeHtml(favorite.source)}${favorite.rank ? ` #${escapeHtml(String(favorite.rank))}` : ""}</span>` : ""}
               </div>
-              ${favorite.note ? `<p class="muted">${escapeHtml(getRecommendationText(favorite.note))}</p>` : ""}
-              <time>收藏于 ${new Intl.DateTimeFormat("zh-CN", { year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(favorite.favoritedAt))}</time>
-            </div>
-            <div class="row-actions">
-              <button class="map-action" data-action="open-map" data-id="${favorite.id}" type="button">打开地图</button>
-              <button class="danger-action" data-action="remove-favorite" data-id="${favorite.id}" type="button">取消收藏</button>
+              ${recommendation ? `<p class="muted">${escapeHtml(recommendation)}</p>` : ""}
+              <div class="row-actions">
+                <button class="map-action" data-action="open-map" data-id="${favorite.id}" type="button">打开地图</button>
+                ${renderPlatformActionLinks({ ...favorite, name: favorite.restaurantName })}
+                <button class="danger-action" data-action="remove-favorite" data-id="${favorite.id}" type="button">取消收藏</button>
+              </div>
             </div>
           </article>
-        `).join("");
+        `;
       }
 
       function handleFavoritesClick(event) {
         const button = event.target.closest("button");
         if (!button) return;
+        if (button.dataset.action === "toggle-favorite-card") {
+          if (expandedFavoriteIds.has(button.dataset.id)) expandedFavoriteIds.delete(button.dataset.id);
+          else expandedFavoriteIds.add(button.dataset.id);
+          renderFavorites();
+          return;
+        }
         if (button.dataset.action === "open-map") {
           const favorite = favorites.find((item) => item.id === button.dataset.id);
           if (favorite) openMapPicker({ ...favorite, name: favorite.restaurantName });
@@ -2083,6 +2364,7 @@
         }
         if (button.dataset.action !== "remove-favorite") return;
         favorites = favorites.filter((favorite) => favorite.id !== button.dataset.id);
+        expandedFavoriteIds.delete(button.dataset.id);
         favoritesDirty = true;
         showMessage("已取消收藏。");
         render();
@@ -2198,12 +2480,13 @@
       function renderDataDiagnostics() {
         const changes = buildRestaurantChanges(restaurants);
         const availabilitySummary = getAvailabilitySummary(availability);
+        const updateInfo = getCurrentUpdateInfo();
         restaurantHealth = getRestaurantHealthReport({
           coreRestaurants,
           restaurants,
           changes,
-          currentDatasetVersion: CURRENT_DATASET_VERSION,
-          legacyCoreRestaurantCount: LEGACY_CORE_RESTAURANT_COUNT,
+          currentDatasetVersion: getCityVersionParam(),
+          legacyCoreRestaurantCount: getLegacyCoreRestaurantCount(),
         });
         elements.dataDiagnostics.innerHTML = `
           <div class="diagnostic-actions">
@@ -2218,11 +2501,15 @@
           </div>
           <div class="diagnostic-grid">
             ${renderDiagnosticChip("官方库", restaurantHealth.officialCount)}
+            ${renderDiagnosticChip("当前城市", currentCity?.shortName || currentCity?.name || "杭州")}
             ${renderDiagnosticChip("当前可用", restaurantHealth.currentCount)}
             ${renderDiagnosticChip("用户新增", restaurantHealth.userAddedCount)}
             ${renderDiagnosticChip("用户删除", restaurantHealth.userDeletedCount)}
             ${renderDiagnosticChip("用户编辑", restaurantHealth.userOverrideCount)}
             ${renderDiagnosticChip("异常删除", restaurantHealth.suspiciousDeletedCount, restaurantHealth.suspiciousDeletedCount > 0)}
+            ${renderDiagnosticChip("最近更新", updateInfo ? formatUpdateTime(updateInfo.updatedAt) : "暂无")}
+            ${renderDiagnosticChip("评分门槛", updateInfo ? `${updateInfo.minRating}+` : `${currentCity?.minRating || 4}+`)}
+            ${renderDiagnosticChip("数据版本", updateInfo?.version || currentCity?.version || "暂无")}
             ${renderDiagnosticChip("今日跳过", availabilitySummary.todaySkippedCount)}
             ${renderDiagnosticChip("稍后再说", availabilitySummary.deferredCount)}
             ${renderDiagnosticChip("不再推荐", availabilitySummary.hiddenCount, availabilitySummary.hiddenCount > 0)}
@@ -2281,6 +2568,7 @@
             </div>
             <div class="row-actions">
               <button class="map-action" data-action="open-map" data-id="${restaurant.id}" type="button">打开地图</button>
+              ${renderPlatformActionLinks(restaurant)}
               <button class="ghost-action" data-action="edit" data-id="${restaurant.id}" type="button">编辑</button>
               <button class="danger-action" data-action="delete" data-id="${restaurant.id}" type="button">删除</button>
             </div>
@@ -2299,6 +2587,9 @@
           address: elements.addressInput.value.trim(),
           category: elements.restaurantCategoryInput.value,
           note: elements.noteInput.value.trim(),
+          province: currentCity?.province || "浙江省",
+          city: currentCity?.name || "杭州市",
+          cityAdcode: currentCity?.adcode || DEFAULT_CITY_ADCODE,
         };
         if (!input.name) {
           alert("餐厅名称不能为空");
@@ -2310,7 +2601,12 @@
           resetForm();
           showMessage("餐厅信息已更新。");
         } else {
-          restaurants = [{ id: createId("restaurant"), ...input, createdAt: new Date().toISOString() }, ...restaurants];
+          restaurants = [{
+            id: createId("restaurant"),
+            ...input,
+            district: getDistrict(input.address, input),
+            createdAt: new Date().toISOString(),
+          }, ...restaurants];
           resetForm();
           showMessage("新餐厅已添加。");
         }

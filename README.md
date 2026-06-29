@@ -1,10 +1,11 @@
 ﻿# 人间寻味记
 
-一个面向手机浏览器的杭州随机餐厅打卡应用。应用不需要后端服务，官方餐厅库由静态 JSON 提供，用户新增、编辑、删除、打卡、评价和收藏等个人数据以增量方式保存在当前浏览器的 localStorage 中。
+一个面向手机浏览器的多城市随机餐厅打卡应用。应用不需要后端服务，官方餐厅库由静态 JSON 提供，用户新增、编辑、删除、打卡、评价和收藏等个人数据以增量方式保存在当前浏览器的 localStorage 中。
 
 ## 当前功能
 
-- 内置杭州 3300 家餐厅：基础库 1300 家，加上好评优先增量库 2000 家。
+- 首批支持杭州和台州：杭州 3272 家评分 4.0+ 餐厅，台州 1000 家优质餐厅。
+- 首页支持城市切换，切换后会刷新分类、区域、商圈、候选数量和随机池。
 - 支持按餐厅分类、行政区、商圈、距离和排序筛选。
 - 支持定位附近餐厅和距离优先排序。
 - 首页改为精简单抽流程：分类 Tab、一个综合筛选入口、当前可抽数量、大随机按钮和球体动画。
@@ -13,6 +14,7 @@
 - 抽中结果会解释为什么是它，例如匹配当前筛选、高评分、未打卡、距离较近等。
 - 不想吃时可选择今天不想吃、稍后再说或不再推荐，管理页可恢复隐藏餐厅。
 - 结果弹窗支持打开地图、复制地址、完成打卡、再抽一次和关闭。
+- 结果弹窗、打卡记录、我的收藏和餐厅管理支持跳转到美团/大众点评搜索该餐厅。
 - 地图支持高德、百度、腾讯和 Apple 地图，并按设备调整推荐顺序。
 - 打卡记录升级为紧凑时间轴，支持统计、筛选、展开详情、评分、点评、图片预览和收藏。
 - 我的收藏为独立二级页面，可随时查看好吃的餐厅。
@@ -52,9 +54,16 @@ npm.cmd run dev
 
 - `restaurants.json`：基础餐厅数据。
 - `restaurants-quality-additions.json`：好评优先增量餐厅。
-- `restaurants-index.json`：首屏轻量索引，只包含筛选和抽取必要字段。
-- `restaurants-details.json`：完整餐厅详情，按需懒加载。
-- `restaurants-quality-report.json`：新增餐厅质量报告。
+- `cities.json`：城市配置、城市数据版本和数据文件路径。
+- `data/cities/330100/restaurants-index.json`：杭州首屏轻量索引。
+- `data/cities/330100/restaurants-details.json`：杭州完整餐厅详情。
+- `data/cities/330100/quality-report.json`：杭州 4.0+ 质量报告。
+- `data/cities/331000/restaurants-index.json`：台州首屏轻量索引。
+- `data/cities/331000/restaurants-details.json`：台州完整餐厅详情。
+- `data/cities/331000/quality-report.json`：台州质量报告。
+- `data/update-manifest.json`：城市餐厅库更新时间、版本、数量和评分门槛。
+- `restaurants-index.json` / `restaurants-details.json`：杭州城市包的兼容入口，方便旧浏览器平滑升级。
+- `restaurants-quality-report.json`：历史新增餐厅质量报告。
 - `scripts/app/restaurant-store.js`：餐厅库加载、旧数据迁移、用户增量差异和健康检查。
 - `scripts/app/restaurant-filter.js`：筛选、排序和结果缓存。
 - `scripts/app/restaurant-images.js`：餐厅分类图片匹配。
@@ -62,6 +71,7 @@ npm.cmd run dev
 - `scripts/app/random-reasons.js`：抽中原因生成。
 - `scripts/app/food-diary.js`：打卡记录统计与筛选。
 - `scripts/app/map-links.js`：跨平台地图链接和复制地址。
+- `scripts/app/platform-links.js`：美团/大众点评搜索链接生成。
 - `scripts/app/storage.js`：localStorage 读写封装。
 
 ## 发布前检查
@@ -71,7 +81,43 @@ npm run test:data
 npm run test:e2e
 ```
 
-`test:data` 会校验 3300 家餐厅数据、生成图片匹配报告并检查文档编码；`test:e2e` 会在移动端视口下检查餐厅加载、旧缓存迁移、异常删除修复、综合筛选、单抽结果弹窗、抽中原因、隐藏恢复和打卡记录时间轴。
+`test:data` 会校验杭州和台州城市包、生成图片匹配报告并检查文档编码；`test:e2e` 会在移动端视口下检查餐厅加载、城市切换、旧缓存迁移、异常删除修复、综合筛选、单抽结果弹窗、抽中原因、隐藏恢复和打卡记录时间轴。
+
+## 餐厅库更新
+
+城市包由脚本生成，高德 API Key 只通过环境变量传入，不写入代码：
+
+```bash
+$env:AMAP_KEY="你的高德Key"
+npm run data:city:update -- --city=all
+```
+
+也可以只更新单个城市：
+
+```bash
+npm run data:city:update -- --city=330100
+npm run data:city:update -- --city=331000
+```
+
+脚本会依次拉取高德 POI、重建城市包、生成 `data/update-manifest.json` 并运行 `npm run test:data`。重新生成后会更新 `cities.json`、`data/cities/{adcode}/`、`data/update-manifest.json` 以及杭州兼容入口 `restaurants-index.json` / `restaurants-details.json`。
+
+如果只想用已有缓存/源数据重建，不联网：
+
+```bash
+npm run data:city:update -- --skip-fetch
+```
+
+GitHub Actions 已添加 `Update restaurant data` 工作流：
+
+1. 在仓库 `Settings > Secrets and variables > Actions` 添加 Repository secret：`AMAP_KEY`。
+2. 进入 `Actions > Update restaurant data`，点击 `Run workflow` 可手动更新。
+3. 工作流也会每周自动运行一次；校验通过后只提交生成后的城市数据、质量报告、图片匹配报告和更新清单。
+
+原始高德缓存位于 `data/cache/`，已在 `.gitignore` 中忽略，不会提交到 GitHub。
+
+## 美团 / 大众点评入口
+
+应用只生成“城市 + 店名 + 地址片段”的网页搜索链接，例如“美团搜这家”“大众点评搜这家”。它不会抓取美团或大众点评页面，也不调用非公开接口，因此搜索结果可能需要用户再点进对应门店页。
 
 ## GitHub Pages
 
@@ -81,6 +127,9 @@ npm run test:e2e
 - `modern.html`
 - `restaurants-index.json`
 - `restaurants-details.json`
+- `cities.json`
+- `data/update-manifest.json`
+- `data/cities/`
 - `restaurants.json`
 - `restaurants-quality-additions.json`
 - `manifest.webmanifest`
@@ -103,12 +152,18 @@ https://knight-kevin.github.io/Random-Restaurant/
 如果旧浏览器仍显示 1300 家或按钮无响应，优先访问带新版参数的入口，例如：
 
 ```text
-https://knight-kevin.github.io/Random-Restaurant/modern.html?v=20260628-v41
+https://knight-kevin.github.io/Random-Restaurant/modern.html?v=20260629-v46
 ```
 
 `v37` 重点做了首页视觉降噪：保留分类、单一筛选入口、可抽数量、主随机按钮和球体动画，减少控件堆叠、重阴影和过长卡片文字。
 
-`v41` 增加餐厅索引缓存兜底、本地异常删除修复、旧迁移增量清理和细节优化：如果浏览器拿到旧的 1300/2300 家索引，或本地差异误删了大量官方餐厅，会自动恢复 3300 家完整官方库；旧版本迁移残留的系统采集餐厅也会自动清理，避免变成 3400 家。打卡记录页去掉重复记录数，地图复制地址提示会显示在弹层上方。
+`v41` 增加餐厅索引缓存兜底、本地异常删除修复、旧迁移增量清理和细节优化：如果浏览器拿到旧的 1300/2300 家索引，或本地差异误删了大量官方餐厅，会自动恢复当时的杭州单城完整官方库；旧版本迁移残留的系统采集餐厅也会自动清理。打卡记录页去掉重复记录数，地图复制地址提示会显示在弹层上方。
+
+`v43` 基于移动端工具型界面做视觉精修：导航、筛选入口、随机按钮、球体区域和时间轴卡片统一为更轻的白底橙色体系；我的收藏也改为和打卡记录一致的紧凑时间轴。
+
+`v44` 完成一期城市化：新增杭州/台州城市切换，杭州官方库重新按评分 4.0+ 校验为 3272 家，台州新增 1000 家优质餐厅并覆盖椒江、黄岩、路桥、温岭、临海、玉环、天台、仙居、三门。
+
+`v46` 完成二期第一轮：新增餐厅库更新清单、GitHub Actions 高德数据更新工作流、管理页数据更新状态，以及美团/大众点评搜索入口。
 
 ## 手机端使用建议
 

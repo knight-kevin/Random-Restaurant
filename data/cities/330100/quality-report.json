@@ -1,0 +1,59 @@
+{
+  "generatedAt": "2026-06-29T00:40:40.628Z",
+  "city": "杭州市",
+  "cityAdcode": "330100",
+  "minimumRating": 4,
+  "selectedCount": 3272,
+  "selectedMinimumRating": 4,
+  "ratingDistribution": {
+    "4.0": 4,
+    "4.1": 6,
+    "4.2": 2,
+    "4.3": 29,
+    "4.4": 401,
+    "4.5": 1168,
+    "4.6": 1135,
+    "4.7": 446,
+    "4.8": 76,
+    "4.9": 5
+  },
+  "districtDistribution": {
+    "滨江区": 315,
+    "淳安县": 107,
+    "富阳区": 203,
+    "拱墅区": 361,
+    "建德市": 110,
+    "临安区": 153,
+    "临平区": 235,
+    "钱塘区": 274,
+    "上城区": 333,
+    "桐庐县": 164,
+    "西湖区": 347,
+    "萧山区": 350,
+    "余杭区": 320
+  },
+  "categoryDistribution": {
+    "asian": 185,
+    "bbq": 310,
+    "buffet": 220,
+    "dessert": 250,
+    "hotpot": 379,
+    "local": 964,
+    "noodle": 331,
+    "seafood": 235,
+    "snack": 133,
+    "western": 265
+  },
+  "rejectionSummary": {
+    "notDiningPoi": 18,
+    "closedOrUnavailable": 3,
+    "belowRating": 7
+  },
+  "dataCompleteness": {
+    "withBusinessArea": 2693,
+    "withAverageCost": 3238,
+    "withTags": 2897,
+    "withPhoto": 1987,
+    "verifiedLocations": 3272
+  }
+}

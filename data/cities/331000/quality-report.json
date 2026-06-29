@@ -1,0 +1,51 @@
+{
+  "generatedAt": "2026-06-29T00:40:40.628Z",
+  "city": "台州市",
+  "cityAdcode": "331000",
+  "minimumRating": 4,
+  "selectedCount": 1000,
+  "selectedMinimumRating": 4.5,
+  "ratingDistribution": {
+    "4.5": 238,
+    "4.6": 682,
+    "4.7": 65,
+    "4.8": 14,
+    "4.9": 1
+  },
+  "districtDistribution": {
+    "黄岩区": 90,
+    "椒江区": 290,
+    "临海市": 158,
+    "路桥区": 140,
+    "三门县": 30,
+    "天台县": 73,
+    "温岭市": 125,
+    "仙居县": 61,
+    "玉环市": 33
+  },
+  "categoryDistribution": {
+    "asian": 18,
+    "bbq": 41,
+    "buffet": 12,
+    "dessert": 90,
+    "hotpot": 74,
+    "local": 525,
+    "noodle": 36,
+    "seafood": 112,
+    "snack": 21,
+    "western": 71
+  },
+  "rejectionSummary": {
+    "notDiningPoi": 76,
+    "missingNameOrAddress": 51,
+    "belowRating": 4839,
+    "closedOrUnavailable": 61
+  },
+  "dataCompleteness": {
+    "withBusinessArea": 646,
+    "withAverageCost": 983,
+    "withTags": 826,
+    "withPhoto": 1000,
+    "verifiedLocations": 1000
+  }
+}

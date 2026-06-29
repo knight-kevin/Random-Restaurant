@@ -1,27 +1,28 @@
 const CATEGORY_DEFINITIONS = [
-  { value: "local", label: "地方菜系", target: 10, keywords: ["杭帮菜", "浙江菜", "中餐", "私房菜", "农家菜", "川菜", "湘菜"] },
-  { value: "hotpot", label: "火锅", target: 10, keywords: ["火锅", "重庆火锅", "潮汕牛肉火锅", "羊肉火锅"] },
-  { value: "bbq", label: "烧烤烤肉", target: 10, keywords: ["烧烤", "烤肉", "烤串", "烤鱼"] },
-  { value: "snack", label: "快餐小吃", target: 10, keywords: ["快餐", "小吃", "中式快餐", "炸鸡", "便当"] },
-  { value: "noodle", label: "面食米粉", target: 10, keywords: ["面馆", "米粉", "馄饨", "饺子", "麻辣烫"] },
-  { value: "seafood", label: "鱼鲜海鲜", target: 10, keywords: ["海鲜", "河鲜", "鱼馆", "小龙虾", "酸菜鱼"] },
-  { value: "western", label: "西餐", target: 10, keywords: ["西餐", "牛排", "披萨", "汉堡"] },
-  { value: "asian", label: "日料韩餐", target: 10, keywords: ["日本料理", "寿司", "韩国料理", "东南亚菜"] },
-  { value: "dessert", label: "奶茶咖啡", target: 10, keywords: ["咖啡", "奶茶", "甜品", "烘焙", "蛋糕"] },
-  { value: "buffet", label: "自助餐", target: 10, keywords: ["自助餐", "海鲜自助", "烤肉自助", "火锅自助"] },
+  { value: "local", label: "地方菜系", keywords: ["杭帮菜", "浙江菜", "台州菜", "中餐", "私房菜", "农家菜", "本地菜", "土菜", "川菜", "湘菜"] },
+  { value: "hotpot", label: "火锅", keywords: ["火锅", "重庆火锅", "潮汕牛肉火锅", "牛肉火锅", "羊肉火锅", "豆捞"] },
+  { value: "bbq", label: "烧烤烤肉", keywords: ["烧烤", "烤肉", "烤串", "烤鱼", "炭烤", "碳烤"] },
+  { value: "snack", label: "快餐小吃", keywords: ["快餐", "小吃", "中式快餐", "炸鸡", "便当", "食堂"] },
+  { value: "noodle", label: "面食米粉", keywords: ["面馆", "拉面", "拌面", "米粉", "馄饨", "饺子", "麻辣烫", "煎饺"] },
+  { value: "seafood", label: "鱼鲜海鲜", keywords: ["海鲜", "河鲜", "湖鲜", "鱼馆", "鱼府", "渔庄", "小龙虾", "酸菜鱼"] },
+  { value: "western", label: "西餐", keywords: ["西餐", "意式", "披萨", "pizza", "bistro", "牛排", "汉堡"] },
+  { value: "asian", label: "日料韩餐", keywords: ["日本料理", "日料", "寿司", "割烹", "居酒屋", "韩国料理", "韩式", "泰国菜", "东南亚"] },
+  { value: "dessert", label: "奶茶咖啡", keywords: ["咖啡", "coffee", "奶茶", "茶饮", "甜品", "烘焙", "蛋糕", "下午茶"] },
+  { value: "buffet", label: "自助餐", keywords: ["自助餐", "海鲜自助", "烤肉自助", "火锅自助", "自助"] },
 ];
 
 function inferCategory(restaurant, preferredCategory = "") {
   if (CATEGORY_DEFINITIONS.some((item) => item.value === restaurant.category)) return restaurant.category;
+
   const name = String(restaurant.name || "").toLowerCase();
-  const note = String(restaurant.note || restaurant.tags || "").toLowerCase();
+  const note = normalizeListText(restaurant.note || restaurant.tags || "");
   const type = String(restaurant.type || "").toLowerCase();
   const text = `${name} ${note} ${type}`;
   const hasName = (words) => words.some((word) => name.includes(word.toLowerCase()));
   const hasText = (words) => words.some((word) => text.includes(word.toLowerCase()));
 
   if (hasName(["自助", "buffet"]) || hasText(["自助餐"])) return "buffet";
-  if (hasName(["日料", "日本料理", "寿司", "割烹", "居酒屋", "韩食", "韩国料理", "泰国菜", "东南亚"])) return "asian";
+  if (hasName(["日料", "日本料理", "寿司", "割烹", "居酒屋", "韩食", "韩国料理", "韩式", "泰国菜", "东南亚"])) return "asian";
   if (hasName(["西餐", "意式", "披萨", "pizza", "bistro", "牛排", "汉堡", "麦当劳", "肯德基", "萨莉亚"])) return "western";
   if (hasName(["火锅", "豆捞", "涮", "暖锅", "羊蝎子", "羊肉炉", "打边炉", "肉蟹煲"])) return "hotpot";
   if (hasName(["烧烤", "烤肉", "烤串", "串串", "烤鱼", "炭烤", "碳烤"])) return "bbq";
@@ -32,12 +33,13 @@ function inferCategory(restaurant, preferredCategory = "") {
   if (preferredCategory && CATEGORY_DEFINITIONS.some((item) => item.value === preferredCategory)) return preferredCategory;
   if (hasText(["寿司", "刺身", "韩式料理"])) return "asian";
   if (hasText(["意面", "披萨", "汉堡"]) && hasText(["牛排", "沙拉", "薯条", "芝士"])) return "western";
+  if (hasText(["海鲜", "鱼鲜", "渔港"])) return "seafood";
   return "local";
 }
 
 function inferSubcategory(restaurant) {
   const category = restaurant.category || inferCategory(restaurant);
-  const text = `${restaurant.name || ""} ${restaurant.note || ""} ${restaurant.tags || ""}`.toLowerCase();
+  const text = `${restaurant.name || ""} ${normalizeListText(restaurant.note || restaurant.tags || "")}`.toLowerCase();
   const has = (words) => words.some((word) => text.includes(word.toLowerCase()));
   if (category === "hotpot") {
     if (has(["潮汕", "鲜切牛肉"])) return "hotpot-chaoshan";
@@ -50,7 +52,7 @@ function inferSubcategory(restaurant) {
     if (has(["烤串", "串串", "羊肉串"])) return "bbq-skewer";
   }
   if (category === "local") {
-    if (has(["杭帮菜", "浙江菜", "浙菜", "桐庐菜", "建德菜", "临安菜"])) return "local-zhejiang";
+    if (has(["杭帮菜", "浙江菜", "浙菜", "台州菜", "桐庐菜", "建德菜", "临安菜"])) return "local-zhejiang";
     if (has(["川菜", "湘菜", "川湘", "江西菜"])) return "local-sichuan";
     if (has(["农家菜", "土菜"])) return "local-farm";
   }
@@ -72,4 +74,13 @@ function inferSubcategory(restaurant) {
   return category;
 }
 
-module.exports = { CATEGORY_DEFINITIONS, inferCategory, inferSubcategory };
+function normalizeListText(value) {
+  if (Array.isArray(value)) return value.join(" ");
+  return String(value || "");
+}
+
+module.exports = {
+  CATEGORY_DEFINITIONS,
+  inferCategory,
+  inferSubcategory,
+};

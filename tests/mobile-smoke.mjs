@@ -11,6 +11,9 @@ const { chromium } = require("playwright");
 const root = path.resolve(import.meta.dirname, "..");
 const baseUrl = "http://127.0.0.1:5173";
 const indexData = JSON.parse(fs.readFileSync(path.join(root, "restaurants-index.json"), "utf8"));
+const cityData = JSON.parse(fs.readFileSync(path.join(root, "cities.json"), "utf8"));
+const hangzhouCount = cityData.find((city) => city.adcode === "330100")?.restaurantCount || indexData.length;
+const taizhouCount = cityData.find((city) => city.adcode === "331000")?.restaurantCount || 1000;
 const chromePath = [
   "C:/Program Files/Google/Chrome/Application/chrome.exe",
   "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe",
@@ -45,7 +48,11 @@ try {
 async function runFreshLoadTest(browser) {
   const page = await browser.newPage({ viewport: { width: 375, height: 812 }, isMobile: true });
   await page.goto(`${baseUrl}/modern.html?v=test`, { waitUntil: "domcontentloaded" });
-  await page.waitForFunction(() => document.querySelector("#restaurant-count")?.textContent === "3300", null, { timeout: 15000 });
+  await waitForRestaurantCount(page, hangzhouCount);
+  await page.selectOption("#city-select", "331000");
+  await waitForRestaurantCount(page, taizhouCount);
+  await page.selectOption("#city-select", "330100");
+  await waitForRestaurantCount(page, hangzhouCount);
   const toastAboveDialogs = await page.evaluate(() => {
     const toastZ = Number(getComputedStyle(document.querySelector("#toast")).zIndex);
     const mapZ = Number(getComputedStyle(document.querySelector("#map-picker")).zIndex);
@@ -62,7 +69,7 @@ async function runLegacyCacheMigrationTest(browser) {
     localStorage.setItem("random-restaurant-checkin:restaurants", JSON.stringify(legacyRestaurants));
   }, indexData.slice(0, 1300));
   await page.goto(`${baseUrl}/modern.html?v=legacy-cache-test`, { waitUntil: "domcontentloaded" });
-  await page.waitForFunction(() => document.querySelector("#restaurant-count")?.textContent === "3300", null, { timeout: 15000 });
+  await waitForRestaurantCount(page, hangzhouCount);
   await page.close();
 }
 
@@ -77,7 +84,7 @@ async function runBadDeletionRepairTest(browser) {
     }));
   }, indexData.slice(1300).map((restaurant) => restaurant.id));
   await page.goto(`${baseUrl}/modern.html?v=repair-test`, { waitUntil: "domcontentloaded" });
-  await page.waitForFunction(() => document.querySelector("#restaurant-count")?.textContent === "3300", null, { timeout: 15000 });
+  await waitForRestaurantCount(page, hangzhouCount);
   await page.close();
 }
 
@@ -92,7 +99,7 @@ async function runLargeOfficialDeletionRepairTest(browser) {
     }));
   }, indexData.slice(0, 1000).map((restaurant) => restaurant.id));
   await page.goto(`${baseUrl}/modern.html?v=large-official-repair-test`, { waitUntil: "domcontentloaded" });
-  await page.waitForFunction(() => document.querySelector("#restaurant-count")?.textContent === "3300", null, { timeout: 15000 });
+  await waitForRestaurantCount(page, hangzhouCount);
   await page.close();
 }
 
@@ -121,7 +128,7 @@ async function runStaleOfficialAdditionRepairTest(browser) {
     }));
   }, staleAdded);
   await page.goto(`${baseUrl}/modern.html?v=stale-added-repair-test`, { waitUntil: "domcontentloaded" });
-  await page.waitForFunction(() => document.querySelector("#restaurant-count")?.textContent === "3301", null, { timeout: 15000 });
+  await waitForRestaurantCount(page, hangzhouCount + 1);
   await page.close();
 }
 
@@ -160,7 +167,7 @@ async function runResultModalVisibilityTest(browser) {
 async function runExplainablePickAndAvailabilityTest(browser) {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true });
   await page.goto(`${baseUrl}/modern.html?v=explainable-test`, { waitUntil: "domcontentloaded" });
-  await page.waitForFunction(() => document.querySelector("#restaurant-count")?.textContent === "3300", null, { timeout: 15000 });
+  await waitForRestaurantCount(page, hangzhouCount);
   await page.evaluate(() => {
     window.__originalConfirm = window.confirm;
     window.confirm = () => true;
@@ -193,7 +200,7 @@ async function runSimplifiedHomeAndTimelineTest(browser) {
     localStorage.setItem("random-restaurant-checkin:wish-list-v1", JSON.stringify({ items: [{ restaurantId: "legacy", addedAt: new Date().toISOString() }] }));
   });
   await page.goto(`${baseUrl}/modern.html?v=simplified-home-test`, { waitUntil: "domcontentloaded" });
-  await page.waitForFunction(() => document.querySelector("#restaurant-count")?.textContent === "3300", null, { timeout: 15000 });
+  await waitForRestaurantCount(page, hangzhouCount);
 
   if (await page.locator("#scene-modes, #wish-priority-button, [data-pick-type='triple']").count()) {
     throw new Error("首页仍然渲染了已移除的情境/最近想吃/三选一控件");
@@ -208,6 +215,25 @@ async function runSimplifiedHomeAndTimelineTest(browser) {
   }
   await page.click("#combined-filter-button");
   await page.waitForSelector("#filter-dropdown:not([hidden])", { timeout: 5000 });
+  await page.waitForSelector("[data-combined-section='food']", { state: "visible", timeout: 5000 });
+  await page.waitForSelector("[data-combined-section='sort']", { state: "visible", timeout: 5000 });
+  const sectionNavVisible = await page.evaluate(() => {
+    const dropdown = document.querySelector("#filter-dropdown");
+    const food = document.querySelector("[data-combined-section='food']");
+    const sort = document.querySelector("[data-combined-section='sort']");
+    if (!dropdown || !food || !sort) return false;
+    const dropdownRect = dropdown.getBoundingClientRect();
+    const foodRect = food.getBoundingClientRect();
+    const sortRect = sort.getBoundingClientRect();
+    return foodRect.top >= dropdownRect.top
+      && foodRect.bottom <= dropdownRect.bottom
+      && sortRect.top >= dropdownRect.top
+      && sortRect.bottom <= dropdownRect.bottom;
+  });
+  if (!sectionNavVisible) {
+    throw new Error("Combined filter should expose food and sort sections without scrolling");
+  }
+  await page.click("[data-combined-section='food']");
   await page.locator("[data-food-value]").first().click();
   await page.click("#filter-confirm-button");
   await page.waitForFunction(() => document.querySelector("#filter-summary")?.textContent?.includes("当前可抽"), null, { timeout: 5000 });
@@ -231,6 +257,13 @@ async function runSimplifiedHomeAndTimelineTest(browser) {
   if (compactCount < 1) throw new Error("打卡记录时间轴未显示");
   await page.locator(".timeline-card .timeline-summary").first().click();
   await page.waitForSelector(".timeline-card.is-expanded .timeline-detail", { state: "visible", timeout: 5000 });
+  await page.click(".timeline-card.is-expanded [data-action='toggle-favorite']");
+  await page.click("#favorites-tab");
+  await page.waitForSelector("#favorites-view:not([hidden]) .favorite-timeline-card", { timeout: 5000 });
+  const favoriteSummaryCount = await page.locator("#favorites-view .favorite-timeline-card .timeline-summary").count();
+  if (favoriteSummaryCount < 1) throw new Error("我的收藏未使用时间轴紧凑卡片");
+  await page.locator("#favorites-view .favorite-timeline-card .timeline-summary").first().click();
+  await page.waitForSelector("#favorites-view .favorite-timeline-card.is-expanded .timeline-detail", { state: "visible", timeout: 5000 });
   await page.evaluate(() => {
     if (window.__originalConfirm) window.confirm = window.__originalConfirm;
   });
@@ -263,4 +296,12 @@ function canReachServer() {
       resolve(false);
     });
   });
+}
+
+async function waitForRestaurantCount(page, expectedCount) {
+  await page.waitForFunction((count) =>
+    document.querySelector("#restaurant-count")?.textContent === String(count),
+    expectedCount,
+    { timeout: 15000 },
+  );
 }

@@ -18,5 +18,11 @@ Random-Restaurant-upload.zip
 restaurants-original-99-backup.json
 restaurants-before-1300-backup.json
 .amap-poi-cache.json
+.amap-poi-cache-*.json
+data/cache/
 *.partial
 .env*
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
+.codex-vite.*.log

@@ -21,15 +21,17 @@ export function getMapProviders(userAgent = navigator.userAgent) {
 
 export function getMapUrl(restaurant, provider, userAgent = navigator.userAgent) {
   const device = getDeviceProfile(userAgent);
-  const query = `杭州 ${restaurant.address || ""} ${restaurant.name || restaurant.restaurantName || ""}`.trim();
+  const city = restaurant.city || "杭州市";
+  const query = `${city} ${restaurant.address || ""} ${restaurant.name || restaurant.restaurantName || ""}`.trim();
   const [longitude = "", latitude = ""] = String(restaurant.location || "").split(",");
   const encodedQuery = encodeURIComponent(query);
+  const encodedCity = encodeURIComponent(city);
   const name = restaurant.name || restaurant.restaurantName || "";
   const address = restaurant.address || "";
 
   if (provider === "baidu") {
     if (device.isAppleMobile || device.isAndroidFamily) {
-      return `baidumap://map/place/search?query=${encodedQuery}&region=${encodeURIComponent("杭州")}&src=webapp.renjianxunweiji`;
+      return `baidumap://map/place/search?query=${encodedQuery}&region=${encodedCity}&src=webapp.renjianxunweiji`;
     }
     return `https://map.baidu.com/search/${encodedQuery}`;
   }
@@ -39,7 +41,7 @@ export function getMapUrl(restaurant, provider, userAgent = navigator.userAgent)
       const marker = encodeURIComponent(`coord:${latitude},${longitude};title:${name};addr:${address}`);
       return `qqmap://map/marker?marker=${marker}&referer=renjianxunweiji`;
     }
-    return `https://map.qq.com/?type=search&keyword=${encodedQuery}&region=${encodeURIComponent("杭州")}`;
+    return `https://map.qq.com/?type=search&keyword=${encodedQuery}&region=${encodedCity}`;
   }
 
   if (provider === "apple") {
