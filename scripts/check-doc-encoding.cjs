@@ -16,8 +16,10 @@ const files = [
   "scripts/app/random-reasons.js",
   "scripts/app/food-diary.js",
   "scripts/app/map-links.js",
-  "scripts/app/platform-links.js",
   "scripts/city-definitions.cjs",
+  "scripts/fetch-city-amap.cjs",
+  "scripts/build-city-data.cjs",
+  "scripts/update-city-data.cjs",
   "scripts/category-rules.cjs",
 ];
 

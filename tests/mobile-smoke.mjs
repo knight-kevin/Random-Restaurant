@@ -135,6 +135,7 @@ async function runStaleOfficialAdditionRepairTest(browser) {
 async function runResultModalVisibilityTest(browser) {
   const page = await browser.newPage({ viewport: { width: 375, height: 812 }, isMobile: true });
   await page.goto(`${baseUrl}/modern.html?v=modal-test`, { waitUntil: "domcontentloaded" });
+  await waitForRestaurantCount(page, hangzhouCount);
   await page.waitForSelector("#result-modal", { state: "attached", timeout: 15000 });
   await page.evaluate(() => {
     const modal = document.querySelector("#result-modal");
@@ -205,36 +206,67 @@ async function runSimplifiedHomeAndTimelineTest(browser) {
   if (await page.locator("#scene-modes, #wish-priority-button, [data-pick-type='triple']").count()) {
     throw new Error("首页仍然渲染了已移除的情境/最近想吃/三选一控件");
   }
+  const categoryTabsText = await page.locator("#category-tabs").innerText();
+  for (const label of ["\u5168\u90e8", "\u5976\u8336\u5496\u5561", "\u706b\u9505"]) {
+    if (!categoryTabsText.includes(label)) {
+      throw new Error(`Home category tab bar is missing label: ${label}`);
+    }
+  }
+  const totalCountText = await page.locator("#filter-summary .count-summary").innerText();
+  const totalMatch = totalCountText.match(/\d+/);
+  await page.locator("#category-tabs [data-category-tab='hotpot']").click();
+  await page.waitForTimeout(100);
+  const hotpotCountText = await page.locator("#filter-summary .count-summary").innerText();
+  const hotpotMatch = hotpotCountText.match(/\d+/);
+  if (!totalMatch || !hotpotMatch || Number(hotpotMatch[0]) <= 0 || Number(hotpotMatch[0]) > Number(totalMatch[0])) {
+    throw new Error("Home category tab should filter the random pool without increasing the candidate count");
+  }
+  await page.locator("#category-tabs [data-category-tab='recommend']").click();
   const pickButtonRect = await page.locator("#pick-button").boundingBox();
   if (!pickButtonRect || pickButtonRect.y > 650) {
     throw new Error("移动端首屏主随机按钮不可见");
   }
-  const countPillRect = await page.locator(".count-pill").boundingBox();
-  if (!countPillRect || countPillRect.height > 38) {
-    throw new Error("当前可抽数量仍然占用过大视觉空间");
+  const countPillInButton = await page.locator("#pick-button .count-pill, .random-controls > .count-pill").count();
+  if (countPillInButton !== 0) {
+    throw new Error("当前可抽数量不应在随机按钮区域重复展示");
   }
   await page.click("#combined-filter-button");
   await page.waitForSelector("#filter-dropdown:not([hidden])", { timeout: 5000 });
-  await page.waitForSelector("[data-combined-section='food']", { state: "visible", timeout: 5000 });
-  await page.waitForSelector("[data-combined-section='sort']", { state: "visible", timeout: 5000 });
-  const sectionNavVisible = await page.evaluate(() => {
+  const locationOnlyFilter = await page.evaluate(() => {
     const dropdown = document.querySelector("#filter-dropdown");
-    const food = document.querySelector("[data-combined-section='food']");
-    const sort = document.querySelector("[data-combined-section='sort']");
-    if (!dropdown || !food || !sort) return false;
-    const dropdownRect = dropdown.getBoundingClientRect();
-    const foodRect = food.getBoundingClientRect();
-    const sortRect = sort.getBoundingClientRect();
-    return foodRect.top >= dropdownRect.top
-      && foodRect.bottom <= dropdownRect.bottom
-      && sortRect.top >= dropdownRect.top
-      && sortRect.bottom <= dropdownRect.bottom;
+    if (!dropdown) return false;
+    return Boolean(dropdown.querySelector(".area-picker"))
+      && !dropdown.querySelector("[data-combined-section='food']")
+      && !dropdown.querySelector("[data-combined-section='sort']")
+      && !dropdown.querySelector("[data-food-value]")
+      && !dropdown.querySelector("[data-sort]")
+      && !/热门|排序方式|全部美食/.test(dropdown.textContent || "");
   });
-  if (!sectionNavVisible) {
-    throw new Error("Combined filter should expose food and sort sections without scrolling");
+  if (!locationOnlyFilter) {
+    throw new Error("Location filter drawer should not include food or sort filters");
   }
-  await page.click("[data-combined-section='food']");
-  await page.locator("[data-food-value]").first().click();
+  const locationDrawerText = await page.locator("#filter-dropdown-content").innerText();
+  if (/[?]{2,}/.test(locationDrawerText)) {
+    throw new Error("Location filter drawer should not render question-mark placeholder copy");
+  }
+  for (const label of ["\u884c\u653f\u533a", "\u4e0d\u9650", "\u5168\u90e8\u5546\u5708", "\u91cd\u65b0\u5b9a\u4f4d"]) {
+    if (!locationDrawerText.includes(label)) {
+      throw new Error(`Location filter drawer is missing label: ${label}`);
+    }
+  }
+  const districtSingleSelectCount = await page.evaluate(() => {
+    const districtButtons = [...document.querySelectorAll("[data-district]")]
+      .filter((button) => button.dataset.district)
+      .slice(0, 2);
+    districtButtons.forEach((button) => button.click());
+    return [...document.querySelectorAll("[data-district].is-selected")]
+      .filter((button) => button.dataset.district)
+      .length;
+  });
+  if (districtSingleSelectCount !== 1) {
+    throw new Error("District filter should only allow one selected district");
+  }
+  await page.locator("[data-distance='0']").click();
   await page.click("#filter-confirm-button");
   await page.waitForFunction(() => document.querySelector("#filter-summary")?.textContent?.includes("当前可抽"), null, { timeout: 5000 });
 
@@ -244,6 +276,11 @@ async function runSimplifiedHomeAndTimelineTest(browser) {
   });
   await page.click("#pick-button");
   await page.waitForSelector(".reason-box", { state: "visible", timeout: 7000 });
+  const platformControlCount = await page.locator("[data-platform-search], .platform-action").count();
+  const platformTextCount = await page.locator("text=美团搜这家").count() + await page.locator("text=大众点评搜这家").count();
+  if (platformControlCount || platformTextCount) {
+    throw new Error("Result modal should not render Meituan or Dianping search buttons");
+  }
   if (await page.locator(".choice-card, [data-choice-select]").count()) {
     throw new Error("单抽流程中不应出现三选一候选");
   }
@@ -300,7 +337,7 @@ function canReachServer() {
 
 async function waitForRestaurantCount(page, expectedCount) {
   await page.waitForFunction((count) =>
-    document.querySelector("#restaurant-count")?.textContent === String(count),
+    document.querySelector("#filter-summary .count-summary")?.textContent?.includes(String(count)),
     expectedCount,
     { timeout: 15000 },
   );

@@ -1,12 +1,16 @@
 const fs = require("node:fs");
 const https = require("node:https");
 const path = require("node:path");
-const { getCityDefinition, RESTAURANT_KEYWORDS } = require("./city-definitions.cjs");
+const {
+  BUSINESS_AREA_KEYWORDS,
+  getCityDefinition,
+  RESTAURANT_KEYWORDS,
+} = require("./city-definitions.cjs");
 
 const AMAP_KEY = process.env.AMAP_KEY;
 const CITY = getCityDefinition(process.env.CITY_ADCODE || process.env.CITY_NAME || "331000");
 const ENDPOINT = "https://restapi.amap.com/v3/place/text";
-const MAX_PAGES = Number(process.env.MAX_PAGES || 5);
+const MAX_PAGES = Number(process.env.MAX_PAGES || 10);
 const REQUEST_DELAY_MS = Number(process.env.REQUEST_DELAY_MS || 280);
 
 if (!CITY) {
@@ -21,7 +25,8 @@ if (!AMAP_KEY) {
 
 const cachePath = process.env.AMAP_CACHE_PATH || path.join("data", "cache", `amap-poi-${CITY.adcode}.json`);
 const legacyCachePath = `.amap-poi-cache-${CITY.adcode}.json`;
-const cache = readJson(cachePath, readJson(legacyCachePath, {}));
+const cityWideLegacyCachePath = CITY.adcode === "330100" ? ".amap-poi-cache.json" : "";
+const cache = readJson(cachePath, readJson(legacyCachePath, cityWideLegacyCachePath ? readJson(cityWideLegacyCachePath, {}) : {}));
 
 main().catch((error) => {
   console.error(error);
@@ -29,33 +34,62 @@ main().catch((error) => {
 });
 
 async function main() {
-  for (const district of CITY.districts) {
-    for (const keyword of RESTAURANT_KEYWORDS) {
-      for (let page = 1; page <= MAX_PAGES; page += 1) {
-        const cacheKey = `${CITY.adcode}|${district}|${keyword}|${page}`;
-        if (Array.isArray(cache[cacheKey])) continue;
-        cache[cacheKey] = await searchPoi(district, keyword, page);
-        await sleep(REQUEST_DELAY_MS);
-      }
-      writeCache();
-      console.log(`${CITY.name} ${district} ${keyword}: cached ${countPois()} POI responses`);
+  const plans = buildSearchPlans(CITY);
+  console.log(`Fetching ${plans.length} search plans for ${CITY.name}, up to ${MAX_PAGES} pages each.`);
+
+  for (const plan of plans) {
+    for (let page = 1; page <= MAX_PAGES; page += 1) {
+      const cacheKey = `${CITY.adcode}|${plan.scope}|${plan.keyword}|${page}`;
+      if (Array.isArray(cache[cacheKey])) continue;
+      const pois = await searchPoi(plan.keyword, page);
+      cache[cacheKey] = pois;
+      await sleep(REQUEST_DELAY_MS);
+      if (pois.length === 0) break;
     }
     writeCache();
+    console.log(`${CITY.name} ${plan.scope} ${plan.keyword}: cached ${countPois()} POI rows`);
   }
+
   writeCache();
   console.log(`Finished ${CITY.name}. Cache written to ${cachePath}`);
 }
 
-async function searchPoi(district, keyword, page) {
+function buildSearchPlans(city) {
+  const plans = [];
+  const add = (scope, keyword) => {
+    const normalized = `${scope}|${keyword}`;
+    if (plans.some((plan) => plan.normalized === normalized)) return;
+    plans.push({ scope, keyword, normalized });
+  };
+
+  for (const district of city.districts) {
+    for (const keyword of RESTAURANT_KEYWORDS) add(district, `${district} ${keyword}`);
+  }
+
+  for (const keyword of RESTAURANT_KEYWORDS) {
+    add("city", `${city.shortName || city.name} ${keyword}`);
+  }
+
+  for (const area of city.businessAreas || []) {
+    for (const keyword of BUSINESS_AREA_KEYWORDS) add(area, `${area} ${keyword}`);
+  }
+
+  return plans;
+}
+
+async function searchPoi(keyword, page) {
   const params = new URLSearchParams({
     key: AMAP_KEY,
-    keywords: `${district} ${keyword}`,
+    keywords: keyword,
     city: CITY.name,
     citylimit: "true",
     offset: "25",
     page: String(page),
     extensions: "all",
+    types: "050000",
+    children: "0",
   });
+
   for (let attempt = 0; attempt < 8; attempt += 1) {
     const data = await requestJson(`${ENDPOINT}?${params}`);
     if (data.status === "1") return Array.isArray(data.pois) ? data.pois : [];
@@ -64,7 +98,7 @@ async function searchPoi(district, keyword, page) {
     }
     await sleep(1200 * (attempt + 1));
   }
-  throw new Error(`Amap API stayed rate-limited for ${district} ${keyword} page ${page}`);
+  throw new Error(`Amap API stayed rate-limited for ${keyword} page ${page}`);
 }
 
 function writeCache() {
@@ -104,7 +138,7 @@ function requestJson(url) {
 
 function readJson(filePath, fallback) {
   try {
-    return fs.existsSync(filePath) ? JSON.parse(fs.readFileSync(filePath, "utf8")) : fallback;
+    return filePath && fs.existsSync(filePath) ? JSON.parse(fs.readFileSync(filePath, "utf8")) : fallback;
   } catch {
     return fallback;
   }

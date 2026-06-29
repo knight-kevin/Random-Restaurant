@@ -4,8 +4,8 @@ import path from "node:path";
 const root = process.cwd();
 const errors = [];
 const requiredCities = [
-  ["330100", "\u676d\u5dde\u5e02", 3000],
-  ["331000", "\u53f0\u5dde\u5e02", 500],
+  ["330100", "\u676d\u5dde\u5e02", 3273],
+  ["331000", "\u53f0\u5dde\u5e02", 1001],
 ];
 
 const cities = readJson("cities.json", []);
