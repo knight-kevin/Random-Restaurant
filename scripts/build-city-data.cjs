@@ -4,7 +4,7 @@ const { CITY_DEFINITIONS } = require("./city-definitions.cjs");
 const { inferCategory, inferSubcategory } = require("./category-rules.cjs");
 
 const root = path.resolve(__dirname, "..");
-const minRating = Number(process.env.MIN_RATING || 4);
+const minRating = Number(process.env.MIN_RATING || 3.5);
 const sourceUpdatedAt = new Date().toISOString();
 
 const indexFields = [
@@ -162,7 +162,7 @@ function dedupeRestaurants(restaurants, rejectionSummary) {
 }
 
 function normalizeExistingRestaurant(restaurant, city) {
-  const category = restaurant.category || inferCategory(restaurant);
+  const category = inferCategory(restaurant);
   const district = restaurant.district || restaurant.amapDistrict || "";
   const location = String(restaurant.location || "");
   return {
@@ -175,8 +175,8 @@ function normalizeExistingRestaurant(restaurant, city) {
     district,
     districtAdcode: restaurant.districtAdcode || "",
     category,
-    categoryGroup: restaurant.categoryGroup || category,
-    subcategory: restaurant.subcategory || inferSubcategory({ ...restaurant, category }),
+    categoryGroup: category,
+    subcategory: inferSubcategory({ ...restaurant, category }),
     rating: parseRating(restaurant.rating),
     averageCost: Number(restaurant.averageCost || 0) || null,
     location,
@@ -191,7 +191,7 @@ function normalizeAmapPoi(poi, city) {
   const business = poi.business || {};
   const bizExt = poi.biz_ext || {};
   const tags = parseTags(business.tag || poi.tag || poi.atag || "");
-  const categoryInput = { name: poi.name || "", note: tags.join(" "), tags, type: poi.type || "" };
+  const categoryInput = { name: poi.name || "", note: tags.join(" "), tags, type: poi.type || "", typecode: poi.typecode || "" };
   const category = inferCategory(categoryInput);
   const averageCost = Number(business.cost || bizExt.cost || 0) || null;
   const location = String(poi.location || "");

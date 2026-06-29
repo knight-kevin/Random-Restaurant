@@ -1,11 +1,14 @@
 import fs from "node:fs";
 import path from "node:path";
+import { createRequire } from "node:module";
 
 const root = process.cwd();
+const require = createRequire(import.meta.url);
+const { inferCategory } = require("../scripts/category-rules.cjs");
 const errors = [];
 const requiredCities = [
-  ["330100", "\u676d\u5dde\u5e02", 3273],
-  ["331000", "\u53f0\u5dde\u5e02", 1001],
+  ["330100", "\u676d\u5dde\u5e02", 17199],
+  ["331000", "\u53f0\u5dde\u5e02", 10984],
 ];
 
 const cities = readJson("cities.json", []);
@@ -68,7 +71,8 @@ for (const [adcode, cityName, minimumCount] of requiredCities) {
     districtSeen.add(restaurant.district);
     if (restaurant.city !== cityName) errors.push(`${cityName} item ${restaurant.id} has city ${restaurant.city}`);
     if (restaurant.cityAdcode !== adcode) errors.push(`${cityName} item ${restaurant.id} has cityAdcode ${restaurant.cityAdcode}`);
-    if (Number(restaurant.rating || 0) < 4) errors.push(`${cityName} item ${restaurant.id} rating below 4.0`);
+    const minRating = Number(city.minRating || 3.5);
+    if (Number(restaurant.rating || 0) < minRating) errors.push(`${cityName} item ${restaurant.id} rating below ${minRating}`);
     if (!/^-?\d+(\.\d+)?,-?\d+(\.\d+)?$/.test(String(restaurant.location || ""))) {
       errors.push(`${cityName} item ${restaurant.id} invalid location`);
     }
@@ -78,7 +82,14 @@ for (const [adcode, cityName, minimumCount] of requiredCities) {
     if (districtSet.size && !districtSet.has(restaurant.district)) {
       errors.push(`${cityName} item ${restaurant.id} district out of scope`);
     }
-    if (!details[restaurant.id]) errors.push(`${cityName} details missing for ${restaurant.id}`);
+    if (!details[restaurant.id]) {
+      errors.push(`${cityName} details missing for ${restaurant.id}`);
+    } else {
+      const expectedCategory = inferCategory(details[restaurant.id]);
+      if (expectedCategory && restaurant.category !== expectedCategory) {
+        errors.push(`${cityName} item ${restaurant.id} obvious category mismatch: expected ${expectedCategory}, got ${restaurant.category}`);
+      }
+    }
   }
 
   const missingDistricts = [...districtSet].filter((district) => !districtSeen.has(district));

@@ -4,7 +4,7 @@
 
 ## 当前功能
 
-- 首批支持杭州和台州：杭州 4812 家评分 4.0+ 餐厅，台州 7720 家评分 4.0+ 餐厅。
+- 首批支持杭州和台州：杭州 17199 家评分 3.5+ 餐厅，台州 10984 家评分 3.5+ 餐厅。
 - 首页支持城市切换，切换后会刷新区域、商圈、候选数量和随机池。
 - 首页筛选只保留位置能力：定位距离、行政区和商圈。
 - 首页改为精简单抽流程：城市、位置筛选、当前可抽数量、大随机按钮和球体动画。
@@ -56,7 +56,7 @@ npm.cmd run dev
 - `cities.json`：城市配置、城市数据版本和数据文件路径。
 - `data/cities/330100/restaurants-index.json`：杭州首屏轻量索引。
 - `data/cities/330100/restaurants-details.json`：杭州完整餐厅详情。
-- `data/cities/330100/quality-report.json`：杭州 4.0+ 质量报告。
+- `data/cities/330100/quality-report.json`：杭州 3.5+ 质量报告。
 - `data/cities/331000/restaurants-index.json`：台州首屏轻量索引。
 - `data/cities/331000/restaurants-details.json`：台州完整餐厅详情。
 - `data/cities/331000/quality-report.json`：台州质量报告。
@@ -150,7 +150,7 @@ https://knight-kevin.github.io/Random-Restaurant/
 如果旧浏览器仍显示 1300 家或按钮无响应，优先访问带新版参数的入口，例如：
 
 ```text
-https://knight-kevin.github.io/Random-Restaurant/modern.html?v=20260629-v47
+https://knight-kevin.github.io/Random-Restaurant/modern.html?v=20260630-v48
 ```
 
 `v37` 重点做了首页视觉降噪：保留分类、单一筛选入口、可抽数量、主随机按钮和球体动画，减少控件堆叠、重阴影和过长卡片文字。
@@ -164,6 +164,8 @@ https://knight-kevin.github.io/Random-Restaurant/modern.html?v=20260629-v47
 `v46` 完成二期第一轮：新增餐厅库更新清单、GitHub Actions 高德数据更新工作流、管理页数据更新状态，以及美团/大众点评搜索入口。
 
 `v47` 精简筛选和平台入口：移除美团/大众点评按钮，首页和筛选抽屉只保留位置筛选；修复城市采集脚本乱码和台州 1000 家上限，杭州扩充为 4812 家 4.0+ 餐厅，台州扩充为 7720 家 4.0+ 餐厅。
+
+`v48` 按高德餐饮分类重做顶部小标题栏，保留“全部”，并拆分为中餐、火锅、烧烤烤肉、鱼鲜海鲜、快餐小吃、面食米粉、咖啡茶饮、甜品烘焙、日韩西餐和自助餐；入库评分门槛调整为 3.5+，重新构建杭州和台州城市包，杭州扩充为 17199 家，台州扩充为 10984 家，并修复奶茶、咖啡、烘焙等误入地方菜系的问题。
 
 ## 手机端使用建议
 

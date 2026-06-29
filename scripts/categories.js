@@ -1,24 +1,26 @@
 export const CATEGORY_TABS = [
   { value: "recommend", label: "全部", categories: [] },
-  { value: "dessert", label: "奶茶咖啡", categories: ["dessert"] },
-  { value: "snack", label: "快餐小吃", categories: ["snack", "noodle"] },
+  { value: "local", label: "中餐", categories: ["local"] },
   { value: "hotpot", label: "火锅", categories: ["hotpot"] },
   { value: "bbq", label: "烧烤烤肉", categories: ["bbq"] },
-  { value: "local", label: "地方菜系", categories: ["local"] },
-  { value: "asian", label: "异域料理", categories: ["asian", "western"] },
-  { value: "buffet", label: "自助餐", categories: ["buffet"] },
   { value: "seafood", label: "鱼鲜海鲜", categories: ["seafood"] },
+  { value: "snack", label: "快餐小吃", categories: ["snack"] },
+  { value: "noodle", label: "面食米粉", categories: ["noodle"] },
+  { value: "dessert-drink", label: "咖啡茶饮", categories: ["dessert-coffee", "dessert-tea"] },
+  { value: "dessert-bakery", label: "甜品烘焙", categories: ["dessert-bakery"] },
+  { value: "asian", label: "日韩西餐", categories: ["asian", "western"] },
+  { value: "buffet", label: "自助餐", categories: ["buffet"] },
 ];
 
 export const FOOD_GROUPS = [
   {
-    value: "popular",
-    label: "热门",
+    value: "local",
+    label: "中餐",
     options: [
-      { value: "snack", label: "中式快餐" },
-      { value: "local", label: "地方菜系" },
-      { value: "noodle", label: "米粉面馆" },
-      { value: "seafood", label: "鱼鲜海鲜" },
+      { value: "local", label: "全部中餐" },
+      { value: "local-zhejiang", label: "江浙本地菜" },
+      { value: "local-sichuan", label: "川湘菜" },
+      { value: "local-farm", label: "农家土菜" },
     ],
   },
   {
@@ -42,20 +44,36 @@ export const FOOD_GROUPS = [
     ],
   },
   {
-    value: "local",
-    label: "地方菜系",
+    value: "seafood",
+    label: "鱼鲜海鲜",
     options: [
-      { value: "local", label: "全部地方菜系" },
-      { value: "local-zhejiang", label: "浙江菜" },
-      { value: "local-sichuan", label: "川湘菜" },
-      { value: "local-farm", label: "农家菜" },
+      { value: "seafood", label: "全部鱼鲜海鲜" },
+    ],
+  },
+  {
+    value: "fast",
+    label: "快餐小吃",
+    options: [
+      { value: "snack", label: "快餐小吃" },
+      { value: "noodle", label: "面食米粉" },
+    ],
+  },
+  {
+    value: "dessert",
+    label: "咖啡茶饮",
+    options: [
+      { value: "dessert", label: "全部咖啡甜品" },
+      { value: "dessert-coffee", label: "咖啡" },
+      { value: "dessert-tea", label: "奶茶果茶" },
+      { value: "dessert-bakery", label: "甜品烘焙" },
     ],
   },
   {
     value: "foreign",
-    label: "异域料理",
+    label: "日韩西餐",
     options: [
-      { value: "western", label: "西餐" },
+      { value: "asian", label: "日韩东南亚" },
+      { value: "western", label: "西餐轻食" },
       { value: "asian-japanese", label: "日本料理" },
       { value: "asian-korean", label: "韩式料理" },
       { value: "asian-southeast", label: "东南亚菜" },
@@ -71,59 +89,67 @@ export const FOOD_GROUPS = [
       { value: "buffet-seafood", label: "海鲜自助" },
     ],
   },
-  {
-    value: "dessert",
-    label: "奶茶咖啡",
-    options: [
-      { value: "dessert", label: "全部奶茶咖啡" },
-      { value: "dessert-coffee", label: "咖啡" },
-      { value: "dessert-tea", label: "奶茶果茶" },
-      { value: "dessert-bakery", label: "甜品烘焙" },
-    ],
-  },
 ];
 
 export const CATEGORY_LABELS = {
-  local: "地方菜系",
+  local: "中餐地方菜",
   hotpot: "火锅",
   bbq: "烧烤烤肉",
   snack: "快餐小吃",
   noodle: "面食米粉",
   seafood: "鱼鲜海鲜",
-  western: "西餐",
-  asian: "日料韩餐",
-  dessert: "奶茶咖啡",
+  western: "西餐轻食",
+  asian: "日韩东南亚",
+  dessert: "咖啡茶饮甜品",
   buffet: "自助餐",
 };
 
 export function getCategoryLabel(value) {
-  return CATEGORY_LABELS[value] || "地方菜系";
+  return CATEGORY_LABELS[value] || getSubcategoryLabel(value) || "中餐地方菜";
 }
 
 export function inferRestaurantCategory(restaurant) {
-  if (CATEGORY_LABELS[restaurant.category]) return restaurant.category;
-  const name = String(restaurant.name || "").toLowerCase();
-  const note = String(restaurant.note || "").toLowerCase();
-  const hasName = (words) => words.some((word) => name.includes(word.toLowerCase()));
-  const hasNote = (words) => words.some((word) => note.includes(word.toLowerCase()));
+  const explicit = CATEGORY_LABELS[restaurant.category] ? restaurant.category : "";
+  const fields = collectTextFields(restaurant);
 
-  if (hasName(["自助", "buffet"]) || hasNote(["自助餐"])) return "buffet";
-  if (hasName(["日料", "日本料理", "寿司", "割烹", "居酒屋", "韩食", "韩国料理", "泰国菜", "东南亚"])) return "asian";
-  if (hasName(["西餐", "意式", "披萨", "pizza", "bistro", "牛排", "汉堡", "麦当劳", "肯德基", "萨莉亚"])) return "western";
-  if (hasName(["火锅", "豆捞", "涮", "暖锅", "羊蝎子", "羊肉炉", "打边炉", "肉蟹煲"])) return "hotpot";
-  if (hasName(["烧烤", "烤肉", "烤串", "串串", "烤鱼", "炭烤", "碳烤"])) return "bbq";
-  if (hasName(["咖啡", "coffee", "奶茶", "茶饮", "甜品", "烘焙", "蛋糕", "下午茶"])) return "dessert";
-  if (hasName(["海鲜", "河鲜", "湖鲜", "鱼馆", "鱼宴", "鱼味", "鱼府", "渔庄", "龙虾"])) return "seafood";
-  if (hasName(["面馆", "拉面", "拌面", "米粉", "馄饨", "饺子", "煎饺", "麻辣烫"])) return "noodle";
-  if (hasName(["小吃", "快餐", "食堂", "便当", "炸鸡", "鸡排"])) return "snack";
-  return "local";
+  const rules = [
+    { value: "buffet", strong: ["自助餐厅", "自助餐"], name: ["自助", "buffet"] },
+    {
+      value: "dessert",
+      strong: ["咖啡厅", "冷饮店", "糕饼店", "甜品店", "茶艺馆", "饮品店"],
+      name: ["咖啡", "coffee", "cafe", "café", "星巴克", "瑞幸", "manner", "奶茶", "茶饮", "果茶", "古茗", "喜茶", "奈雪", "茶百道", "霸王茶姬", "1点点", "甜品", "蛋糕", "面包", "吐司", "烘焙", "bakery", "好利来", "下午茶"],
+      text: ["珍珠奶茶", "鲜奶茶", "果茶", "现磨咖啡", "美式咖啡", "生日蛋糕", "小蛋糕", "蛋挞", "泡芙", "奶油", "提拉米苏"],
+    },
+    { value: "hotpot", strong: ["火锅店"], name: ["火锅", "豆捞", "涮", "暖锅", "羊蝎子", "羊肉锅", "打边炉", "肉蟹煲"] },
+    { value: "bbq", strong: ["烧烤店"], name: ["烧烤", "烤肉", "烤串", "串串", "烤鱼", "炭烤", "碳烤"] },
+    { value: "seafood", strong: ["海鲜酒楼"], name: ["海鲜", "小海鲜", "河鲜", "湖鲜", "鱼馆", "鱼宴", "鱼味", "鱼府", "渔庄", "龙虾", "蟹"] },
+    { value: "asian", strong: ["日本料理", "韩国料理"], name: ["日料", "日本料理", "寿司", "刺身", "居酒屋", "韩食", "韩国料理", "韩式", "泰国菜", "东南亚"] },
+    { value: "western", strong: ["西餐厅", "外国餐厅"], name: ["西餐", "意式", "披萨", "比萨", "pizza", "bistro", "牛排", "汉堡", "麦当劳", "肯德基", "萨莉亚", "达美乐"] },
+    { value: "noodle", strong: ["面馆"], name: ["面馆", "拉面", "拌面", "拌川", "米粉", "粉面", "馄饨", "饺子", "煎饼", "麻辣烫"] },
+    { value: "snack", strong: ["快餐厅", "休闲餐饮场所"], name: ["小吃", "快餐", "食堂", "便当", "炸鸡", "鸡排", "粥铺", "包子", "早餐"] },
+    { value: "local", strong: ["中餐厅", "浙江菜", "杭帮菜", "台州菜"], name: ["杭帮菜", "浙江菜", "浙菜", "台州菜", "本地菜", "土菜", "私房菜", "农家菜", "川菜", "湘菜", "江浙菜"] },
+  ];
+
+  for (const rule of rules) {
+    if (includesAny(fields.type, rule.strong || [])) return rule.value;
+  }
+
+  for (const rule of rules) {
+    if (includesAny(fields.name, rule.name || [])) return rule.value;
+  }
+
+  for (const rule of rules) {
+    if (includesAny(fields.all, rule.text || [])) return rule.value;
+  }
+
+  return explicit && explicit !== "local" ? explicit : "local";
 }
 
 export function inferSubcategory(restaurant) {
-  if (restaurant.subcategory) return restaurant.subcategory;
   const category = inferRestaurantCategory(restaurant);
-  const text = `${restaurant.name || ""} ${restaurant.note || ""}`.toLowerCase();
-  const includes = (words) => words.some((word) => text.includes(word.toLowerCase()));
+  const fields = collectTextFields(restaurant);
+  const text = fields.all;
+  const includes = (words) => includesAny(text, words);
 
   if (category === "hotpot") {
     if (includes(["潮汕", "鲜切牛肉"])) return "hotpot-chaoshan";
@@ -136,12 +162,12 @@ export function inferSubcategory(restaurant) {
     if (includes(["烤串", "串串", "羊肉串"])) return "bbq-skewer";
   }
   if (category === "local") {
-    if (includes(["杭帮菜", "浙江菜", "浙菜", "桐庐菜", "建德菜", "临安菜"])) return "local-zhejiang";
+    if (includes(["杭帮菜", "浙江菜", "浙菜", "台州菜", "桐庐菜", "建德菜", "临安菜"])) return "local-zhejiang";
     if (includes(["川菜", "湘菜", "川湘", "江西菜"])) return "local-sichuan";
     if (includes(["农家菜", "土菜"])) return "local-farm";
   }
   if (category === "asian") {
-    if (includes(["日本", "日料", "寿司", "割烹"])) return "asian-japanese";
+    if (includes(["日本", "日料", "寿司", "刺身"])) return "asian-japanese";
     if (includes(["韩国", "韩式", "韩餐"])) return "asian-korean";
     if (includes(["泰国", "越南", "东南亚"])) return "asian-southeast";
   }
@@ -151,9 +177,9 @@ export function inferSubcategory(restaurant) {
     if (includes(["火锅"])) return "buffet-hotpot";
   }
   if (category === "dessert") {
-    if (includes(["咖啡", "coffee"])) return "dessert-coffee";
-    if (includes(["奶茶", "果茶", "茶饮"])) return "dessert-tea";
-    if (includes(["蛋糕", "面包", "烘焙", "甜品"])) return "dessert-bakery";
+    if (includes(["奶茶", "果茶", "茶饮", "冷饮", "古茗", "喜茶", "奈雪", "茶百道", "霸王茶姬", "1点点"])) return "dessert-tea";
+    if (includes(["咖啡", "coffee", "cafe", "café", "星巴克", "瑞幸", "manner"])) return "dessert-coffee";
+    if (includes(["蛋糕", "面包", "吐司", "烘焙", "甜品", "糕饼", "bakery"])) return "dessert-bakery";
   }
   return category;
 }
@@ -163,4 +189,31 @@ export function matchesFoodSelection(restaurant, selectedValues) {
   const category = inferRestaurantCategory(restaurant);
   const subcategory = inferSubcategory(restaurant);
   return selectedValues.has(category) || selectedValues.has(subcategory);
+}
+
+function getSubcategoryLabel(value) {
+  const allOptions = FOOD_GROUPS.flatMap((group) => group.options);
+  return allOptions.find((item) => item.value === value)?.label || "";
+}
+
+function collectTextFields(restaurant) {
+  const name = String(restaurant.name || "").toLowerCase();
+  const note = String(restaurant.note || "").toLowerCase();
+  const tags = Array.isArray(restaurant.tags) ? restaurant.tags.join(" ").toLowerCase() : "";
+  const type = `${restaurant.type || ""} ${restaurant.typecode || ""}`.toLowerCase();
+  const category = String(restaurant.category || "").toLowerCase();
+  const subcategory = String(restaurant.subcategory || "").toLowerCase();
+  return {
+    name,
+    note,
+    tags,
+    type,
+    category,
+    subcategory,
+    all: `${name} ${note} ${tags} ${type} ${category} ${subcategory}`.toLowerCase(),
+  };
+}
+
+function includesAny(text, words) {
+  return words.some((word) => text.includes(String(word).toLowerCase()));
 }

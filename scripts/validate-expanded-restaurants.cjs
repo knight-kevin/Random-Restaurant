@@ -1,5 +1,6 @@
 const fs = require("node:fs");
 const path = require("node:path");
+const { inferCategory } = require("./category-rules.cjs");
 
 const root = path.resolve(__dirname, "..");
 const citiesPath = path.join(root, "cities.json");
@@ -50,12 +51,19 @@ function validateCity(city) {
     globalIds.add(id);
     if (restaurant.city !== city.name) errors.push(`${label} has wrong city field`);
     if (restaurant.cityAdcode !== city.adcode) errors.push(`${label} has wrong cityAdcode field`);
-    if (Number(restaurant.rating || 0) < Number(city.minRating || 4)) errors.push(`${label} rating below ${city.minRating || 4}`);
+    if (Number(restaurant.rating || 0) < Number(city.minRating || 3.5)) errors.push(`${label} rating below ${city.minRating || 3.5}`);
     if (!restaurant.location || !isLocation(restaurant.location)) errors.push(`${label} has invalid location`);
     if (!restaurant.district) errors.push(`${label} missing district`);
     if (districtSet.size && !districtSet.has(restaurant.district)) errors.push(`${label} district is outside ${city.name}: ${restaurant.district}`);
     if (!restaurant.category || !restaurant.subcategory) errors.push(`${label} has incomplete category`);
-    if (!details[restaurant.id]) errors.push(`${label} missing details`);
+    if (!details[restaurant.id]) {
+      errors.push(`${label} missing details`);
+    } else {
+      const expectedCategory = inferCategory(details[restaurant.id]);
+      if (expectedCategory && restaurant.category !== expectedCategory) {
+        errors.push(`${label} obvious category mismatch: expected ${expectedCategory}, got ${restaurant.category}`);
+      }
+    }
     districtSeen.add(restaurant.district);
     const key = `${normalize(restaurant.name)}|${normalize(details[restaurant.id]?.address || "")}`;
     if (compositeKeys.has(key)) errors.push(`${label} duplicate name/address`);

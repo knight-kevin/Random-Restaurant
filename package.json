@@ -17,9 +17,10 @@
     "data:image-report": "node scripts/report-image-matches.cjs",
     "docs:encoding": "node scripts/check-doc-encoding.cjs",
     "test:city-data": "node tests/city-data-smoke.mjs",
+    "test:category": "node tests/category-rules-smoke.mjs",
     "test:page-integration": "node tests/page-integration-smoke.mjs",
     "test:update-script": "node tests/update-script-smoke.mjs",
-    "test:data": "npm run data:validate && npm run test:city-data && npm run test:page-integration && npm run test:update-script && npm run data:image-report && npm run docs:encoding",
+    "test:data": "npm run data:validate && npm run test:city-data && npm run test:category && npm run test:page-integration && npm run test:update-script && npm run data:image-report && npm run docs:encoding",
     "test:e2e": "node tests/mobile-smoke.mjs"
   },
   "dependencies": {

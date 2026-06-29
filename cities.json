@@ -20,15 +20,15 @@
       "淳安县",
       "建德市"
     ],
-    "minRating": 4,
-    "version": "amap-330100-4812-2026-06-29",
-    "restaurantCount": 4812,
-    "minRestaurants": 3273,
+    "minRating": 3.5,
+    "version": "amap-330100-17199-2026-06-29",
+    "restaurantCount": 17199,
+    "minRestaurants": 17199,
     "indexPath": "data/cities/330100/restaurants-index.json",
     "detailsPath": "data/cities/330100/restaurants-details.json",
     "reportPath": "data/cities/330100/quality-report.json",
-    "selectedMinimumRating": 4,
-    "generatedAt": "2026-06-29T14:08:58.975Z"
+    "selectedMinimumRating": 3.5,
+    "generatedAt": "2026-06-29T18:26:39.915Z"
   },
   {
     "province": "浙江省",
@@ -47,14 +47,14 @@
       "仙居县",
       "三门县"
     ],
-    "minRating": 4,
-    "version": "amap-331000-7720-2026-06-29",
-    "restaurantCount": 7720,
-    "minRestaurants": 1001,
+    "minRating": 3.5,
+    "version": "amap-331000-10984-2026-06-29",
+    "restaurantCount": 10984,
+    "minRestaurants": 10984,
     "indexPath": "data/cities/331000/restaurants-index.json",
     "detailsPath": "data/cities/331000/restaurants-details.json",
     "reportPath": "data/cities/331000/quality-report.json",
-    "selectedMinimumRating": 4,
-    "generatedAt": "2026-06-29T14:08:58.975Z"
+    "selectedMinimumRating": 3.5,
+    "generatedAt": "2026-06-29T18:26:39.915Z"
   }
 ]

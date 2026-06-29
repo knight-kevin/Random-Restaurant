@@ -1,13 +1,18 @@
 {
-  "generatedAt": "2026-06-29T14:08:58.975Z",
+  "generatedAt": "2026-06-29T18:26:39.915Z",
   "city": "台州市",
   "cityAdcode": "331000",
-  "minimumRating": 4,
+  "minimumRating": 3.5,
   "candidateCount": 18997,
-  "validBeforeDedupCount": 12505,
-  "selectedCount": 7720,
-  "selectedMinimumRating": 4,
+  "validBeforeDedupCount": 16821,
+  "selectedCount": 10984,
+  "selectedMinimumRating": 3.5,
   "ratingDistribution": {
+    "3.5": 382,
+    "3.6": 512,
+    "3.7": 681,
+    "3.8": 801,
+    "3.9": 888,
     "4.0": 878,
     "4.1": 958,
     "4.2": 991,
@@ -20,40 +25,40 @@
     "4.9": 1
   },
   "districtDistribution": {
-    "黄岩区": 810,
-    "椒江区": 1222,
-    "临海市": 1073,
-    "路桥区": 957,
-    "三门县": 438,
-    "天台县": 644,
-    "温岭市": 1239,
-    "仙居县": 631,
-    "玉环市": 706
+    "黄岩区": 1171,
+    "椒江区": 1542,
+    "临海市": 1520,
+    "路桥区": 1262,
+    "三门县": 764,
+    "天台县": 939,
+    "温岭市": 1727,
+    "仙居县": 899,
+    "玉环市": 1160
   },
   "categoryDistribution": {
-    "asian": 121,
-    "bbq": 673,
-    "buffet": 142,
-    "dessert": 732,
-    "hotpot": 405,
-    "local": 3840,
-    "noodle": 642,
-    "seafood": 614,
-    "snack": 231,
-    "western": 320
+    "asian": 262,
+    "bbq": 186,
+    "buffet": 37,
+    "dessert": 2127,
+    "hotpot": 634,
+    "local": 5876,
+    "noodle": 99,
+    "seafood": 446,
+    "snack": 1101,
+    "western": 216
   },
   "rejectionSummary": {
-    "notDiningPoi": 104,
+    "notDiningPoi": 131,
     "missingNameOrAddress": 79,
-    "belowRating": 6227,
-    "closedOrUnavailable": 82,
-    "duplicate": 4785
+    "belowRating": 1868,
+    "closedOrUnavailable": 98,
+    "duplicate": 5837
   },
   "dataCompleteness": {
-    "withBusinessArea": 3394,
-    "withAverageCost": 7368,
-    "withTags": 4795,
-    "withPhoto": 7638,
-    "verifiedLocations": 7720
+    "withBusinessArea": 4318,
+    "withAverageCost": 10074,
+    "withTags": 6306,
+    "withPhoto": 10733,
+    "verifiedLocations": 10984
   }
 }

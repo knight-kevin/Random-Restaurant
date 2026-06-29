@@ -1,46 +1,104 @@
 const CATEGORY_DEFINITIONS = [
-  { value: "local", label: "地方菜系", keywords: ["杭帮菜", "浙江菜", "台州菜", "中餐", "私房菜", "农家菜", "本地菜", "土菜", "川菜", "湘菜"] },
-  { value: "hotpot", label: "火锅", keywords: ["火锅", "重庆火锅", "潮汕牛肉火锅", "牛肉火锅", "羊肉火锅", "豆捞"] },
-  { value: "bbq", label: "烧烤烤肉", keywords: ["烧烤", "烤肉", "烤串", "烤鱼", "炭烤", "碳烤"] },
-  { value: "snack", label: "快餐小吃", keywords: ["快餐", "小吃", "中式快餐", "炸鸡", "便当", "食堂"] },
-  { value: "noodle", label: "面食米粉", keywords: ["面馆", "拉面", "拌面", "米粉", "馄饨", "饺子", "麻辣烫", "煎饺"] },
-  { value: "seafood", label: "鱼鲜海鲜", keywords: ["海鲜", "河鲜", "湖鲜", "鱼馆", "鱼府", "渔庄", "小龙虾", "酸菜鱼"] },
-  { value: "western", label: "西餐", keywords: ["西餐", "意式", "披萨", "pizza", "bistro", "牛排", "汉堡"] },
-  { value: "asian", label: "日料韩餐", keywords: ["日本料理", "日料", "寿司", "割烹", "居酒屋", "韩国料理", "韩式", "泰国菜", "东南亚"] },
-  { value: "dessert", label: "奶茶咖啡", keywords: ["咖啡", "coffee", "奶茶", "茶饮", "甜品", "烘焙", "蛋糕", "下午茶"] },
-  { value: "buffet", label: "自助餐", keywords: ["自助餐", "海鲜自助", "烤肉自助", "火锅自助", "自助"] },
+  { value: "local", label: "中餐地方菜", keywords: ["中餐厅", "浙江菜", "杭帮菜", "台州菜", "地方菜", "私房菜", "农家菜", "本地菜", "土菜", "川菜", "湘菜"] },
+  { value: "hotpot", label: "火锅", keywords: ["火锅店", "火锅", "重庆火锅", "潮汕牛肉火锅", "牛肉火锅", "羊肉火锅", "豆捞"] },
+  { value: "bbq", label: "烧烤烤肉", keywords: ["烧烤店", "烧烤", "烤肉", "烤串", "烤鱼", "炭烤", "碳烤"] },
+  { value: "snack", label: "快餐小吃", keywords: ["快餐厅", "快餐", "小吃", "中式快餐", "炸鸡", "便当", "食堂"] },
+  { value: "noodle", label: "面食米粉", keywords: ["面馆", "拉面", "拌面", "米粉", "粉面", "馄饨", "饺子", "麻辣烫", "煎饼"] },
+  { value: "seafood", label: "鱼鲜海鲜", keywords: ["海鲜酒楼", "海鲜", "河鲜", "湖鲜", "鱼馆", "鱼府", "渔庄", "小龙虾", "酸菜鱼"] },
+  { value: "western", label: "西餐", keywords: ["外国餐厅", "西餐厅", "西餐", "意式", "披萨", "pizza", "bistro", "牛排", "汉堡"] },
+  { value: "asian", label: "日韩东南亚", keywords: ["日本料理", "日料", "寿司", "刺身", "居酒屋", "韩国料理", "韩式", "泰国菜", "东南亚"] },
+  { value: "dessert", label: "咖啡茶饮甜品", keywords: ["咖啡厅", "咖啡", "coffee", "cafe", "冷饮店", "饮品店", "奶茶", "茶饮", "果茶", "甜品店", "甜品", "糕饼店", "蛋糕", "面包", "烘焙", "下午茶"] },
+  { value: "buffet", label: "自助餐", keywords: ["自助餐厅", "自助餐", "海鲜自助", "烤肉自助", "火锅自助", "自助"] },
+];
+
+const CATEGORY_VALUES = new Set(CATEGORY_DEFINITIONS.map((item) => item.value));
+
+const CATEGORY_PRIORITY = [
+  {
+    value: "buffet",
+    strongWords: ["自助餐厅", "自助餐"],
+    nameWords: ["自助", "buffet"],
+  },
+  {
+    value: "dessert",
+    strongWords: ["咖啡厅", "冷饮店", "糕饼店", "甜品店", "茶艺馆", "饮品店"],
+    nameWords: [
+      "咖啡", "coffee", "cafe", "café", "星巴克", "瑞幸", "manner", "m stand",
+      "奶茶", "茶饮", "果茶", "古茗", "喜茶", "奈雪", "茶百道", "霸王茶姬", "1点点",
+      "甜品", "蛋糕", "面包", "吐司", "烘焙", "bakery", "好利来", "下午茶",
+    ],
+    textWords: ["珍珠奶茶", "鲜奶茶", "果茶", "现磨咖啡", "美式咖啡", "生日蛋糕", "小蛋糕", "蛋挞", "泡芙", "奶油", "提拉米苏"],
+  },
+  {
+    value: "hotpot",
+    strongWords: ["火锅店"],
+    nameWords: ["火锅", "豆捞", "涮", "暖锅", "羊蝎子", "羊肉锅", "打边炉", "肉蟹煲"],
+  },
+  {
+    value: "bbq",
+    strongWords: ["烧烤店"],
+    nameWords: ["烧烤", "烤肉", "烤串", "串串", "烤鱼", "炭烤", "碳烤"],
+  },
+  {
+    value: "seafood",
+    strongWords: ["海鲜酒楼"],
+    nameWords: ["海鲜", "小海鲜", "河鲜", "湖鲜", "鱼馆", "鱼宴", "鱼味", "鱼府", "渔庄", "龙虾", "蟹"],
+  },
+  {
+    value: "asian",
+    strongWords: ["日本料理", "韩国料理"],
+    nameWords: ["日料", "日本料理", "寿司", "刺身", "居酒屋", "韩食", "韩国料理", "韩式", "泰国菜", "东南亚"],
+  },
+  {
+    value: "western",
+    strongWords: ["西餐厅", "外国餐厅"],
+    nameWords: ["西餐", "意式", "披萨", "比萨", "pizza", "bistro", "牛排", "汉堡", "麦当劳", "肯德基", "萨莉亚", "达美乐"],
+  },
+  {
+    value: "noodle",
+    strongWords: ["面馆"],
+    nameWords: ["面馆", "拉面", "拌面", "拌川", "米粉", "粉面", "馄饨", "饺子", "煎饼", "麻辣烫"],
+  },
+  {
+    value: "snack",
+    strongWords: ["快餐厅", "休闲餐饮场所"],
+    nameWords: ["小吃", "快餐", "食堂", "便当", "炸鸡", "鸡排", "粥铺", "包子", "早餐"],
+  },
+  {
+    value: "local",
+    strongWords: ["中餐厅", "浙江菜", "杭帮菜", "台州菜"],
+    nameWords: ["杭帮菜", "浙江菜", "浙菜", "台州菜", "本地菜", "土菜", "私房菜", "农家菜", "川菜", "湘菜", "江浙菜"],
+  },
 ];
 
 function inferCategory(restaurant, preferredCategory = "") {
-  if (CATEGORY_DEFINITIONS.some((item) => item.value === restaurant.category)) return restaurant.category;
+  const explicitCategory = CATEGORY_VALUES.has(restaurant.category) ? restaurant.category : "";
+  const preferred = CATEGORY_VALUES.has(preferredCategory) ? preferredCategory : "";
+  const fields = collectTextFields(restaurant);
 
-  const name = String(restaurant.name || "").toLowerCase();
-  const note = normalizeListText(restaurant.note || restaurant.tags || "");
-  const type = String(restaurant.type || "").toLowerCase();
-  const text = `${name} ${note} ${type}`;
-  const hasName = (words) => words.some((word) => name.includes(word.toLowerCase()));
-  const hasText = (words) => words.some((word) => text.includes(word.toLowerCase()));
+  for (const rule of CATEGORY_PRIORITY) {
+    if (includesAny(fields.type, rule.strongWords || [])) return rule.value;
+  }
 
-  if (hasName(["自助", "buffet"]) || hasText(["自助餐"])) return "buffet";
-  if (hasName(["日料", "日本料理", "寿司", "割烹", "居酒屋", "韩食", "韩国料理", "韩式", "泰国菜", "东南亚"])) return "asian";
-  if (hasName(["西餐", "意式", "披萨", "pizza", "bistro", "牛排", "汉堡", "麦当劳", "肯德基", "萨莉亚"])) return "western";
-  if (hasName(["火锅", "豆捞", "涮", "暖锅", "羊蝎子", "羊肉炉", "打边炉", "肉蟹煲"])) return "hotpot";
-  if (hasName(["烧烤", "烤肉", "烤串", "串串", "烤鱼", "炭烤", "碳烤"])) return "bbq";
-  if (hasName(["咖啡", "coffee", "奶茶", "茶饮", "甜品", "烘焙", "蛋糕", "下午茶"])) return "dessert";
-  if (hasName(["海鲜", "河鲜", "湖鲜", "鱼馆", "鱼宴", "鱼味", "鱼府", "渔庄", "龙虾"])) return "seafood";
-  if (hasName(["面馆", "拉面", "拌面", "米粉", "馄饨", "饺子", "煎饺", "麻辣烫"])) return "noodle";
-  if (hasName(["小吃", "快餐", "食堂", "便当", "炸鸡", "鸡排"])) return "snack";
-  if (preferredCategory && CATEGORY_DEFINITIONS.some((item) => item.value === preferredCategory)) return preferredCategory;
-  if (hasText(["寿司", "刺身", "韩式料理"])) return "asian";
-  if (hasText(["意面", "披萨", "汉堡"]) && hasText(["牛排", "沙拉", "薯条", "芝士"])) return "western";
-  if (hasText(["海鲜", "鱼鲜", "渔港"])) return "seafood";
+  for (const rule of CATEGORY_PRIORITY) {
+    if (includesAny(fields.name, rule.nameWords || [])) return rule.value;
+  }
+
+  for (const rule of CATEGORY_PRIORITY) {
+    if (includesAny(fields.all, rule.textWords || [])) return rule.value;
+  }
+
+  if (preferred) return preferred;
+  if (explicitCategory && explicitCategory !== "local") return explicitCategory;
   return "local";
 }
 
 function inferSubcategory(restaurant) {
-  const category = restaurant.category || inferCategory(restaurant);
-  const text = `${restaurant.name || ""} ${normalizeListText(restaurant.note || restaurant.tags || "")}`.toLowerCase();
+  const category = inferCategory(restaurant);
+  const fields = collectTextFields(restaurant);
+  const text = fields.all;
   const has = (words) => words.some((word) => text.includes(word.toLowerCase()));
+
   if (category === "hotpot") {
     if (has(["潮汕", "鲜切牛肉"])) return "hotpot-chaoshan";
     if (has(["牛肉", "羊肉", "羊蝎子"])) return "hotpot-beef";
@@ -57,7 +115,7 @@ function inferSubcategory(restaurant) {
     if (has(["农家菜", "土菜"])) return "local-farm";
   }
   if (category === "asian") {
-    if (has(["日本", "日料", "寿司", "割烹"])) return "asian-japanese";
+    if (has(["日本", "日料", "寿司", "刺身"])) return "asian-japanese";
     if (has(["韩国", "韩式", "韩餐"])) return "asian-korean";
     if (has(["泰国", "越南", "东南亚"])) return "asian-southeast";
   }
@@ -67,11 +125,33 @@ function inferSubcategory(restaurant) {
     if (has(["火锅"])) return "buffet-hotpot";
   }
   if (category === "dessert") {
-    if (has(["咖啡", "coffee"])) return "dessert-coffee";
-    if (has(["奶茶", "果茶", "茶饮"])) return "dessert-tea";
-    if (has(["蛋糕", "面包", "烘焙", "甜品"])) return "dessert-bakery";
+    if (has(["奶茶", "果茶", "茶饮", "冷饮", "古茗", "喜茶", "奈雪", "茶百道", "霸王茶姬", "1点点"])) return "dessert-tea";
+    if (has(["咖啡", "coffee", "cafe", "café", "星巴克", "瑞幸", "manner"])) return "dessert-coffee";
+    if (has(["蛋糕", "面包", "吐司", "烘焙", "甜品", "糕饼", "bakery"])) return "dessert-bakery";
   }
   return category;
+}
+
+function collectTextFields(restaurant) {
+  const name = String(restaurant.name || "").toLowerCase();
+  const note = normalizeListText(restaurant.note || restaurant.tags || "").toLowerCase();
+  const tags = normalizeListText(restaurant.tags || "").toLowerCase();
+  const type = `${restaurant.type || ""} ${restaurant.typecode || ""}`.toLowerCase();
+  const category = String(restaurant.category || "").toLowerCase();
+  const subcategory = String(restaurant.subcategory || "").toLowerCase();
+  return {
+    name,
+    note,
+    tags,
+    type,
+    category,
+    subcategory,
+    all: `${name} ${note} ${tags} ${type} ${category} ${subcategory}`.toLowerCase(),
+  };
+}
+
+function includesAny(text, words) {
+  return words.some((word) => text.includes(String(word).toLowerCase()));
 }
 
 function normalizeListText(value) {

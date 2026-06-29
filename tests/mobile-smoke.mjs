@@ -207,7 +207,7 @@ async function runSimplifiedHomeAndTimelineTest(browser) {
     throw new Error("首页仍然渲染了已移除的情境/最近想吃/三选一控件");
   }
   const categoryTabsText = await page.locator("#category-tabs").innerText();
-  for (const label of ["\u5168\u90e8", "\u5976\u8336\u5496\u5561", "\u706b\u9505"]) {
+  for (const label of ["\u5168\u90e8", "\u4e2d\u9910", "\u706b\u9505", "\u5496\u5561\u8336\u996e", "\u751c\u54c1\u70d8\u7119"]) {
     if (!categoryTabsText.includes(label)) {
       throw new Error(`Home category tab bar is missing label: ${label}`);
     }
