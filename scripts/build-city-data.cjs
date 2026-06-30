@@ -77,10 +77,14 @@ function main() {
 function buildCitySources(city) {
   const sources = [];
   if (city.adcode === "330100") {
-    sources.push(...readExistingHangzhouSources(city));
+    appendItems(sources, readExistingHangzhouSources(city));
   }
-  sources.push(...readCachedCityRestaurants(city));
+  appendItems(sources, readCachedCityRestaurants(city));
   return sources;
+}
+
+function appendItems(target, items) {
+  for (const item of items) target.push(item);
 }
 
 function readExistingHangzhouSources(city) {

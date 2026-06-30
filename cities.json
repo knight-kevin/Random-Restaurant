@@ -21,14 +21,14 @@
       "建德市"
     ],
     "minRating": 3.5,
-    "version": "amap-330100-17199-2026-06-30",
-    "restaurantCount": 17199,
+    "version": "amap-330100-41152-2026-06-30",
+    "restaurantCount": 41152,
     "minRestaurants": 17199,
     "indexPath": "data/cities/330100/restaurants-index.json",
     "detailsPath": "data/cities/330100/restaurants-details.json",
     "reportPath": "data/cities/330100/quality-report.json",
     "selectedMinimumRating": 3.5,
-    "generatedAt": "2026-06-30T04:03:32.641Z"
+    "generatedAt": "2026-06-30T17:22:14.231Z"
   },
   {
     "province": "浙江省",
@@ -55,6 +55,6 @@
     "detailsPath": "data/cities/331000/restaurants-details.json",
     "reportPath": "data/cities/331000/quality-report.json",
     "selectedMinimumRating": 3.5,
-    "generatedAt": "2026-06-30T04:03:32.641Z"
+    "generatedAt": "2026-06-30T17:22:14.231Z"
   }
 ]
