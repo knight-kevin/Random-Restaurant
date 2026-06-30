@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T18:26:39.915Z",
+  "generatedAt": "2026-06-30T04:03:32.641Z",
   "city": "杭州市",
   "cityAdcode": "330100",
   "minimumRating": 3.5,
@@ -40,16 +40,16 @@
     "余杭区": 1256
   },
   "categoryDistribution": {
-    "asian": 789,
-    "bbq": 199,
-    "buffet": 101,
-    "dessert": 2990,
-    "hotpot": 1122,
-    "local": 9201,
-    "noodle": 208,
-    "seafood": 388,
-    "snack": 1635,
-    "western": 566
+    "asian": 653,
+    "bbq": 1344,
+    "buffet": 417,
+    "dessert": 3070,
+    "hotpot": 1048,
+    "local": 5950,
+    "noodle": 1818,
+    "seafood": 673,
+    "snack": 1220,
+    "western": 1006
   },
   "rejectionSummary": {
     "notDiningPoi": 425,

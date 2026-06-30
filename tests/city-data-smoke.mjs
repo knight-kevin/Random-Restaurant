@@ -79,6 +79,9 @@ for (const [adcode, cityName, minimumCount] of requiredCities) {
     if (!restaurant.category || !restaurant.district) {
       errors.push(`${cityName} item ${restaurant.id} missing category or district`);
     }
+    if (!Array.isArray(restaurant.categoryTags) || !restaurant.categoryTags.includes(restaurant.category)) {
+      errors.push(`${cityName} item ${restaurant.id} missing categoryTags primary category`);
+    }
     if (districtSet.size && !districtSet.has(restaurant.district)) {
       errors.push(`${cityName} item ${restaurant.id} district out of scope`);
     }

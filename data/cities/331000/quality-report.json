@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T18:26:39.915Z",
+  "generatedAt": "2026-06-30T04:03:32.641Z",
   "city": "台州市",
   "cityAdcode": "331000",
   "minimumRating": 3.5,
@@ -36,16 +36,16 @@
     "玉环市": 1160
   },
   "categoryDistribution": {
-    "asian": 262,
-    "bbq": 186,
-    "buffet": 37,
-    "dessert": 2127,
-    "hotpot": 634,
-    "local": 5876,
-    "noodle": 99,
-    "seafood": 446,
-    "snack": 1101,
-    "western": 216
+    "asian": 254,
+    "bbq": 1078,
+    "buffet": 204,
+    "dessert": 2241,
+    "hotpot": 577,
+    "local": 3176,
+    "noodle": 1415,
+    "seafood": 755,
+    "snack": 832,
+    "western": 452
   },
   "rejectionSummary": {
     "notDiningPoi": 131,

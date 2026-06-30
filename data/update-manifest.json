@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T18:26:39.915Z",
+  "generatedAt": "2026-06-30T04:03:32.641Z",
   "source": "amap-public-poi",
   "minimumRating": 3.5,
   "cities": [
@@ -8,8 +8,8 @@
       "name": "杭州市",
       "shortName": "杭州",
       "adcode": "330100",
-      "version": "amap-330100-17199-2026-06-29",
-      "updatedAt": "2026-06-29T18:26:39.915Z",
+      "version": "amap-330100-17199-2026-06-30",
+      "updatedAt": "2026-06-30T04:03:32.641Z",
       "restaurantCount": 17199,
       "minRating": 3.5,
       "selectedMinimumRating": 3.5,
@@ -22,8 +22,8 @@
       "name": "台州市",
       "shortName": "台州",
       "adcode": "331000",
-      "version": "amap-331000-10984-2026-06-29",
-      "updatedAt": "2026-06-29T18:26:39.915Z",
+      "version": "amap-331000-10984-2026-06-30",
+      "updatedAt": "2026-06-30T04:03:32.641Z",
       "restaurantCount": 10984,
       "minRating": 3.5,
       "selectedMinimumRating": 3.5,

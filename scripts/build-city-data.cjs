@@ -1,7 +1,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { CITY_DEFINITIONS } = require("./city-definitions.cjs");
-const { inferCategory, inferSubcategory } = require("./category-rules.cjs");
+const { inferCategory, inferCategories, inferSubcategory } = require("./category-rules.cjs");
 
 const root = path.resolve(__dirname, "..");
 const minRating = Number(process.env.MIN_RATING || 3.5);
@@ -19,6 +19,7 @@ const indexFields = [
   "category",
   "categoryGroup",
   "subcategory",
+  "categoryTags",
   "businessArea",
   "rating",
   "averageCost",
@@ -163,6 +164,7 @@ function dedupeRestaurants(restaurants, rejectionSummary) {
 
 function normalizeExistingRestaurant(restaurant, city) {
   const category = inferCategory(restaurant);
+  const categoryTags = inferCategories({ ...restaurant, category });
   const district = restaurant.district || restaurant.amapDistrict || "";
   const location = String(restaurant.location || "");
   return {
@@ -177,6 +179,7 @@ function normalizeExistingRestaurant(restaurant, city) {
     category,
     categoryGroup: category,
     subcategory: inferSubcategory({ ...restaurant, category }),
+    categoryTags,
     rating: parseRating(restaurant.rating),
     averageCost: Number(restaurant.averageCost || 0) || null,
     location,
@@ -193,6 +196,7 @@ function normalizeAmapPoi(poi, city) {
   const tags = parseTags(business.tag || poi.tag || poi.atag || "");
   const categoryInput = { name: poi.name || "", note: tags.join(" "), tags, type: poi.type || "", typecode: poi.typecode || "" };
   const category = inferCategory(categoryInput);
+  const categoryTags = inferCategories({ ...categoryInput, category });
   const averageCost = Number(business.cost || bizExt.cost || 0) || null;
   const location = String(poi.location || "");
   return {
@@ -217,6 +221,7 @@ function normalizeAmapPoi(poi, city) {
     category,
     categoryGroup: category,
     subcategory: inferSubcategory({ ...categoryInput, category }),
+    categoryTags,
     source: "高德POI评分整理",
     rank: 0,
     rating: parseRating(business.rating || bizExt.rating),

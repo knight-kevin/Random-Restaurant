@@ -81,15 +81,17 @@
       .multi-filter-option span { color: inherit; font-size: .88rem; }
       .filter-summary { margin: 0; color: #53655a; font-size: .9rem; font-weight: 800; white-space: nowrap; }
       .food-filter { position: relative; z-index: 31; width: 100%; min-width: 0; margin-top: 18px; }
-      .category-tabs { display: flex; width: 100%; min-width: 0; gap: 20px; overflow-x: auto; padding: 0 2px 9px; border-bottom: 1px solid rgba(238,229,223,.8); scrollbar-width: none; }
+      .category-tabs { display: flex; width: 100%; min-width: 0; gap: 14px; overflow-x: auto; padding: 0 2px 10px; border-bottom: 1px solid rgba(238,229,223,.8); scrollbar-width: none; }
       .category-tabs::-webkit-scrollbar { display: none; }
-      .category-tab { position: relative; flex: 0 0 auto; min-height: 38px; padding: 7px 0; background: transparent; color: #20252a; font-weight: 900; white-space: nowrap; transition: color .18s var(--ease-standard); }
+      .category-tab { position: relative; display: grid; flex: 0 0 auto; min-width: 58px; min-height: 58px; justify-items: center; gap: 4px; padding: 4px 0 8px; background: transparent; color: #20252a; font-size: .78rem; font-weight: 900; white-space: nowrap; transition: color .18s var(--ease-standard); }
+      .category-thumb { width: 34px; height: 34px; border: 1px solid rgba(255,255,255,.86); border-radius: 50%; background: #fff1eb center/cover no-repeat; box-shadow: 0 5px 12px rgba(31,41,51,.08); }
+      .category-tab span:last-child { max-width: 72px; overflow: hidden; text-overflow: ellipsis; }
       .category-tab.is-active { color: var(--color-primary); }
       .category-tab.is-active::after { position: absolute; right: 0; bottom: -1px; left: 0; height: 3px; border-radius: 4px; background: var(--color-primary); content: ""; }
-      .filter-entry-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+      .filter-entry-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 8px; }
       .filter-entry-row.is-single { grid-template-columns: 1fr; }
-      .filter-entry { display: flex; min-width: 0; min-height: 44px; align-items: center; justify-content: center; gap: 5px; padding: 7px 10px; border: 1px solid var(--color-border); border-radius: var(--radius-control); background: #fff; color: #25292d; font-size: .9rem; font-weight: 900; line-height: 1; white-space: nowrap; box-shadow: none; transition: border-color .18s var(--ease-standard), background .18s var(--ease-standard); }
-      .primary-filter-entry { justify-content: space-between; margin-top: 8px; padding: 8px 14px; text-align: left; }
+      .filter-entry { display: flex; min-width: 0; min-height: 40px; align-items: center; justify-content: center; gap: 5px; padding: 7px 8px; border: 1px solid var(--color-border); border-radius: var(--radius-control); background: #fff; color: #25292d; font-size: .86rem; font-weight: 900; line-height: 1; white-space: nowrap; box-shadow: none; transition: border-color .18s var(--ease-standard), background .18s var(--ease-standard); }
+      .primary-filter-entry { justify-content: center; margin-top: 0; padding: 8px 10px; text-align: center; }
       .primary-filter-entry span { min-width: 0; overflow: hidden; color: #798087; font-size: .76rem; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
       .filter-entry::after { flex: 0 0 auto; content: "v"; color: #596068; font-size: .82rem; line-height: 1; }
       .filter-entry.is-active { border-color: #ffc4b5; background: var(--color-primary-soft); color: var(--color-primary); }
@@ -381,10 +383,11 @@
         .rating-grid, .review-score-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .form-actions, .row-actions { display: grid; grid-template-columns: 1fr 1fr; }
         .form-actions .secondary-action { grid-column: 1 / -1; }
-        .category-tabs { gap: 18px; margin-inline: -2px; padding-bottom: 8px; }
-        .category-tab { min-height: 36px; font-size: .92rem; }
-        .filter-entry-row { gap: 6px; }
-        .filter-entry { min-height: 38px; padding: 5px 8px; font-size: .82rem; }
+        .category-tabs { gap: 12px; margin-inline: -2px; padding-bottom: 8px; }
+        .category-tab { min-width: 54px; min-height: 54px; font-size: .72rem; }
+        .category-thumb { width: 30px; height: 30px; }
+        .filter-entry-row { display: grid; gap: 6px; padding-bottom: 0; }
+        .filter-entry { min-height: 36px; padding: 5px 10px; font-size: .78rem; }
         .top-actions { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 3px; padding: 4px; }
         .nav-action { width: 100%; min-height: 36px; padding-inline: 3px; font-size: .72rem; }
         .filter-dropdown-inner { max-height: none; padding: 14px; }
@@ -431,7 +434,7 @@
           <div class="category-tabs" id="category-tabs" aria-label="餐厅分类"></div>
           <div class="food-filter" aria-label="筛选餐厅">
             <div class="filter-entry-row is-single">
-              <button class="filter-entry primary-filter-entry" data-filter-panel="combined" id="combined-filter-button" type="button">筛选</button>
+              <button class="filter-entry primary-filter-entry" data-filter-panel="nearby" id="combined-filter-button" type="button">位置筛选</button>
             </div>
             <div class="filter-dropdown" id="filter-dropdown" hidden>
               <div class="filter-dropdown-inner" id="filter-dropdown-content"></div>
@@ -557,32 +560,33 @@
         CATEGORY_TABS,
         CATEGORY_LABELS,
         getCategoryLabel,
+        inferRestaurantCategories,
         inferRestaurantCategory,
         inferSubcategory,
-      } from "./scripts/categories.js?v=20260630-v48";
+      } from "./scripts/categories.js?v=20260630-v49";
       import {
         formatDistance,
         getRestaurantDistance,
         parseAverageCost,
         requestCurrentPosition,
-      } from "./scripts/location-fixed.js?v=20260630-v48";
+      } from "./scripts/location-fixed.js?v=20260630-v49";
       import {
         readJson as storageReadJson,
         safeSetItem as storageSafeSetItem,
-      } from "./scripts/app/storage.js?v=20260630-v48";
+      } from "./scripts/app/storage.js?v=20260630-v49";
       import {
         buildRestaurantChanges as buildRestaurantChangesFromStore,
         getRestaurantHealthReport,
         readRestaurantState,
-      } from "./scripts/app/restaurant-store.js?v=20260630-v48";
+      } from "./scripts/app/restaurant-store.js?v=20260630-v49";
       import {
         getCategoryRestaurantImage as getMappedRestaurantImage,
         getImageMatchReport,
         getRestaurantImageCategory as getMappedRestaurantImageCategory,
-      } from "./scripts/app/restaurant-images.js?v=20260630-v48";
+      } from "./scripts/app/restaurant-images.js?v=20260630-v49";
       import {
         createRestaurantFilterEngine,
-      } from "./scripts/app/restaurant-filter.js?v=20260630-v48";
+      } from "./scripts/app/restaurant-filter.js?v=20260630-v49";
       import {
         deferRestaurant,
         filterAvailableRestaurants,
@@ -593,25 +597,25 @@
         rankAvailablePool,
         restoreHiddenRestaurants,
         skipForToday,
-      } from "./scripts/app/restaurant-availability.js?v=20260630-v48";
+      } from "./scripts/app/restaurant-availability.js?v=20260630-v49";
       import {
         getPickReasons,
-      } from "./scripts/app/random-reasons.js?v=20260630-v48";
+      } from "./scripts/app/random-reasons.js?v=20260630-v49";
       import {
         filterDiaryRecords,
         getDiaryStats,
-      } from "./scripts/app/food-diary.js?v=20260630-v48";
+      } from "./scripts/app/food-diary.js?v=20260630-v49";
       import {
         getCopyAddressText,
         getMapProviders,
         getMapUrl as buildMapUrl,
-      } from "./scripts/app/map-links.js?v=20260630-v48";
+      } from "./scripts/app/map-links.js?v=20260630-v49";
       const RESTAURANTS_KEY = "random-restaurant-checkin:restaurants";
       const RESTAURANTS_VERSION_KEY = "random-restaurant-checkin:restaurants-version";
       const RESTAURANT_CHANGES_KEY = "random-restaurant-checkin:restaurant-changes-v1";
       const CITY_SELECTION_KEY = "random-restaurant-checkin:selected-city-adcode-v1";
       const DEFAULT_CITY_ADCODE = "330100";
-      const CURRENT_DATASET_VERSION = "amap-multicity-hangzhou-taizhou-2026-06-30-v48";
+      const CURRENT_DATASET_VERSION = "amap-multicity-hangzhou-taizhou-2026-06-30-v49";
       const LEGACY_CORE_RESTAURANT_COUNT = 1300;
       const CHECK_INS_KEY = "random-restaurant-checkin:check-ins";
       const FAVORITES_KEY = "random-restaurant-checkin:favorites";
@@ -1106,7 +1110,7 @@
       }
 
       function resetActiveFilterPanel() {
-        if (activeFilterPanel === "combined") {
+        if (activeFilterPanel === "nearby") {
           selectedDistance = 0;
           selectedLocations.clear();
           selectedBusinessAreas.clear();
@@ -1245,10 +1249,17 @@
         if (!tab || !tab.categories?.length) return items;
         const allowedCategories = new Set(tab.categories);
         return items.filter((restaurant) => {
-          const category = inferCategory(restaurant);
+          const categories = getRestaurantCategories(restaurant);
           const subcategory = inferSubcategory(restaurant);
-          return allowedCategories.has(category) || allowedCategories.has(subcategory);
+          return categories.some((category) => allowedCategories.has(category)) || allowedCategories.has(subcategory);
         });
+      }
+
+      function getRestaurantCategories(restaurant) {
+        if (Array.isArray(restaurant.categoryTags) && restaurant.categoryTags.length) {
+          return [...new Set([restaurant.category, ...restaurant.categoryTags].filter(Boolean))];
+        }
+        return inferRestaurantCategories(restaurant);
       }
 
       function getDistanceForRestaurant(restaurant) {
@@ -1342,7 +1353,10 @@
 
       function renderCategoryTabs() {
         elements.categoryTabs.innerHTML = CATEGORY_TABS.map((tab) => `
-          <button class="category-tab ${selectedCategoryTab === tab.value ? "is-active" : ""}" data-category-tab="${escapeHtml(tab.value)}" type="button">${escapeHtml(tab.label)}</button>
+          <button class="category-tab ${selectedCategoryTab === tab.value ? "is-active" : ""}" data-category-tab="${escapeHtml(tab.value)}" type="button">
+            <span class="category-thumb" style="background-image:url('${escapeHtml(tab.thumb || "")}')"></span>
+            <span>${escapeHtml(tab.label)}</span>
+          </button>
         `).join("");
       }
 

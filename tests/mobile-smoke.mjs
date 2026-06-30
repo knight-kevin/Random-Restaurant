@@ -212,6 +212,10 @@ async function runSimplifiedHomeAndTimelineTest(browser) {
       throw new Error(`Home category tab bar is missing label: ${label}`);
     }
   }
+  const categoryThumbCount = await page.locator("#category-tabs .category-thumb").count();
+  if (categoryThumbCount < 5) {
+    throw new Error("Home category tab bar should show compact thumbnails");
+  }
   const totalCountText = await page.locator("#filter-summary .count-summary").innerText();
   const totalMatch = totalCountText.match(/\d+/);
   await page.locator("#category-tabs [data-category-tab='hotpot']").click();
@@ -230,20 +234,26 @@ async function runSimplifiedHomeAndTimelineTest(browser) {
   if (countPillInButton !== 0) {
     throw new Error("当前可抽数量不应在随机按钮区域重复展示");
   }
+  const filterBarText = await page.locator(".filter-entry-row").innerText();
+  if (!filterBarText.includes("\u4f4d\u7f6e\u7b5b\u9009")) {
+    throw new Error("Home filter bar should keep only location filter");
+  }
+  for (const removedLabel of ["\u5206\u7c7b", "\u6392\u5e8f", "\u626b\u8857\u699c", "\u9644\u8fd13\u516c\u91cc"]) {
+    if (filterBarText.includes(removedLabel)) {
+      throw new Error(`Home filter bar should not include ${removedLabel}`);
+    }
+  }
   await page.click("#combined-filter-button");
   await page.waitForSelector("#filter-dropdown:not([hidden])", { timeout: 5000 });
-  const locationOnlyFilter = await page.evaluate(() => {
+  const locationFilter = await page.evaluate(() => {
     const dropdown = document.querySelector("#filter-dropdown");
     if (!dropdown) return false;
     return Boolean(dropdown.querySelector(".area-picker"))
-      && !dropdown.querySelector("[data-combined-section='food']")
-      && !dropdown.querySelector("[data-combined-section='sort']")
-      && !dropdown.querySelector("[data-food-value]")
-      && !dropdown.querySelector("[data-sort]")
-      && !/热门|排序方式|全部美食/.test(dropdown.textContent || "");
+      && Boolean(dropdown.querySelector("[data-distance='3000']"))
+      && Boolean(dropdown.querySelector("[data-district]"));
   });
-  if (!locationOnlyFilter) {
-    throw new Error("Location filter drawer should not include food or sort filters");
+  if (!locationFilter) {
+    throw new Error("Location filter drawer should include distance and district controls");
   }
   const locationDrawerText = await page.locator("#filter-dropdown-content").innerText();
   if (/[?]{2,}/.test(locationDrawerText)) {
